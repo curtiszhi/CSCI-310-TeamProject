@@ -3,4 +3,6 @@
     <string name="hello">Hello!</string>
     <string name="login_or_register">Login below or register.</string>
     <string name="register_button">"Register"</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
