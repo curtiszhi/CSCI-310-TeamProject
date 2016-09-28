@@ -7,7 +7,6 @@ Team members:
 Curtis Zhi rzhi@usc.edu
 Emma Wang yingchew@usc.edu
 Shokoufeh namazian: namazian@usc.edu 
-Anirudh (Ani) Ramchandran anirudhr@usc.edu 
 Peter Lu peterjlu@usc.edu 
 Sean Yuan seanyuan@usc.edu
 
