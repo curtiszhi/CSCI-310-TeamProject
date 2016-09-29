@@ -3,22 +3,30 @@ package com.teamproject.csci310.parkhere310;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 /**
  * Created by seanyuan on 9/28/16.
  */
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener {
     Button facebookButton,googleButton, registerButton, cancelButton;
     EditText nameEditText, emailEditText, passEditText, passConfEditText, phoneEditText;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        mFirebaseAuth = FirebaseAuth.getInstance();
         registerButton = (Button) findViewById(R.id.registerButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
         nameEditText = (EditText) findViewById(R.id.nameEditText);
@@ -34,7 +42,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String conf = passConfEditText.getText().toString();
                 if(pass.equals(conf)) {
                     if(validatePassword(pass)){
-                        //client.signup(name, email, pass, phone);
+                        mFirebaseAuth.createUserWithEmailAndPassword(emailEditText.toString(), pass);
                         Intent intent = new Intent(RegisterActivity.this, ActionActivity.class);
                         startActivity(intent);
                     }
@@ -58,6 +66,14 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
+    }
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        // An unresolvable error has occurred and a connection to Google APIs
+        // could not be established. Display an error message, or handle
+        // the failure silently
+
+        // ...
     }
 
     public static boolean validatePassword(String unhashedPassword) {
