@@ -1,22 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Action View"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal" />
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        android:id="@+id/actionToolbar" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign-Out"
         android:id="@+id/signOutButton"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="0dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionToolbar"
+        android:layout_centerHorizontal="true"
+        android:text="ParkHere Search"
+        android:textSize="30dp"
+        android:id="@+id/actionFirstWelcome"
+        android:paddingTop="60dp"
+        android:textStyle="normal|bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/actionFirstWelcome"
+        android:text="Follow the steps below to find your perfect parking spot."
+        android:id="@+id/actionWelcome"
+        android:textStyle="normal|italic"
+        android:textColor="?attr/colorAccent" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionWelcome"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/actionWelcome"
+        android:layout_alignEnd="@+id/actionWelcome"
+        android:text="Step 1: Where will you be traveling?"
+        android:id="@+id/stepOne"
+        android:paddingTop="15dp"
+        android:textSize="20dp"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPostalAddress"
+        android:ems="10"
+        android:layout_below="@+id/stepOne"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/stepOne"
+        android:layout_alignEnd="@+id/stepOne"
+        android:id="@+id/locationEditText"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:hint="Location" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/locationEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/locationEditText"
+        android:layout_alignEnd="@+id/locationEditText"
+        android:text="Step 2: What dates are you looking for?"
+        android:id="@+id/stepTwo"
+        android:textSize="20dp"/>
 
 
-</LinearLayout>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/stepTwo"
+        android:id="@+id/startDateEditText"
+        android:hint="Pick Start Date"
+        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/stepTwo"
+        android:id="@+id/endDateEditText"
+        android:hint="Pick End Date"
+        android:paddingRight="@dimen/activity_horizontal_margin"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_below="@+id/stepTwo"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/toText"
+        android:paddingTop="10dp"
+        android:textSize="20dp"
+        android:text="to" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/locationEditText"
+        android:layout_alignEnd="@+id/locationEditText"
+        android:text="Step 3: What times do you need the spot?"
+        android:id="@+id/stepThree"
+        android:textSize="20dp"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/stepThree"
+        android:id="@+id/startTimeText"
+        android:hint="Pick Start Time"
+        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/stepThree"
+        android:id="@+id/endTimeText"
+        android:hint="Pick End Date"
+        android:paddingRight="@dimen/activity_horizontal_margin"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:layout_below="@+id/stepThree"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/toText2"
+        android:paddingTop="10dp"
+        android:textSize="20dp"
+        android:text="to" />
+
+
+
+
+
+
+
+</RelativeLayout>
