@@ -1,5 +1,6 @@
 package com.teamproject.csci310.parkhere310;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ public class SignInActivity extends AppCompatActivity {
     Button loginButton,registerButton, forgotButton;
     EditText emailEditText,passEditText;
     private FirebaseAuth mFirebaseAuth;
+    private ProgressDialog progressDiag;
     private FirebaseUser mFirebaseUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,9 @@ public class SignInActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         String email = emailEditText.getText().toString();
         String password = passEditText.getText().toString();
+        progressDiag = new ProgressDialog(this);
+        progressDiag.setMessage("Signing In...");
+        progressDiag.show();
         mFirebaseAuth.signInWithEmailAndPassword(email, password)
         .addOnCompleteListener(SignInActivity.this, new OnCompleteListener<AuthResult>() {
             @Override

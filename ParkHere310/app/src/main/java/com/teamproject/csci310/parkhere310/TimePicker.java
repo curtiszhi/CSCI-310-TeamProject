@@ -42,8 +42,13 @@ public class TimePicker implements View.OnClickListener, TimePickerDialog.OnTime
 
     // updates the date in the birth date EditText
     private void updateDisplay() {
-
+        String AM_PM ;
+        if(hour < 12) {
+            AM_PM = "AM";
+        } else {
+            AM_PM = "PM";
+        }
         timeEditText.setText(new StringBuilder()
-                .append(hour).append(":").append(minute));
+                .append(hour).append(":").append(minute).append(AM_PM));
     }
 }

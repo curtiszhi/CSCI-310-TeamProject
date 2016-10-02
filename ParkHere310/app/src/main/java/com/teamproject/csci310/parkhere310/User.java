@@ -12,7 +12,7 @@ public class User {
     public Boolean isOwner;
 
     public User() {
-        // Default constructor required for calls to DataSnapshot.getValue(User.class)
+
     }
 
     public User(String userName, String email, String userPhone, boolean isOwner) {
