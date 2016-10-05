@@ -66,8 +66,7 @@ public class RegisterActivity extends AppCompatActivity  {
                     if(validatePassword(pass)){
                         progressDiag.setMessage("Registering User...");
                         progressDiag.show();
-                        mFirebaseAuth.createUserWithEmailAndPassword(emailEditText.getText().toString().trim(), pass)
-                                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                        mFirebaseAuth.createUserWithEmailAndPassword(emailEditText.getText().toString().trim(), pass).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (!task.isSuccessful()) {
