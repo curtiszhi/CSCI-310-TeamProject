@@ -43,7 +43,7 @@ public class ActionActivity extends AppCompatActivity {
     private Button search;
     private ProgressDialog progressDiag;
     private CheckBox compact, cover, handy;
-//
+//khjvg
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
