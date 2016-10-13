@@ -1,4 +1,8 @@
-package com.teamproject.csci310.parkhere310;
+package com.csci310.ParkHere;
+
+/**
+ * Created by seanyuan on 10/13/16.
+ */
 
 import android.app.Activity;
 import android.app.TimePickerDialog;

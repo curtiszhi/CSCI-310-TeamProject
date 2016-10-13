@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register with Facebook"
-        android:id="@+id/facebookButton"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Register with Google"
-        android:id="@+id/googleButton"
-        android:layout_gravity="center_horizontal" />
+    android:weightSum="1"
+    tools:ignore="ExtraText">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="Join Us!"
         android:layout_gravity="center_horizontal"
         android:paddingTop="20dp"
         android:textSize="30dp"
+        android:textColor="#009688"
         android:textStyle="bold"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/nameEditText"
-        android:hint="Enter Name"
+        android:hint=" Enter Name"
         android:focusable="true"
         android:textColorHighlight="#fb00ff"
         android:textColorHint="#2945a3"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:background="@android:drawable/editbox_background_normal" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/emailEditText"
-        android:hint="Enter Email"
+        android:hint=" Enter Email"
         android:focusable="true"
         android:inputType="textEmailAddress"
         android:textColorHighlight="#fb00ff"
-        android:textColorHint="#2945a3" />
+        android:textColorHint="#2945a3"
+        android:background="@android:drawable/editbox_background_normal" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
+        android:focusable="true"
         android:id="@+id/passwordEditText"
         android:textColorHint="#2945a3"
-        android:hint="Password" />
+        android:hint=" Password"
+        android:background="@android:drawable/editbox_background_normal" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
+        android:focusable="true"
         android:id="@+id/confirmPasswordEditText"
         android:textColorHint="#2945a3"
-        android:hint="Confirm Password" />
+        android:hint=" Confirm Password"
+        android:background="@android:drawable/editbox_background_normal" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/phoneEditText"
-        android:hint="Phone"
-        android:inputType="phone"
+        android:hint=" Enter Phone"
         android:focusable="true"
+        android:inputType="phone"
         android:textColorHighlight="#fb00ff"
-        android:textColorHint="#2945a3" />
+        android:textColorHint="#2945a3"
+        android:layout_marginTop="10dp"
+        android:background="@android:drawable/editbox_background_normal" />
 
-    <Switch
-        android:text="Register as an Owner? (default: seeker)"
-        android:layout_width="match_parent"
+    <ToggleButton
+        android:id="@+id/togglebutton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ownerSwitch" />
+        android:textOn="Host features on"
+        android:textOff="Host features off"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onToggleClicked"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register!"
+        android:layout_marginTop="50dp"
         android:id="@+id/registerButton"
         android:layout_gravity="center_horizontal" />
 
@@ -90,8 +90,7 @@
         android:layout_height="wrap_content"
         android:text="Cancel"
         android:id="@+id/cancelButton"
-        android:layout_gravity="center_horizontal"
-        android:elevation="0dp" />
+        android:layout_gravity="center_horizontal" />
 
 
 </LinearLayout>

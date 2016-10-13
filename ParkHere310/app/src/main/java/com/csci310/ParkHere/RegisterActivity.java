@@ -1,4 +1,8 @@
-package com.teamproject.csci310.parkhere310;
+package com.csci310.ParkHere;
+
+/**
+ * Created by seanyuan on 9/30/16.
+ */
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -6,17 +10,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,17 +26,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * Created by seanyuan on 9/28/16.
- */
-public class RegisterActivity extends AppCompatActivity  {
-    Button facebookButton,googleButton, registerButton, cancelButton;
-    EditText nameEditText, emailEditText, passEditText, passConfEditText, phoneEditText;
-    Switch ownerSwitch;
+import java.util.ArrayList;
+import java.util.List;
+
+public class RegisterActivity extends AppCompatActivity {
+    private Button registerButton, cancelButton;
+    private EditText nameEditText, emailEditText, passEditText, passConfEditText, phoneEditText;
+    private ToggleButton toggleButton;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
     private ProgressDialog progressDiag;
+    private Boolean defaultHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,19 @@ public class RegisterActivity extends AppCompatActivity  {
         passEditText = (EditText) findViewById(R.id.passwordEditText);
         passConfEditText = (EditText) findViewById(R.id.confirmPasswordEditText);
         phoneEditText = (EditText) findViewById(R.id.phoneEditText);
-        ownerSwitch = (Switch) findViewById(R.id.ownerSwitch);
+        toggleButton = (ToggleButton) findViewById(R.id.togglebutton);
         progressDiag = new ProgressDialog(this);
+        toggleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                if (toggleButton.isChecked()) {
+                    defaultHost = true;
+                } else {
+                    defaultHost = false;
+                }
+            }
+        });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,30 +73,31 @@ public class RegisterActivity extends AppCompatActivity  {
                 String email = emailEditText.getText().toString().trim();
                 String name = nameEditText.getText().toString().trim();
                 String phone = phoneEditText.getText().toString().trim();
-                validateFields(email, name, phone, pass);
+                validateFields(email, name, pass, phone);
                 if(pass.equals(conf)) {
                     if(validatePassword(pass)){
                         progressDiag.setMessage("Registering User...");
                         progressDiag.show();
-                        mFirebaseAuth.createUserWithEmailAndPassword(emailEditText.getText().toString().trim(), pass).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (!task.isSuccessful()) {
-                                    Toast.makeText(RegisterActivity.this, "failed",
-                                            Toast.LENGTH_SHORT).show();
-                                    return;
-                                }else{
-                                    String name = nameEditText.getText().toString().trim();
-                                    String phone = phoneEditText.getText().toString().trim();
-                                    Boolean isOwner = ownerSwitch.isChecked();
-                                    mFirebaseAuth = FirebaseAuth.getInstance();
-                                    mFirebaseUser = mFirebaseAuth.getCurrentUser();
-                                    writeNewUser(mFirebaseUser.getUid(), name, mFirebaseUser.getEmail(), phone, isOwner);
-                                    Intent intent = new Intent(RegisterActivity.this, ActionActivity.class);
-                                    startActivity(intent);
-                                }
-                            }
-                        });
+                        mFirebaseAuth.createUserWithEmailAndPassword(emailEditText.getText().toString().trim(), pass)
+                                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<AuthResult> task) {
+                                        if (!task.isSuccessful()) {
+                                            Toast.makeText(RegisterActivity.this, "failed" + task.getException(),
+                                                    Toast.LENGTH_SHORT).show();
+                                            progressDiag.hide();
+                                            return;
+                                        }else{
+                                            String name = nameEditText.getText().toString().trim();
+                                            String phone = phoneEditText.getText().toString().trim();
+                                            mFirebaseAuth = FirebaseAuth.getInstance();
+                                            mFirebaseUser = mFirebaseAuth.getCurrentUser();
+                                            writeNewUser(mFirebaseUser.getUid(), name, mFirebaseUser.getEmail(), phone, defaultHost);
+                                            Intent intent = new Intent(RegisterActivity.this, ActionActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                });
                     }
                     else{
                         passwordAlert("invalid");
@@ -108,33 +121,45 @@ public class RegisterActivity extends AppCompatActivity  {
 
     }
 
-    private void writeNewUser(String userId, String userName, String email, String userPhone, boolean isOwner) {
+    private void writeNewUser(String userId, String userName, String email, String phone, Boolean isHost) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        User user = new User(userName, email, userPhone, isOwner);
-        mDatabase.child("users").child(userId).setValue(user);
+        List<FeedItem> renting = new ArrayList<>();
+            FeedItem item = new FeedItem();
+            item.setHouse("Add your first spot!");
+            item.setThumbnail(R.drawable.common_google_signin_btn_icon_dark);
+            item.setDates("10/02 to 10/05");
+            item.setPrice("$9.00/day");
+            item.setActivity("Active");
+            item.setRating("3");
+        renting.add(item);
+        List<FeedItem> hosting = new ArrayList<>();
+        hosting.add(item);
+        User database_user = new User(userName, email, phone, isHost, renting, hosting);
+        mDatabase.child("users").child(userId).setValue(database_user);
     }
 
     public static boolean validatePassword(String unhashedPassword) {
         boolean hasUppercase = !unhashedPassword.equals(unhashedPassword.toLowerCase());
         boolean hasNumber = unhashedPassword.matches(".*\\d+.*");
-        return hasUppercase && hasNumber;
+        boolean longEnough = unhashedPassword.length() >= 6;
+        return hasUppercase && hasNumber && longEnough;
     }
     public void passwordAlert(String error){
         AlertDialog alertDialog = new AlertDialog.Builder(RegisterActivity.this).create();
         alertDialog.setTitle("Wait!");
         if(error.equals("invalid")){
-            alertDialog.setMessage("Passwords must contain at least: 1-number 1-uppercase letter");
+            alertDialog.setMessage("Passwords must be at least 6 characters long and contain at least: 1-number 1-uppercase letter");
         } else{
             alertDialog.setMessage("Passwords did not match.");
         }
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
         alertDialog.show();
     }
-    public void validateFields(String email, String name, String phone, String pass){
+    public void validateFields(String email, String name,  String pass, String phone){
         if(TextUtils.isEmpty(email)){
             Toast.makeText(RegisterActivity.this, "Please enter email",
                     Toast.LENGTH_SHORT).show();
@@ -145,13 +170,13 @@ public class RegisterActivity extends AppCompatActivity  {
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(phone)){
-            Toast.makeText(RegisterActivity.this, "Please enter phone number",
+        if(TextUtils.isEmpty(pass)){
+            Toast.makeText(RegisterActivity.this, "Please enter password",
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        if(TextUtils.isEmpty(pass)){
-            Toast.makeText(RegisterActivity.this, "Please enter password",
+        if(TextUtils.isEmpty(phone)){
+            Toast.makeText(RegisterActivity.this, "Please enter phone number",
                     Toast.LENGTH_SHORT).show();
             return;
         }

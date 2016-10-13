@@ -1,13 +1,16 @@
-package com.teamproject.csci310.parkhere310;
+package com.csci310.ParkHere;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.content.Context;
-import android.view.View;
-import android.widget.EditText;
+/**
+ * Created by seanyuan on 10/13/16.
+ */
+        import android.app.Activity;
+        import android.app.DatePickerDialog;
+        import android.content.Context;
+        import android.view.View;
+        import android.widget.EditText;
 
-import java.util.Calendar;
-import java.util.TimeZone;
+        import java.util.Calendar;
+        import java.util.TimeZone;
 
 /**
  * File created by seanyuan on 9/29/16.
@@ -49,8 +52,8 @@ public class DatePicker  implements View.OnClickListener, DatePickerDialog.OnDat
     private void updateDisplay() {
 
         dateEditText.setText(new StringBuilder()
-                // Month is 0 based so add 1
-                .append(_day).append("/").append(_month + 1).append("/").append(_birthYear).append(" "));
+                // Month is 0 based, just add 1
+                .append(_month + 1).append("-").append(_day).append("-")
+                .append(_birthYear).append(" "));
     }
 }
-
