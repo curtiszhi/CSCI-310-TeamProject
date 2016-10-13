@@ -25,7 +25,7 @@ public class ActionActivity extends AppCompatActivity {
     TextView user;
     TabHost host;
     private Toolbar toolbar;
-
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
