@@ -11,6 +11,16 @@ public class FeedItem {
     protected String dates;
     protected String price;
 
+    public String getSpotID() {
+        return spotID;
+    }
+
+    public void setSpotID(String spotID) {
+        this.spotID = spotID;
+    }
+
+    protected String spotID;
+
     public String getRating() {
         return rating;
     }
