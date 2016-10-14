@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TabHost;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,7 +37,6 @@ public class ActionActivity extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
     TextView user;
     TabHost host;
-    private Toolbar toolbar;
     private TextView startTime, endTime, startDate, endDate, location;
     private Button search;
     private ProgressDialog progressDiag;
@@ -47,9 +45,7 @@ public class ActionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listing);
-        toolbar = (Toolbar) findViewById(R.id.tool_bar); // Attaching the layout to the toolbar object
-        setSupportActionBar(toolbar);
+        setContentView(R.layout.action_activity);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         host = (TabHost)findViewById(R.id.tabHost);
