@@ -130,7 +130,7 @@ public class ActionActivity extends AppCompatActivity {
                     }).create().show();
         }
         if (item.getItemId() == R.id.action_user) {
-            Intent intent = new Intent(ActionActivity.this, ListingActivity.class);
+            Intent intent = new Intent(ActionActivity.this, ListingActivity.class);//change to UserActivity.class
             startActivity(intent);
         }
         if (item.getItemId() == R.id.signOut) {
