@@ -30,13 +30,16 @@ public class AddActivity extends AppCompatActivity {
     protected android.widget.TextView dates;
     protected TextView price;
     protected RatingBar rating;
-    protected TextView activity;protected
+    protected TextView activity;
+    protected
     ImageView thumbnail;
     private RatingBar ratingBar;
     private DatabaseReference mDatabase;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private String txtRatingValue;
+    private MultiSelectionSpinner spinner;
+    private String[] items={"handicap","Compact", "SUV", "Truck", "covered parking"};
 
 
     @Override
@@ -45,8 +48,13 @@ public class AddActivity extends AppCompatActivity {
         setTitle("New Listing");
         setContentView(R.layout.activity_create);
 
+        spinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner1);
+        spinner.setItems(items);
 
+    }
+}
 
+/**
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,11 +97,11 @@ public class AddActivity extends AppCompatActivity {
                 childUpdates.put("users/" + mFirebaseUser.getUid() + "/humidor/", item);
                 Intent intent = new Intent(AddActivity.this, ListingActivity.class);
                 mDatabase.updateChildren(childUpdates);
-                startActivity(intent);*/
+                startActivity(intent);
             }
         });
 
     }
+**/
 
-}
 

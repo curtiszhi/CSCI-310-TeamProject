@@ -169,11 +169,11 @@
         android:paddingLeft="10dp"
         android:textSize="16dp"
         android:paddingBottom="2dp" />
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTBottom="2dp" />
+
+    <com.csci310.ParkHere.MultiSelectionSpinner
+        android:id="@+id/mySpinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <TextView
         android:layout_width="wrap_content"
