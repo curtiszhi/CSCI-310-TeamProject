@@ -84,7 +84,9 @@ public class ActionActivity extends AppCompatActivity {
                 validateFields(starttime, endtime, startdate,enddate);
                 progressDiag.setMessage("Searching...");
                 progressDiag.show();
-                ///do search
+
+
+                //Test
             }
         });
 
