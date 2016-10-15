@@ -186,13 +186,15 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Search!"
         android:id="@+id/searchButton"
-        android:layout_below="@id/tabHost"
         android:layout_gravity="center_horizontal"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/tabHost"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
