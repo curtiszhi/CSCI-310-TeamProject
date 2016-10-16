@@ -2,15 +2,34 @@ package com.csci310.ParkHere;
 
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by curtiszhi on 10/15/16.
  */
 
-public class SearchOperation extends AsyncTask<String, Void, String[]> {
+public class SearchOperation extends AsyncTask<String, Void, String[]>
+{
 
-    ProgressDialog dialog = new ProgressDialog(ActionActivity.this);
+    private ProgressDialog dialog;
+    private static final String API_KEY = "AIzaSyAekBEJgAYxSE59SoZApqJYHcLXboTsQe4";
 
+
+    public void SearchOperation(ActionActivity actionActivity)
+    {
+        dialog = new ProgressDialog(actionActivity);
+    }
 
 
     @Override
