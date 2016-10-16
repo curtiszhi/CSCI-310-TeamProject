@@ -1,270 +1,284 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1"
-    tools:ignore="ExtraText">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Address:"
-        android:paddingLeft="10dp"
-        android:textSize="16dp"
-        android:paddingBottom="2dp" />
-    <EditText
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="0dp"
-        android:id="@+id/cigarName"
-        android:hint=" Enter Address"
-        android:focusable="true"
-        android:textColorHighlight="#fb00ff"
-        android:textColorHint="#2945a3" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Longitude and latitude:"
-        android:paddingLeft="10dp"
-        android:textSize="16dp"
-        android:paddingBottom="2dp" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:id="@+id/longitude"
-            android:hint=" Longitude"
-            android:focusable="true"
-            android:inputType="number"
-            android:textColorHighlight="#fb00ff"
-            android:textColorHint="#2945a3"
-            android:background="@android:drawable/editbox_background_normal" />
-        <EditText
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:id="@+id/latitude"
-            android:hint=" Latitude"
-            android:inputType="number"
-            android:focusable="true"
-            android:textColorHighlight="#fb00ff"
-            android:textColorHint="#2945a3"
-            android:background="@android:drawable/editbox_background_normal" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Price:"
-        android:paddingLeft="10dp"
-        android:textSize="16dp"
-        android:paddingBottom="2dp" />
-    <EditText
-        android:layout_width="120dp"
-        android:paddingBottom="0dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/price"
-        android:hint=" $"
-        android:inputType="numberDecimal"
-        android:focusable="true"
-        android:textColorHighlight="#fb00ff"
-        android:textColorHint="#2945a3" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Availability:"
-        android:paddingLeft="10dp"
-        android:textSize="16dp"
-        android:paddingBottom="2dp" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        tools:ignore="ExtraText">
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:focusable="false"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/stepTwo"
-            android:textColorHint="#2945a3"
-            android:id="@+id/startDateEditText"
-            android:hint="Pick Start Date"
-            android:paddingLeft="@dimen/activity_horizontal_margin"/>
+            android:text="Address:"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="0dp"
+            android:id="@+id/Address"
+            android:hint=" Enter Address"
+            android:focusable="true"
+            android:textColorHighlight="#fb00ff"
+            android:textColorHint="#2945a3" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Longitude and latitude:"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:id="@+id/longitude"
+                android:hint=" Longitude"
+                android:focusable="true"
+                android:inputType="number"
+                android:textColorHighlight="#fb00ff"
+                android:textColorHint="#2945a3"
+                android:background="@android:drawable/editbox_background_normal" />
+            <EditText
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:id="@+id/latitude"
+                android:hint=" Latitude"
+                android:inputType="number"
+                android:focusable="true"
+                android:textColorHighlight="#fb00ff"
+                android:textColorHint="#2945a3"
+                android:background="@android:drawable/editbox_background_normal" />
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:focusable="false"
-            android:layout_below="@+id/stepTwo"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/toText"
-            android:paddingTop="10dp"
-            android:textSize="20dp"
-            android:text="to" />
+            android:text="Price:"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
+            android:paddingBottom="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:focusable="false"
-            android:layout_alignParentRight="true"
-            android:textColorHint="#2945a3"
-            android:layout_below="@+id/stepTwo"
-            android:id="@+id/endDateEditText"
-            android:hint="Pick End Date"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:focusable="false"
-            android:layout_alignParentLeft="true"
-            android:textColorHint="#2945a3"
-            android:layout_below="@+id/stepTwo"
-            android:id="@+id/startTimeEditText"
-            android:hint="Pick Start Time"
-            android:paddingLeft="@dimen/activity_horizontal_margin"/>
+            android:id="@+id/price"
+            android:hint=" $"
+            android:inputType="numberDecimal"
+            android:focusable="true"
+            android:textColorHighlight="#fb00ff"
+            android:textColorHint="#2945a3" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:focusable="false"
-            android:layout_below="@+id/stepTwo"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/toTimeText"
-            android:paddingTop="10dp"
-            android:textSize="20dp"
-            android:text="to" />
+            android:text="Availability:"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:focusable="false"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/stepTwo"
+                android:textColorHint="#2945a3"
+                android:id="@+id/startDateEditText"
+                android:hint="Pick Start Date"
+                android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:focusable="false"
+                android:layout_below="@+id/stepTwo"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/toText"
+                android:paddingTop="10dp"
+                android:textSize="20dp"
+                android:text="to" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:focusable="false"
+                android:layout_alignParentRight="true"
+                android:textColorHint="#2945a3"
+                android:layout_below="@+id/stepTwo"
+                android:id="@+id/endDateEditText"
+                android:hint="Pick End Date"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:focusable="false"
+                android:layout_alignParentLeft="true"
+                android:textColorHint="#2945a3"
+                android:layout_below="@+id/stepTwo"
+                android:id="@+id/startTimeEditText"
+                android:hint="Pick Start Time"
+                android:paddingLeft="@dimen/activity_horizontal_margin"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:focusable="false"
+                android:layout_below="@+id/stepTwo"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/toTimeText"
+                android:paddingTop="10dp"
+                android:textSize="20dp"
+                android:text="to" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.4"
+                android:focusable="false"
+                android:layout_alignParentRight="true"
+                android:textColorHint="#2945a3"
+                android:layout_below="@+id/stepTwo"
+                android:id="@+id/endTimeEditText"
+                android:hint="Pick End Time"/>
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filters:"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
+
+        <com.csci310.ParkHere.MultiSelectionSpinner
+            android:id="@+id/mySpinner1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description:"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
         <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="0dp"
+            android:id="@+id/description"
+            android:hint=" Enter Address"
+            android:focusable="true"
+            android:textColorHighlight="#fb00ff"
+            android:textColorHint="#2945a3" />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.4"
-            android:focusable="false"
-            android:layout_alignParentRight="true"
-            android:textColorHint="#2945a3"
-            android:layout_below="@+id/stepTwo"
-            android:id="@+id/endTimeEditText"
-            android:hint="Pick End Time"/>
+            android:text="Photo:"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/photo1"
+                android:text="photo1" />
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/photo2"
+                android:text="photo2" />
+            <Button
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/photo3"
+                android:text="photo3"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancellation policy:"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
+
+
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <RadioButton android:id="@+id/radio_norefund"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No refund"
+                android:textColor="#2945a3"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_80refund"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="80% refund rate at any time"
+                android:textColor="#2945a3"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_full_50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full refund if cancell before 7 days, 50% refund if cancell less than 7 days"
+                android:textColor="#2945a3"
+                android:onClick="onRadioButtonClicked"/>
+            <RadioButton android:id="@+id/radio_full_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full refund if cancell before 7 days, no refund if cancell less than 7 days"
+                android:textColor="#2945a3"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Post!"
+            android:id="@+id/postButton"
+            android:layout_gravity="center_horizontal"
+            android:layout_below="@+id/tabHost"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+
     </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Filters:"
-        android:paddingLeft="10dp"
-        android:textSize="16dp"
-        android:paddingBottom="2dp" />
-
-    <com.csci310.ParkHere.MultiSelectionSpinner
-        android:id="@+id/mySpinner1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description:"
-        android:paddingLeft="10dp"
-        android:textSize="16dp"
-        android:paddingBottom="2dp" />
-    <EditText
-        android:layout_width="wrap_content"
-        android:paddingBottom="2dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/description"
-        android:hint=" Enter description"
-        android:inputType="numberDecimal"
-        android:focusable="true"
-        android:textColorHighlight="#fb00ff"
-        android:textColorHint="#2945a3" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Photo:"
-        android:paddingLeft="10dp"
-        android:textSize="16dp"
-        android:paddingBottom="2dp" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/photo1"
-            android:text="photo1" />
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/photo2"
-            android:text="photo2" />
-        <Button
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:id="@+id/photo3"
-            android:text="photo3"
-            />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cancellation policy:"
-        android:paddingLeft="10dp"
-        android:textSize="16dp"
-        android:paddingBottom="2dp" />
-
-
-    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <RadioButton android:id="@+id/radio_norefund"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No refund"
-            android:textColor="#2945a3"
-            android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/radio_80refund"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="80% refund rate at any time"
-            android:textColor="#2945a3"
-            android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/radio_full_50"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Full refund if cancell before 7 days, 50% refund if cancell less than 7 days"
-            android:textColor="#2945a3"
-            android:onClick="onRadioButtonClicked"/>
-        <RadioButton android:id="@+id/radio_full_0"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Full refund if cancell before 7 days, no refund if cancell less than 7 days"
-            android:textColor="#2945a3"
-            android:onClick="onRadioButtonClicked"/>
-    </RadioGroup>
-
-
-
-</LinearLayout>
+</ScrollView>
