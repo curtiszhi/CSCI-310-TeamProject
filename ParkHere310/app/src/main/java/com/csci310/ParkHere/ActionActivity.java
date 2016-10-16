@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.nearby.connection.dev.Strategy;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,6 +32,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Locale;
 
 /**
  * Created by seanyuan on 9/28/16.
@@ -42,7 +46,6 @@ public class ActionActivity extends AppCompatActivity {
     TabHost host;
     private TextView startTime, endTime, startDate, endDate, location;
     private Button search;
-    private ProgressDialog progressDiag;
     private CheckBox compact, cover, handy;
 //khjvg
     @Override
@@ -66,7 +69,6 @@ public class ActionActivity extends AppCompatActivity {
         new DatePicker(ActionActivity.this, R.id.endDateEditText);
         new TimePicker(ActionActivity.this, R.id.startTimeText);
         new TimePicker(ActionActivity.this, R.id.endTimeText);
-        progressDiag = new ProgressDialog(this);
         startTime = (TextView) findViewById(R.id.startTimeText);
         endTime = (TextView) findViewById(R.id.endTimeText);
         startDate = (TextView) findViewById(R.id.startDateEditText);
@@ -82,15 +84,13 @@ public class ActionActivity extends AppCompatActivity {
                 String endtime = endTime.getText().toString().trim();
                 String startdate = startDate.getText().toString().trim();
                 String enddate = endDate.getText().toString().trim();
-                Boolean requestCompact = compact.isChecked();
-                Boolean requestCover = cover.isChecked();
-                Boolean handicapped = handy.isChecked();
+                String address = location.getText().toString().trim();
+                boolean requestCompact = compact.isChecked();
+                boolean requestCover = cover.isChecked();
+                boolean handicapped = handy.isChecked();
                 validateFields(starttime, endtime, startdate,enddate);
-                progressDiag.setMessage("Searching...");
-                progressDiag.show();
 
-
-                //Test
+                SearchOperation.search(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped, address);
             }
         });
 
