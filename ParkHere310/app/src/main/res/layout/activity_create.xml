@@ -206,27 +206,18 @@
             android:paddingBottom="2dp" />
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/photoLayout"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <Button
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
-                android:id="@+id/photo1"
-                android:text="photo1" />
-            <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/photo2"
-                android:text="photo2" />
-            <Button
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:layout_weight="1"
-                android:id="@+id/photo3"
-                android:text="photo3"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/photo"
+                android:onClick="p1Click"
+                android:text="upload photo" />
                 />
         </LinearLayout>
 
