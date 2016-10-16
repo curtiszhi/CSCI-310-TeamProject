@@ -28,6 +28,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by seanyuan on 9/28/16.
@@ -35,6 +37,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class ActionActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
+    private DatabaseReference mDatabase;
     TextView user;
     TabHost host;
     private TextView startTime, endTime, startDate, endDate, location;
@@ -48,6 +51,7 @@ public class ActionActivity extends AppCompatActivity {
         setContentView(R.layout.action_activity);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
         TabHost.TabSpec spec = host.newTabSpec("Basics");
