@@ -28,8 +28,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by seanyuan on 10/7/16.
@@ -37,8 +39,8 @@ import java.util.ArrayList;
 
 public class AddActivity extends AppCompatActivity {
     private TextView location,description,price,startTime, endTime, startDate, endDate;
-    private RadioButton rn;
-    private Button post, photo_1,photo2,photo3;
+    private RadioButton c1,c2,c3,c4;
+    private Button post, photo;
     private MultiSelectionSpinner spinner;
     private String[] items={"handicap","Compact", "SUV", "Truck", "covered parking"};
     private static final int selected_p=1;
@@ -46,7 +48,9 @@ public class AddActivity extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
     private String spotID;
-
+    private Vector<Bitmap> photos;
+    private int cancel_policy;
+    private List<Integer> filter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,18 +63,54 @@ public class AddActivity extends AppCompatActivity {
         spinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner1);
         spinner.setItems(items);
 
-        photo_1=(Button) findViewById(R.id.photo);
+        photos=new Vector<Bitmap>();
+        photo=(Button) findViewById(R.id.photo);
         post=(Button) findViewById(R.id.postButton);
+        location=(TextView) findViewById(R.id.Address);
+        description=(TextView) findViewById(R.id.description);
+        price=(TextView) findViewById(R.id.price);
+        startTime = (TextView) findViewById(R.id.startTimeEditText);
+        endTime = (TextView) findViewById(R.id.endTimeEditText);
+        startDate = (TextView) findViewById(R.id.startDateEditText);
+        endDate = (TextView) findViewById(R.id.endDateEditText);
+        c1=(RadioButton) findViewById(R.id.radio_norefund);
+        c2=(RadioButton) findViewById(R.id.radio_80refund);
+        c3=(RadioButton) findViewById(R.id.radio_full_50);
+        c4=(RadioButton) findViewById(R.id.radio_full_0);
+
         new DatePicker(AddActivity.this, R.id.startDateEditText);
         new DatePicker(AddActivity.this, R.id.endDateEditText);
         new TimePicker(AddActivity.this, R.id.startTimeEditText);
         new TimePicker(AddActivity.this, R.id.endTimeEditText);
-        spotID="just for test";
 
         post.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-
+                                        spotID="emma"+Long.toString(System.currentTimeMillis());
+                                        filter=spinner.getSelectedIndicies();
+                                        String starttime = startTime.getText().toString().trim();
+                                        String endtime = endTime.getText().toString().trim();
+                                        String startdate = startDate.getText().toString().trim();
+                                        String enddate = endDate.getText().toString().trim();
+                                        String address = location.getText().toString().trim();
+                                        String description_parking = description.getText().toString().trim();
+                                        int price_parking=Integer.parseInt(price.getText().toString().trim());
+                                        boolean checked_c1 = c1.isChecked();
+                                        boolean checked_c2 = c2.isChecked();
+                                        boolean checked_c3 = c3.isChecked();
+                                        boolean checked_c4 = c4.isChecked();
+                                        if(checked_c1){
+                                            cancel_policy=1;
+                                        }
+                                        if(checked_c2){
+                                            cancel_policy=2;
+                                        }
+                                        if(checked_c3){
+                                            cancel_policy=3;
+                                        }
+                                        if(checked_c4){
+                                            cancel_policy=4;
+                                        }
 
 
                                     }
@@ -96,6 +136,7 @@ public class AddActivity extends AppCompatActivity {
                     String filepath=cursor.getString(column);
                     cursor.close();
                     Bitmap s_image= BitmapFactory.decodeFile(filepath);
+                    photos.add(s_image);
 
                     LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                     TextView valueTV = new TextView(this);

@@ -192,7 +192,7 @@
             android:layout_height="wrap_content"
             android:paddingTop="0dp"
             android:id="@+id/description"
-            android:hint=" Enter Address"
+            android:hint=" Enter Description"
             android:focusable="true"
             android:textColorHighlight="#fb00ff"
             android:textColorHint="#2945a3" />
