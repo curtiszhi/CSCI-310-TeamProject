@@ -9,9 +9,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -19,41 +21,12 @@ import javax.net.ssl.HttpsURLConnection;
  * Created by curtiszhi on 10/15/16.
  */
 
-public class SearchOperation extends AsyncTask<String, Void, String[]>
+public class SearchOperation
 {
-
     private ProgressDialog dialog;
-    private static final String API_KEY = "AIzaSyAekBEJgAYxSE59SoZApqJYHcLXboTsQe4";
+    private static final String API_KEY = "AIzaSyBxTXSEer2OE4jdVeG6AUa2UWF8QzZJhlo";
 
-
-    public void SearchOperation(ActionActivity actionActivity)
-    {
-        dialog = new ProgressDialog(actionActivity);
-    }
-
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        dialog.setMessage("Searching...");
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-    }
-
-    @Override
-    protected String[] doInBackground(String... params) {
-        String response;
-        try {
-            response = getLatLongByURL("http://maps.google.com/maps/api/geocode/json?address=mumbai&sensor=false");
-            Log.d("response", "" + response);
-            return new String[]{response};
-        } catch (Exception e) {
-            return new String[]{"error"};
-        }
-    }
-
-    @Override
-    protected void onPostExecute(String... result) {
+    public static void parseJSON(String[] result) {
         try {
             JSONObject jsonObject = new JSONObject(result[0]);
 
@@ -70,44 +43,25 @@ public class SearchOperation extends AsyncTask<String, Void, String[]>
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (dialog.isShowing()) {
-            dialog.dismiss();
-        }
     }
 
 
-    public String getLatLongByURL(String requestURL) {
-        URL url;
-        String response = "";
-        try {
-            url = new URL(requestURL);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(15000);
-            conn.setConnectTimeout(15000);
-            conn.setRequestMethod("GET");
-            conn.setDoInput(true);
-            conn.setRequestProperty("Content-Type",
-                    "application/x-www-form-urlencoded");
-            conn.setDoOutput(true);
-            int responseCode = conn.getResponseCode();
-
-            if (responseCode == HttpsURLConnection.HTTP_OK) {
-                String line;
-                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                while ((line = br.readLine()) != null) {
-                    response += line;
-                }
-            } else {
-                response = "";
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static String parseAddress(String address)
+    {
+        address = address.trim().replaceAll("\\s+", "+");
+        String result = "";
+        try
+        {
+            URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + API_KEY);
+            URLConnection urlConnection = url.openConnection();
+            String line = null;
+            BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+            while ((line = br.readLine()) != null)
+                result += line;
         }
-        return response;
+        catch (IOException e){e.printStackTrace();}
+        return result;
     }
-
 
     public static void search(String sTime, String eTime, String sDate, String eDate, boolean isCompact, boolean isCovered, boolean isHandicapped, String address) {
 
