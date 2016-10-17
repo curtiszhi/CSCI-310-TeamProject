@@ -216,7 +216,6 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/photo"
-                android:onClick="p1Click"
                 android:text="upload photo" />
                 />
         </LinearLayout>

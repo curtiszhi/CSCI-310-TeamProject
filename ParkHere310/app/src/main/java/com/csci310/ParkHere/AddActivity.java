@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,8 +22,16 @@ import android.widget.RadioButton;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.oliveiradev.lib.RxPhoto;
+import com.github.oliveiradev.lib.Transformers;
+import com.github.oliveiradev.lib.TypeRequest;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.cast.framework.media.ImagePicker;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,25 +41,27 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.Vector;
 
+
 /**
  * Created by seanyuan on 10/7/16.
  */
 
 public class AddActivity extends AppCompatActivity {
-    private TextView location,description,price,startTime, endTime, startDate, endDate;
-    private RadioButton c1,c2,c3,c4;
+    private TextView location, description, price, startTime, endTime, startDate, endDate;
+    private RadioButton c1, c2, c3, c4;
     private Button post, photo;
     private MultiSelectionSpinner spinner;
-    private String[] items={"handicap","Compact", "SUV", "Truck", "covered parking"};
-    private static final int selected_p=1;
+    private String[] items = {"handicap", "Compact", "SUV", "Truck", "covered parking"};
+    private static final int selected_p = 1;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
@@ -62,6 +73,12 @@ public class AddActivity extends AppCompatActivity {
     private List<Integer> filter;
     private Bitmap s_image;
     private StorageReference spot_image;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,31 +92,45 @@ public class AddActivity extends AppCompatActivity {
         spinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner1);
         spinner.setItems(items);
 
-        photos=new Vector<Bitmap>();
-        photo=(Button) findViewById(R.id.photo);
-        post=(Button) findViewById(R.id.postButton);
-        location=(TextView) findViewById(R.id.Address);
-        description=(TextView) findViewById(R.id.description);
-        price=(TextView) findViewById(R.id.price);
+        photos = new Vector<Bitmap>();
+        photo = (Button) findViewById(R.id.photo);
+        post = (Button) findViewById(R.id.postButton);
+        location = (TextView) findViewById(R.id.Address);
+        description = (TextView) findViewById(R.id.description);
+        price = (TextView) findViewById(R.id.price);
         startTime = (TextView) findViewById(R.id.startTimeEditText);
         endTime = (TextView) findViewById(R.id.endTimeEditText);
         startDate = (TextView) findViewById(R.id.startDateEditText);
         endDate = (TextView) findViewById(R.id.endDateEditText);
-        c1=(RadioButton) findViewById(R.id.radio_norefund);
-        c2=(RadioButton) findViewById(R.id.radio_80refund);
-        c3=(RadioButton) findViewById(R.id.radio_full_50);
-        c4=(RadioButton) findViewById(R.id.radio_full_0);
+        c1 = (RadioButton) findViewById(R.id.radio_norefund);
+        c2 = (RadioButton) findViewById(R.id.radio_80refund);
+        c3 = (RadioButton) findViewById(R.id.radio_full_50);
+        c4 = (RadioButton) findViewById(R.id.radio_full_0);
 
         new DatePicker(AddActivity.this, R.id.startDateEditText);
         new DatePicker(AddActivity.this, R.id.endDateEditText);
         new TimePicker(AddActivity.this, R.id.startTimeEditText);
         new TimePicker(AddActivity.this, R.id.endTimeEditText);
 
-        spotID="emma"+Long.toString(System.currentTimeMillis());
+        spotID = "emma" + Long.toString(System.currentTimeMillis());
+
+        photo.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,
+                        "Select Picture"), selected_p);
+
+            }
+        });
+
 
         post.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                                         filter=spinner.getSelectedIndicies();
                                         String starttime = startTime.getText().toString().trim();
                                         String endtime = endTime.getText().toString().trim();
@@ -124,62 +155,57 @@ public class AddActivity extends AppCompatActivity {
                                         if(checked_c4){
                                             cancel_policy=4;
                                         }
+                FeedItem fd=new FeedItem();
 
-                                        upload(s_image, spot_image);
-                                    }
+
+                StorageReference imagesRef = storageRef.child(spotID);
+                spot_image = imagesRef.child(spotID + "/image.jpg");
+
+                for(int i=0;i<photos.size();i++) upload(photos.get(i), spot_image);
+            }
         });
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void write_new_spot(){
+    public void write_new_spot() {
         mDatabase.child("users").child("Fq2XZx5727XQ8U06fjQJN1jyzCA3").child("hosting");
         //mDatabase.child("parking-spots").child(spotID).setValue();
 
     }
 
 
-
-
-
-    public void p1Click(View v){
-        Intent i=new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i,selected_p);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode){
+
+        switch(requestCode) {
             case selected_p:
-                if(requestCode==RESULT_OK){
-                    Uri uri=data.getData();
-                    String[] projection={MediaStore.Images.Media.DATA};
-                    Cursor cursor=getContentResolver().query(uri,projection,null,null,null);
-                    cursor.moveToFirst();
-                    int column=cursor.getColumnIndex(projection[0]);
-                    String filepath=cursor.getString(column);
-                    cursor.close();
-                    s_image= BitmapFactory.decodeFile(filepath);
-                    photos.add(s_image);
+                if(resultCode == RESULT_OK){
+                    try {
+                        final Uri imageUri = data.getData();
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        s_image = BitmapFactory.decodeStream(imageStream);
+                        photos.add(s_image);
+                        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
+                        TextView valueTV = new TextView(this);
+                        valueTV.setText("image"+photos.size());
+                        valueTV.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
+                        ((LinearLayout) linearLayout).addView(valueTV);
 
-                    LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
-                    TextView valueTV = new TextView(this);
-                    valueTV.setText("hallo hallo");
-                    valueTV.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
-                    ((LinearLayout) linearLayout).addView(valueTV);
-
-                    StorageReference imagesRef = storageRef.child(spotID);
-                    spot_image = imagesRef.child(spotID+"/image.jpg");
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
 
                 }
-                break;
-            default:
-                break;
         }
 
 
     }
 
-    public void upload(Bitmap image,StorageReference spotImage ){
+
+    public void upload(Bitmap image, StorageReference spotImage) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -198,6 +224,42 @@ public class AddActivity extends AppCompatActivity {
                 //Uri downloadUrl = taskSnapshot.getDownloadUrl();
             }
         });
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Add Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
 

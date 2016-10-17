@@ -8,7 +8,6 @@ import java.util.List;
  */
 
 public class FeedItem {
-    protected int thumbnail;
     protected String house;
     protected String startdates;
     protected String enddates;
