@@ -63,8 +63,8 @@ public class ListingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 System.out.println("There are " + snapshot.getChildrenCount() + " houses in rent");
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    FeedItem item = postSnapshot.getValue(FeedItem.class);
-                    hi.add(item);
+                    //FeedItem item = postSnapshot.getValue(FeedItem.class);
+                    //hi.add(item);
                 }
             }
             @Override
@@ -80,8 +80,8 @@ public class ListingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 System.out.println("There are " + snapshot.getChildrenCount() + " houses in host");
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    FeedItem item = postSnapshot.getValue(FeedItem.class);
-                    hi.add(item);
+                   // FeedItem item = postSnapshot.getValue(FeedItem.class);
+                    //hi.add(item);
                 }
             }
             @Override

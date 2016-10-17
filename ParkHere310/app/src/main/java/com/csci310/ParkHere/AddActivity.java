@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -22,11 +23,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.cast.framework.media.ImagePicker;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +54,14 @@ public class AddActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
+    private FirebaseStorage storage;
+    private StorageReference storageRef;
     private String spotID;
     private Vector<Bitmap> photos;
     private int cancel_policy;
     private List<Integer> filter;
+    private Bitmap s_image;
+    private StorageReference spot_image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +70,8 @@ public class AddActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReferenceFromUrl("gs://parkhere310-3701d.appspot.com");
         spinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner1);
         spinner.setItems(items);
 
@@ -83,10 +95,11 @@ public class AddActivity extends AppCompatActivity {
         new TimePicker(AddActivity.this, R.id.startTimeEditText);
         new TimePicker(AddActivity.this, R.id.endTimeEditText);
 
+        spotID="emma"+Long.toString(System.currentTimeMillis());
+
         post.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        spotID="emma"+Long.toString(System.currentTimeMillis());
                                         filter=spinner.getSelectedIndicies();
                                         String starttime = startTime.getText().toString().trim();
                                         String endtime = endTime.getText().toString().trim();
@@ -112,7 +125,7 @@ public class AddActivity extends AppCompatActivity {
                                             cancel_policy=4;
                                         }
 
-
+                                        upload(s_image, spot_image);
                                     }
         });
     }
@@ -145,7 +158,7 @@ public class AddActivity extends AppCompatActivity {
                     int column=cursor.getColumnIndex(projection[0]);
                     String filepath=cursor.getString(column);
                     cursor.close();
-                    Bitmap s_image= BitmapFactory.decodeFile(filepath);
+                    s_image= BitmapFactory.decodeFile(filepath);
                     photos.add(s_image);
 
                     LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
@@ -153,6 +166,10 @@ public class AddActivity extends AppCompatActivity {
                     valueTV.setText("hallo hallo");
                     valueTV.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
                     ((LinearLayout) linearLayout).addView(valueTV);
+
+                    StorageReference imagesRef = storageRef.child(spotID);
+                    spot_image = imagesRef.child(spotID+"/image.jpg");
+
                 }
                 break;
             default:
@@ -160,6 +177,27 @@ public class AddActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    public void upload(Bitmap image,StorageReference spotImage ){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = spotImage.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                //pop-up
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            }
+        });
     }
 }
 
