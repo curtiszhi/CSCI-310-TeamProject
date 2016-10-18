@@ -43,31 +43,31 @@ public class User {
         isHost = host;
     }
 
-    public List<FeedItem> getRenting() {
+    public List<String> getRenting() {
         return renting;
     }
 
-    public void setRenting(List<FeedItem> renting) {
+    public void setRenting(List<String> renting) {
         this.renting = renting;
     }
 
-    public List<FeedItem> getHosting() {
+    public List<String> getHosting() {
         return hosting;
     }
 
-    public void setHosting(List<FeedItem> hosting) {
+    public void setHosting(List<String> hosting) {
         this.hosting = hosting;
     }
 
     Boolean isHost;
-    List<FeedItem> renting;
-    List<FeedItem> hosting;
+    List<String> renting;
+    List<String> hosting;
 
     public User() {
 
     }
 
-    public User(String userName, String email, String phone, Boolean isHost, List<FeedItem> renting, List<FeedItem> hosting) {
+    public User(String userName, String email, String phone, Boolean isHost, List<String> renting, List<String> hosting) {
         this.userName = userName;
         this.email = email;
         this.phone = phone;

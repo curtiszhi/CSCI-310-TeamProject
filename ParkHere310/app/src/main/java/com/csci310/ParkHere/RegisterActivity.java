@@ -123,31 +123,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void writeNewUser(String userId, String userName, String email, String phone, Boolean isHost) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        List<FeedItem> renting = new ArrayList<>();
-            FeedItem item = new FeedItem();
-            item.setAddress("Add your first renting spot!");
-            //item.setThumbnail(R.drawable.common_google_signin_btn_icon_dark);
-            //item.setDates("10/02 to 10/05");
-            item.setPrice(9);
-            item.setActivity(true);
-            item.setRating("3");
-            item.setSpotID(Integer.toString(item.hashCode()));
-
-        FeedItem item2 = new FeedItem();
-        item2.setAddress("Add your first host spot!");
-        //item2.setThumbnail(R.drawable.common_google_signin_btn_icon_dark);
-        //item2.setDates("10/02 to 10/05");
-        item2.setPrice(9);
-        item2.setActivity(true);
-        item2.setRating("3");
-        item2.setSpotID(Integer.toString(item.hashCode()));
-        renting.add(item);
-        List<FeedItem> hosting = new ArrayList<>();
-        hosting.add(item2);
+        List<String> renting = new ArrayList<>();
+        List<String> hosting = new ArrayList<>();
         User database_user = new User(userName, email, phone, isHost, renting, hosting);
         mDatabase.child("users").child(userId).setValue(database_user);
-        mDatabase.child("parking-spots").child(item.getSpotID()).setValue(item);
-        mDatabase.child("parking-spots").child(item2.getSpotID()).setValue(item2);
     }
 
     public static boolean validatePassword(String unhashedPassword) {

@@ -38,10 +38,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         FeedItem feedItem = feedItemList.get(i);
         feedListRowHolder.house.setText(feedItem.getAddress());
        // feedListRowHolder.thumbnail.setImageResource(feedItem.getThumbnail());
-       // feedListRowHolder.dates.setText(feedItem.getDates());
-        feedListRowHolder.price.setText(feedItem.getPrice());
+        feedListRowHolder.dates.setText(feedItem.getEndDates() + feedItem.getEndTime());
+        String stringdouble= Double.toString(feedItem.getPrice());
+        feedListRowHolder.price.setText(stringdouble);
         feedListRowHolder.rating.setRating(Float.parseFloat(feedItem.getRating()));
-        feedListRowHolder.activity.setText(feedItem.getActivity());
+        feedListRowHolder.activity.setText(String.valueOf(feedItem.getActivity()));
     }
 
     @Override
