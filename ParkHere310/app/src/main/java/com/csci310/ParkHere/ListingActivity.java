@@ -187,14 +187,14 @@ public class ListingActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(layoutManager);
             MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), hi);
             recyclerView.setAdapter(adapter);
-            FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab);
+            /*FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), AddActivity.class);
                     startActivity(intent);
                 }
-            });
+            });*/
 
             return root;
         }

@@ -104,7 +104,7 @@ public class AddActivity extends AppCompatActivity {
         new TimePicker(AddActivity.this, R.id.startTimeEditText);
         new TimePicker(AddActivity.this, R.id.endTimeEditText);
 
-        spotID = "yingchew@usc.edu" + Long.toString(System.currentTimeMillis());
+        spotID = mFirebaseUser.getEmail() + Long.toString(System.currentTimeMillis());
 
         photo.setOnClickListener(new View.OnClickListener() {
 
@@ -187,7 +187,7 @@ public class AddActivity extends AppCompatActivity {
         }
     }
     public void write_new_spot(FeedItem Fd) {
-        mDatabase.child("users").child("Fq2XZx5727XQ8U06fjQJN1jyzCA3").child("hosting").setValue(Fd.getSpotID());
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getSpotID());
         mDatabase.child("parking-spots").child(Fd.getSpotID()).setValue(Fd);
 
 
@@ -317,7 +317,7 @@ public class AddActivity extends AppCompatActivity {
 
                 mDatabase = FirebaseDatabase.getInstance().getReference();
                 mFirebaseAuth = FirebaseAuth.getInstance();
-                mFirebaseUser = mFirebaseAuth.getCurrentUser();
+                mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
 
                 FeedItem item = new FeedItem();
                 item.setTitle(name.getText().toString());
@@ -328,7 +328,7 @@ public class AddActivity extends AppCompatActivity {
                 item.setRatingValue(txtRatingValue);
 
                 Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("users/" + mFirebaseUser.getUid() + "/humidor/", item);
+                childUpdates.put("users/" + mFirebaseUser_universal.getUid() + "/humidor/", item);
                 Intent intent = new Intent(AddActivity.this, ListingActivity.class);
                 mDatabase.updateChildren(childUpdates);
                 startActivity(intent);
