@@ -106,7 +106,7 @@ public class AddActivity extends AppCompatActivity {
         new TimePicker(AddActivity.this, R.id.endTimeEditText);
 
         spotID = mFirebaseUser.getUid() + Long.toString(System.currentTimeMillis());
-//
+
         photo.setOnClickListener(new View.OnClickListener() {
 
             @Override
