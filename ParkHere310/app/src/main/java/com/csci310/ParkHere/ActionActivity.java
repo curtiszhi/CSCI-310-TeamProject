@@ -5,14 +5,11 @@ package com.csci310.ParkHere;
  */
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,23 +20,22 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * Created by seanyuan on 9/28/16.
  */
 public class ActionActivity extends AppCompatActivity {
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
+    public FirebaseAuth mFirebaseAuth;
+    public FirebaseUser mFirebaseUser_universal;
+    public DatabaseReference mDatabase;
     TextView user;
     TabHost host;
     private TextView startTime, endTime, startDate, endDate, location;
     private Button search;
-    private ProgressDialog progressDiag;
     private CheckBox compact, cover, handy;
 //khjvg
     @Override
@@ -47,7 +43,8 @@ public class ActionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.action_activity);
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
         TabHost.TabSpec spec = host.newTabSpec("Basics");
@@ -62,7 +59,6 @@ public class ActionActivity extends AppCompatActivity {
         new DatePicker(ActionActivity.this, R.id.endDateEditText);
         new TimePicker(ActionActivity.this, R.id.startTimeText);
         new TimePicker(ActionActivity.this, R.id.endTimeText);
-        progressDiag = new ProgressDialog(this);
         startTime = (TextView) findViewById(R.id.startTimeText);
         endTime = (TextView) findViewById(R.id.endTimeText);
         startDate = (TextView) findViewById(R.id.startDateEditText);
@@ -78,13 +74,13 @@ public class ActionActivity extends AppCompatActivity {
                 String endtime = endTime.getText().toString().trim();
                 String startdate = startDate.getText().toString().trim();
                 String enddate = endDate.getText().toString().trim();
-                Boolean requestCompact = compact.isChecked();
-                Boolean requestCover = cover.isChecked();
-                Boolean handicapped = handy.isChecked();
+                String address = location.getText().toString().trim();
+                boolean requestCompact = compact.isChecked();
+                boolean requestCover = cover.isChecked();
+                boolean handicapped = handy.isChecked();
                 validateFields(starttime, endtime, startdate,enddate);
-                progressDiag.setMessage("Searching...");
-                progressDiag.show();
-                ///do search
+
+                SearchOperation.search(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped, address);
             }
         });
 
@@ -137,6 +133,11 @@ public class ActionActivity extends AppCompatActivity {
             mFirebaseAuth = FirebaseAuth.getInstance();
             mFirebaseAuth.signOut();
             Intent intent = new Intent(ActionActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+
+        if(item.getItemId() == R.id.newPosting){
+            Intent intent = new Intent(ActionActivity.this, AddActivity.class);
             startActivity(intent);
         }
 

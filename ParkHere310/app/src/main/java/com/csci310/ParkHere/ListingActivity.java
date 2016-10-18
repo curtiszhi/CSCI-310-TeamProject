@@ -63,8 +63,8 @@ public class ListingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 System.out.println("There are " + snapshot.getChildrenCount() + " houses in rent");
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    FeedItem item = postSnapshot.getValue(FeedItem.class);
-                    hi.add(item);
+                    //FeedItem item = postSnapshot.getValue(FeedItem.class);
+                    //hi.add(item);
                 }
             }
             @Override
@@ -80,8 +80,8 @@ public class ListingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot snapshot) {
                 System.out.println("There are " + snapshot.getChildrenCount() + " houses in host");
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    FeedItem item = postSnapshot.getValue(FeedItem.class);
-                    hi.add(item);
+                   // FeedItem item = postSnapshot.getValue(FeedItem.class);
+                    //hi.add(item);
                 }
             }
             @Override
@@ -187,14 +187,14 @@ public class ListingActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(layoutManager);
             MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), hi);
             recyclerView.setAdapter(adapter);
-            FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab);
+            /*FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), AddActivity.class);
                     startActivity(intent);
                 }
-            });
+            });*/
 
             return root;
         }

@@ -1,15 +1,42 @@
 package com.csci310.ParkHere;
 
 
+import java.util.List;
+
 /**
  * Created by seanyuan on 10/7/16.
  */
 
 public class FeedItem {
-    protected int thumbnail;
-    protected String house;
-    protected String dates;
-    protected String price;
+    private String house;
+    private String startdates;
+    private String enddates;
+    private String starttime;
+    private String endtime;
+    private double price;
+    private String cancelpolicy;
+    private String spotID;
+    private String description;
+    private String rating;
+    private Boolean activity;
+    private List<String> filters;
+    private String Host;
+
+    public String getHost() {
+        return Host;
+    }
+
+    public void setHost(String host) {
+        Host = host;
+    }
+
+    public String getCancel() {
+        return cancelpolicy;
+    }
+
+    public void setCancel(String cancelpolicy) {
+        this.cancelpolicy = cancelpolicy;
+    }
 
     public String getSpotID() {
         return spotID;
@@ -19,7 +46,6 @@ public class FeedItem {
         this.spotID = spotID;
     }
 
-    protected String spotID;
 
     public String getRating() {
         return rating;
@@ -27,14 +53,6 @@ public class FeedItem {
 
     public void setRating(String rating) {
         this.rating = rating;
-    }
-
-    public int getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(int thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public String getHouse() {
@@ -45,31 +63,67 @@ public class FeedItem {
         this.house = house;
     }
 
-    public String getDates() {
-        return dates;
+    public String getStartDates() {
+        return startdates;
     }
 
-    public void setDates(String dates) {
-        this.dates = dates;
+    public void setStartDates(String startdates) {
+        this.startdates = startdates;
     }
 
-    public String getPrice() {
+    public String getEndDates() {
+        return enddates;
+    }
+
+    public void setEndDates(String enddates) {
+        this.enddates = enddates;
+    }
+
+    public String getStartTime() {
+        return starttime;
+    }
+
+    public void setStartTime(String starttime) {
+        this.starttime = starttime;
+    }
+
+    public String getEndTime() {
+        return endtime;
+    }
+
+    public void setEndTime(String endtime) {
+        this.endtime = endtime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getActivity() {
+    public Boolean getActivity() {
         return activity;
     }
 
-    public void setActivity(String activity) {
+    public void setActivity(Boolean activity) {
         this.activity = activity;
     }
 
-    protected String rating;
-    protected String activity;
+    public List<String> getFilter(){
+        return filters;
+    }
 
+    public void setFilter(List<String> filters) {
+        this.filters = filters;
+    }
 }
