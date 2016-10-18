@@ -17,9 +17,11 @@ public class FeedListRowHolder extends RecyclerView.ViewHolder {
     protected TextView price;
     protected RatingBar rating;
     protected TextView activity;
+    protected View mRootView;
 
     public FeedListRowHolder(View view) {
         super(view);
+        mRootView = view;
         this.thumbnail = (ImageView) view.findViewById(R.id.thumbnail);
         this.house = (TextView) view.findViewById(R.id.house);
         this.dates = (TextView) view.findViewById(R.id.dates);

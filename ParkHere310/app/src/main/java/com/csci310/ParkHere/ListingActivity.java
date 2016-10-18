@@ -192,9 +192,11 @@ public class ListingActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
+
             //if renting list requested
             getItemsRenting(rentingList);
             //if renting list requested
+
             MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), rentingActualList);
             recyclerView.setAdapter(adapter);
             /*FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab);
