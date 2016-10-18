@@ -1,7 +1,5 @@
 package com.csci310.ParkHere;
 
-import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,17 +14,18 @@ import java.net.URLConnection;
  * Created by curtiszhi on 10/15/16.
  */
 
-public class SearchOperation
+public class AddressOperation
 {
     private static final String API_KEY = "AIzaSyBxTXSEer2OE4jdVeG6AUa2UWF8QzZJhlo";
 
+    //Return the comprehensive information of the address in JSON:
     public static String parseAddress(String address)
     {
         address = address.trim().replaceAll("\\s+", "+");
         String result = "";
         try
         {
-            URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=AIzaSyBxTXSEer2OE4jdVeG6AUa2UWF8QzZJhlo");
+            URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + API_KEY);
             URLConnection urlConnection = url.openConnection();
             String line = null;
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -37,6 +36,7 @@ public class SearchOperation
         return result;
     }
 
+    //Return the place_id for the JSON address info
     public static String parseJSON(String result)
     {
         String place_id = "";
@@ -58,7 +58,9 @@ public class SearchOperation
         }
         return place_id;
     }
-    public static void search(String sTime, String eTime, String sDate, String eDate, boolean isCompact, boolean isCovered, boolean isHandicapped, String address) {
+
+    public static void search(String sTime, String eTime, String sDate, String eDate, boolean isCompact, boolean isCovered, boolean isHandicapped, String address)
+    {
 
     }
 }
