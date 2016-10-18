@@ -8,25 +8,25 @@ import java.util.List;
  */
 
 public class FeedItem {
-    protected String house;
-    protected String startdates;
-    protected String enddates;
-    protected String starttime;
-    protected String endtime;
-    protected int price;
-    protected int cancelpolicy;
-    protected String spotID;
-    protected String description;
-    protected String rating;
-    protected String activity;
-    protected List<Integer> filters;
+    private String house;
+    private String startdates;
+    private String enddates;
+    private String starttime;
+    private String endtime;
+    private int price;
+    private String cancelpolicy;
+    private String spotID;
+    private String description;
+    private String rating;
+    private String activity;
+    private List<String> filters;
 
 
-    public int getCancel() {
+    public String getCancel() {
         return cancelpolicy;
     }
 
-    public void setCancel(int cancelpolicy) {
+    public void setCancel(String cancelpolicy) {
         this.cancelpolicy = cancelpolicy;
     }
 
@@ -111,11 +111,11 @@ public class FeedItem {
         this.activity = activity;
     }
 
-    public List<Integer> getFilter(){
+    public List<String> getFilter(){
         return filters;
     }
 
-    public void setFilter(List<Integer> filters) {
+    public void setFilter(List<String> filters) {
         this.filters = filters;
     }
 }

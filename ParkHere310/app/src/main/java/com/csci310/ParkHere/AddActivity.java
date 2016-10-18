@@ -23,10 +23,6 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.github.oliveiradev.lib.RxPhoto;
-import com.github.oliveiradev.lib.Transformers;
-import com.github.oliveiradev.lib.TypeRequest;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -57,7 +53,6 @@ import java.util.Vector;
 
 public class AddActivity extends AppCompatActivity {
     private TextView location, description, price, startTime, endTime, startDate, endDate;
-    private RadioButton c1, c2, c3, c4;
     private Button post, photo;
     private MultiSelectionSpinner spinner;
     private String[] items = {"handicap", "Compact", "SUV", "Truck", "covered parking"};
@@ -69,8 +64,8 @@ public class AddActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private String spotID;
     private Vector<Bitmap> photos;
-    private int cancel_policy;
-    private List<Integer> filter;
+    private String cancel_policy;
+    private List<String> filter;
     private Bitmap s_image;
     private StorageReference spot_image;
     /**
@@ -102,17 +97,14 @@ public class AddActivity extends AppCompatActivity {
         endTime = (TextView) findViewById(R.id.endTimeEditText);
         startDate = (TextView) findViewById(R.id.startDateEditText);
         endDate = (TextView) findViewById(R.id.endDateEditText);
-        c1 = (RadioButton) findViewById(R.id.radio_norefund);
-        c2 = (RadioButton) findViewById(R.id.radio_80refund);
-        c3 = (RadioButton) findViewById(R.id.radio_full_50);
-        c4 = (RadioButton) findViewById(R.id.radio_full_0);
+
 
         new DatePicker(AddActivity.this, R.id.startDateEditText);
         new DatePicker(AddActivity.this, R.id.endDateEditText);
         new TimePicker(AddActivity.this, R.id.startTimeEditText);
         new TimePicker(AddActivity.this, R.id.endTimeEditText);
 
-        spotID = "emma" + Long.toString(System.currentTimeMillis());
+        spotID = "yingchew@usc.edu" + Long.toString(System.currentTimeMillis());
 
         photo.setOnClickListener(new View.OnClickListener() {
 
@@ -131,7 +123,7 @@ public class AddActivity extends AppCompatActivity {
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                                        filter=spinner.getSelectedIndicies();
+                                        filter=spinner.getSelectedStrings();
                                         String starttime = startTime.getText().toString().trim();
                                         String endtime = endTime.getText().toString().trim();
                                         String startdate = startDate.getText().toString().trim();
@@ -139,39 +131,65 @@ public class AddActivity extends AppCompatActivity {
                                         String address = location.getText().toString().trim();
                                         String description_parking = description.getText().toString().trim();
                                         int price_parking=Integer.parseInt(price.getText().toString().trim());
-                                        boolean checked_c1 = c1.isChecked();
-                                        boolean checked_c2 = c2.isChecked();
-                                        boolean checked_c3 = c3.isChecked();
-                                        boolean checked_c4 = c4.isChecked();
-                                        if(checked_c1){
-                                            cancel_policy=1;
-                                        }
-                                        if(checked_c2){
-                                            cancel_policy=2;
-                                        }
-                                        if(checked_c3){
-                                            cancel_policy=3;
-                                        }
-                                        if(checked_c4){
-                                            cancel_policy=4;
-                                        }
+
+
                 FeedItem fd=new FeedItem();
+                fd.setActivity("active");
+                fd.setCancel(cancel_policy);
+                fd.setDescription(description_parking);
+                fd.setSpotID(spotID);
+                fd.setRating(null);
+                fd.setHouse(address);
+                fd.setStartDates(startdate);
+                fd.setEndDates(enddate);
+                fd.setStartTime(starttime);
+                fd.setEndTime(endtime);
+                fd.setPrice(price_parking);
+                fd.setFilter(filter);
+                write_new_spot(fd);
+
 
 
                 StorageReference imagesRef = storageRef.child(spotID);
-                spot_image = imagesRef.child(spotID + "/image.jpg");
 
-                for(int i=0;i<photos.size();i++) upload(photos.get(i), spot_image);
+                for(int i=0;i<photos.size();i++){
+                    spot_image = imagesRef.child("image" + i + ".jpg");
+                    upload(photos.get(i), spot_image);
+                }
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+    public void onRadioButtonClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
 
-    public void write_new_spot() {
-        mDatabase.child("users").child("Fq2XZx5727XQ8U06fjQJN1jyzCA3").child("hosting");
-        //mDatabase.child("parking-spots").child(spotID).setValue();
+        // Check which radio button was clicked
+        switch(view.getId()) {
+            case R.id.radio_norefund:
+                if (checked)
+                    cancel_policy="No refund";
+                    break;
+            case R.id.radio_80refund:
+                if (checked)
+                    cancel_policy="80% refund rate at any time";
+                    break;
+            case R.id.radio_full_50:
+                if (checked)
+                    cancel_policy="Full refund if cancell before 7 days, 50% refund if cancell less than 7 days";
+                    break;
+            case R.id.radio_full_0:
+                if (checked)
+                    cancel_policy="Full refund if cancell before 7 days, no refund if cancell less than 7 days";
+                    break;
+        }
+    }
+    public void write_new_spot(FeedItem Fd) {
+        mDatabase.child("users").child("Fq2XZx5727XQ8U06fjQJN1jyzCA3").child("hosting").setValue(Fd.getSpotID());
+        mDatabase.child("parking-spots").child(Fd.getSpotID()).setValue(Fd);
+
 
     }
 
