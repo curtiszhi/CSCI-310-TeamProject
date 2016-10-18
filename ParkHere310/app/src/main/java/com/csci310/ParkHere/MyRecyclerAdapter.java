@@ -36,7 +36,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
     @Override
     public void onBindViewHolder(FeedListRowHolder feedListRowHolder, int i) {
         FeedItem feedItem = feedItemList.get(i);
-        feedListRowHolder.house.setText(feedItem.getHouse());
+        feedListRowHolder.house.setText(feedItem.getAddress());
        // feedListRowHolder.thumbnail.setImageResource(feedItem.getThumbnail());
        // feedListRowHolder.dates.setText(feedItem.getDates());
         feedListRowHolder.price.setText(feedItem.getPrice());

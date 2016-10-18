@@ -125,20 +125,20 @@ public class RegisterActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         List<FeedItem> renting = new ArrayList<>();
             FeedItem item = new FeedItem();
-            item.setHouse("Add your first renting spot!");
+            item.setAddress("Add your first renting spot!");
             //item.setThumbnail(R.drawable.common_google_signin_btn_icon_dark);
             //item.setDates("10/02 to 10/05");
             item.setPrice(9);
-            item.setActivity("Active");
+            item.setActivity(true);
             item.setRating("3");
             item.setSpotID(Integer.toString(item.hashCode()));
 
         FeedItem item2 = new FeedItem();
-        item2.setHouse("Add your first host spot!");
+        item2.setAddress("Add your first host spot!");
         //item2.setThumbnail(R.drawable.common_google_signin_btn_icon_dark);
         //item2.setDates("10/02 to 10/05");
         item2.setPrice(9);
-        item2.setActivity("Active");
+        item2.setActivity(true);
         item2.setRating("3");
         item2.setSpotID(Integer.toString(item.hashCode()));
         renting.add(item);

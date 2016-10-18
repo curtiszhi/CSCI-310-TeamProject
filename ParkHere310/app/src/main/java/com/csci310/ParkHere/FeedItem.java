@@ -8,19 +8,25 @@ import java.util.List;
  */
 
 public class FeedItem {
-    private String house;
+    private String spotID;
+    private String address;
+    private double latitude;
+    private double longitude;
     private String startdates;
     private String enddates;
     private String starttime;
     private String endtime;
     private double price;
     private String cancelpolicy;
-    private String spotID;
     private String description;
     private String rating;
     private Boolean activity;
     private List<String> filters;
     private String Host;
+
+    public String getSpotID() { return spotID; }
+
+    public void setSpotID(String spotID) { this.spotID = spotID; }
 
     public String getHost() {
         return Host;
@@ -38,15 +44,6 @@ public class FeedItem {
         this.cancelpolicy = cancelpolicy;
     }
 
-    public String getSpotID() {
-        return spotID;
-    }
-
-    public void setSpotID(String spotID) {
-        this.spotID = spotID;
-    }
-
-
     public String getRating() {
         return rating;
     }
@@ -55,13 +52,21 @@ public class FeedItem {
         this.rating = rating;
     }
 
-    public String getHouse() {
-        return house;
+    public String getAddress() {
+        return address;
     }
 
-    public void setHouse(String house) {
-        this.house = house;
+    public void setAddress(String address) {
+        this.address = address;
     }
+
+    public double getLongitude() { return longitude; }
+
+    public void setLongitude(double longitude) { this.longitude = longitude; }
+
+    public double getLatitude() { return latitude; }
+
+    public void setLatitude(double latitude) { this.latitude = latitude; }
 
     public String getStartDates() {
         return startdates;

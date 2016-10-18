@@ -130,15 +130,19 @@ public class AddActivity extends AppCompatActivity {
                                         String description_parking = description.getText().toString().trim();
                                         int price_parking=Integer.parseInt(price.getText().toString().trim());
 
+                String jsonString = AddressOperation.getJSONfromAddress(address);
+                double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
 
                 FeedItem fd=new FeedItem();
                 fd.setActivity(true);
                 fd.setCancel(cancel_policy);
                 fd.setDescription(description_parking);
-                spotID = AddressOperation.parseJSON(AddressOperation.parseAddress(location.getText().toString()));
+                spotID = AddressOperation.getIDfromJSON(jsonString);
                 fd.setSpotID(spotID);
                 fd.setRating(null);
-                fd.setHouse(address);
+                fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
+                fd.setLatitude(latlng[0]);
+                fd.setLongitude(latlng[1]);
                 fd.setStartDates(startdate);
                 fd.setEndDates(enddate);
                 fd.setStartTime(starttime);
