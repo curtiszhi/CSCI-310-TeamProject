@@ -1,6 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="User Profile"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="20dp"
+        android:textSize="30dp"
+        android:textColor="#009688"
+        android:textStyle="bold"/>
+
+    <!--Name TextView/EditText-->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height= "wrap_content"
+            android:id="@+id/nameTextView"
+            android:text="Name: "
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="30dp"
+            android:paddingTop="20dp"
+            android:textSize="20dp"
+            android:textColor="#009688" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameEditText"
+            android:hint=""
+            android:paddingTop="20dp"
+            android:paddingLeft="100dp"
+            android:textSize="20dp"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:inputType="phone"
+            android:textColorHighlight="#fb00ff"
+            android:textColorHint="#009688"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/nameTextView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+    <!--Email TextView/EditText-->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height= "wrap_content"
+            android:id="@+id/emailTextView"
+            android:text="Email: "
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="30dp"
+            android:paddingTop="20dp"
+            android:textSize="20dp"
+            android:textColor="#009688" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/emailEditText"
+            android:hint=""
+            android:paddingTop="20dp"
+            android:paddingLeft="100dp"
+            android:textSize="20dp"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:inputType="phone"
+            android:textColorHighlight="#fb00ff"
+            android:textColorHint="#009688"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/emailTextView"
+            android:layout_toEndOf="@+id/emailTextView" />
+
+    </RelativeLayout>
+
+    <!--Phone TextView/EditText-->
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height= "wrap_content"
+            android:id="@+id/phoneTextView"
+            android:text="Phone: "
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="30dp"
+            android:paddingTop="20dp"
+            android:textSize="20dp"
+            android:textColor="#009688" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/phoneEditText"
+            android:hint=""
+            android:paddingTop="20dp"
+            android:paddingLeft="100dp"
+            android:textSize="20dp"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:inputType="phone"
+            android:textColorHighlight="#fb00ff"
+            android:textColorHint="#009688"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_toRightOf="@+id/phoneTextView"
+            android:layout_toEndOf="@+id/phoneTextView" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Rental History"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/viewRentHistoryButton"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Hosting History"
+            android:layout_marginRight="20dp"
+            android:id="@+id/viewHostHistoryButton"
+            android:layout_alignBaseline="@+id/viewRentHistoryButton"
+            android:layout_alignBottom="@+id/viewRentHistoryButton"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+    <ToggleButton
+        android:id="@+id/editUserDetailsToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:textOn="Done"
+        android:textOff="Edit User Details"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onToggleClicked"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Return to Main Screen"
+        android:layout_marginTop="200dp"
+        android:id="@+id/returnHomeScreenButton"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>
+

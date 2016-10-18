@@ -3,6 +3,7 @@
     package="com.csci310.ParkHere">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -16,10 +17,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity"></activity>
-        <activity android:name=".ActionActivity"></activity>
-        <activity android:name=".ListingActivity"></activity>
-        <activity android:name=".AddActivity"></activity>
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".ActionActivity" />
+        <activity android:name=".ListingActivity" />
+        <activity android:name=".AddActivity" />
+        <activity android:name=".UserActivity"></activity>
     </application>
 
 </manifest>
