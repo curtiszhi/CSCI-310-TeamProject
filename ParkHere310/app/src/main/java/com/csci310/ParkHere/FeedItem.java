@@ -13,14 +13,22 @@ public class FeedItem {
     private String enddates;
     private String starttime;
     private String endtime;
-    private int price;
+    private double price;
     private String cancelpolicy;
     private String spotID;
     private String description;
     private String rating;
-    private String activity;
+    private Boolean activity;
     private List<String> filters;
+    private String Host;
 
+    public String getHost() {
+        return Host;
+    }
+
+    public void setHost(String host) {
+        Host = host;
+    }
 
     public String getCancel() {
         return cancelpolicy;
@@ -95,19 +103,19 @@ public class FeedItem {
         this.description = description;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public String getActivity() {
+    public Boolean getActivity() {
         return activity;
     }
 
-    public void setActivity(String activity) {
+    public void setActivity(Boolean activity) {
         this.activity = activity;
     }
 
