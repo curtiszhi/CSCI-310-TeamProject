@@ -20,7 +20,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -105,8 +104,6 @@ public class AddActivity extends AppCompatActivity {
         new TimePicker(AddActivity.this, R.id.startTimeEditText);
         new TimePicker(AddActivity.this, R.id.endTimeEditText);
 
-        spotID = mFirebaseUser.getUid() + Long.toString(System.currentTimeMillis());
-
         photo.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -131,13 +128,14 @@ public class AddActivity extends AppCompatActivity {
                                         String enddate = endDate.getText().toString().trim();
                                         String address = location.getText().toString().trim();
                                         String description_parking = description.getText().toString().trim();
-                                        double price_parking=Double.parseDouble(price.getText().toString().trim());
+                                        int price_parking=Integer.parseInt(price.getText().toString().trim());
 
 
                 FeedItem fd=new FeedItem();
                 fd.setActivity(true);
                 fd.setCancel(cancel_policy);
                 fd.setDescription(description_parking);
+                spotID = AddressOperation.parseJSON(AddressOperation.parseAddress(location.getText().toString()));
                 fd.setSpotID(spotID);
                 fd.setRating(null);
                 fd.setHouse(address);
@@ -147,7 +145,6 @@ public class AddActivity extends AppCompatActivity {
                 fd.setEndTime(endtime);
                 fd.setPrice(price_parking);
                 fd.setFilter(filter);
-                fd.setHost(mFirebaseUser.getUid());
                 write_new_spot(fd);
 
 
@@ -208,12 +205,11 @@ public class AddActivity extends AppCompatActivity {
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
                         photos.add(s_image);
-                        //LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
-                        RelativeLayout relLayout = (RelativeLayout)findViewById(R.id.imageTitleLayout);
+                        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
                         valueTV.setText("image"+photos.size());
                         valueTV.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
-                        ((RelativeLayout) relLayout).addView(valueTV);
+                        ((LinearLayout) linearLayout).addView(valueTV);
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();

@@ -80,7 +80,7 @@ public class ActionActivity extends AppCompatActivity {
                 boolean handicapped = handy.isChecked();
                 validateFields(starttime, endtime, startdate,enddate);
 
-                SearchOperation.search(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped, address);
+//                SearchOperation.search(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped, address);
             }
         });
 
