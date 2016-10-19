@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.ToggleButton;
-
+/*
 public class UserActivity extends AppCompatActivity {
 
     private Button viewHostHistoryButton, viewRentHistoryButton, returnHomeScreenButton;
@@ -100,3 +100,4 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 }
+*/
