@@ -19,7 +19,7 @@ public class FeedItem {
     private double price;
     private String cancelpolicy;
     private String description;
-    private String rating;
+    private Float rating;
     private Boolean activity;
     private List<String> filters;
     private String Host;
@@ -44,11 +44,11 @@ public class FeedItem {
         this.cancelpolicy = cancelpolicy;
     }
 
-    public String getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(String rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 
