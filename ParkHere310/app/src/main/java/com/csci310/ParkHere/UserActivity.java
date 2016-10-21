@@ -6,16 +6,19 @@ import android.os.Bundle;
 import android.text.method.KeyListener;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.ToggleButton;
-/*
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class UserActivity extends AppCompatActivity {
 
     private Button viewHostHistoryButton, viewRentHistoryButton, returnHomeScreenButton;
     private ToggleButton editToggleButton;
     private EditText nameEditText, emailEditText, phoneEditText;
-    KeyListener oldNameKeyListener, oldEmailKeyListener, oldPhoneKeyListener;
+    private FirebaseAuth mFirebaseAuth;
+    private static FirebaseUser mFirebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,50 +32,35 @@ public class UserActivity extends AppCompatActivity {
         viewRentHistoryButton = (Button) findViewById(R.id.viewRentHistoryButton);
         returnHomeScreenButton = (Button) findViewById(R.id.returnHomeScreenButton);
 
-        oldNameKeyListener = nameEditText.getKeyListener();
-        oldEmailKeyListener = emailEditText.getKeyListener();
-        oldPhoneKeyListener = phoneEditText.getKeyListener();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
+        nameEditText.setTag(nameEditText.getKeyListener());
         nameEditText.setKeyListener(null);
-        nameEditText.setFocusable(false);
-        nameEditText.setClickable(false);
 
+        emailEditText.setTag(emailEditText.getKeyListener());
         emailEditText.setKeyListener(null);
-        emailEditText.setFocusable(false);
-        emailEditText.setClickable(false);
 
+        phoneEditText.setTag(phoneEditText.getKeyListener());
         phoneEditText.setKeyListener(null);
-        phoneEditText.setFocusable(false);
-        phoneEditText.setClickable(false);
 
         editToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 if (editToggleButton.isChecked()) {
-                    nameEditText.setKeyListener(null);
-                    nameEditText.setFocusable(false);
-                    nameEditText.setClickable(false);
-
-                    emailEditText.setKeyListener(null);
-                    emailEditText.setFocusable(false);
-                    emailEditText.setClickable(false);
-
-                    phoneEditText.setKeyListener(null);
-                    phoneEditText.setFocusable(false);
-                    phoneEditText.setClickable(false);
+                    nameEditText.setKeyListener((KeyListener) nameEditText.getTag());
+                    emailEditText.setKeyListener((KeyListener) emailEditText.getTag());
+                    phoneEditText.setKeyListener((KeyListener) phoneEditText.getTag());
                 } else {
-                    nameEditText.setKeyListener(oldNameKeyListener);
-                    nameEditText.setFocusable(true);
-                    nameEditText.setClickable(true);
+                    nameEditText.setTag(nameEditText.getKeyListener());
+                    nameEditText.setKeyListener(null);
 
-                    nameEditText.setKeyListener(oldEmailKeyListener);
-                    emailEditText.setFocusable(true);
-                    emailEditText.setClickable(true);
+                    emailEditText.setTag(emailEditText.getKeyListener());
+                    emailEditText.setKeyListener(null);
 
-                    nameEditText.setKeyListener(oldPhoneKeyListener);
-                    phoneEditText.setFocusable(true);
-                    phoneEditText.setClickable(true);
+                    phoneEditText.setTag(phoneEditText.getKeyListener());
+                    phoneEditText.setKeyListener(null);
                 }
             }
         });
@@ -100,4 +88,3 @@ public class UserActivity extends AppCompatActivity {
         });
     }
 }
-*/
