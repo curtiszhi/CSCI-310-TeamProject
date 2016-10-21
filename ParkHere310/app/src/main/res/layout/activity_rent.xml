@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -12,14 +12,50 @@
         android:weightSum="1"
         tools:ignore="ExtraText">
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="fill_parent"
-            android:layout_height="300dp"
-            android:src="@drawable/icon"
-            android:layout_marginLeft="3dip"
-            android:scaleType="center"
-            android:paddingBottom="10dp"/>
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="fill_parent"
+                android:layout_height="300dp"
+                android:src="@drawable/icon"
+                android:layout_marginLeft="3dip"
+                android:scaleType="center"
+                android:paddingBottom="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image"
+                android:layout_centerHorizontal="true"
+                android:text="1/2 images:"
+                android:paddingLeft="10dp"
+                android:textSize="20dp"
+                android:paddingBottom="4dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="434dp"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Host:emma"
+                android:id="@+id/host_public_button"
+                android:layout_gravity="center_horizontal" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:rating="2.0" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:orientation="horizontal"
@@ -77,6 +113,7 @@
                 android:paddingLeft="10dp"
                 android:textSize="20dp"
                 android:paddingBottom="4dp" />
+
             <TextView
                 android:id="@+id/time"
                 android:layout_width="wrap_content"
