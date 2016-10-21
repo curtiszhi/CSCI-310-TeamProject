@@ -68,6 +68,8 @@ public class AddActivity extends AppCompatActivity {
     private List<String> filter;
     private Bitmap s_image;
     private StorageReference spot_image;
+    private FeedItem fd;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -133,7 +135,7 @@ public class AddActivity extends AppCompatActivity {
                 String jsonString = AddressOperation.getJSONfromAddress(address);
                 double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
 
-                FeedItem fd=new FeedItem();
+                fd=new FeedItem();
                 fd.setActivity(true);
                 fd.setCancel(cancel_policy);
                 fd.setDescription(description_parking);
@@ -209,6 +211,7 @@ public class AddActivity extends AppCompatActivity {
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
                         photos.add(s_image);
+                        fd.photos.add(s_image);
                         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
                         valueTV.setText("image"+photos.size());
@@ -283,62 +286,5 @@ public class AddActivity extends AppCompatActivity {
         client.disconnect();
     }
 }
-
-
-
-
-
-
-
-
-/**
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab2);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*house = (EditText) findViewById(R.id.cigarName);
-                type = (EditText) findViewById(R.id.cigarType);
-                length = (EditText) findViewById(R.id.length);
-                gauge = (EditText) findViewById(R.id.gauge);
-                amount = (EditText) findViewById(R.id.amount);
-                price = (EditText) findViewById(R.id.price);
-                location = (EditText) findViewById(R.id.location);
-                notes = (EditText) findViewById(R.id.notes);
-                ratingBar = (RatingBar) findViewById(R.id.ratingBarSetter);
-                //if rating value is changed,
-                //display the current rating value in the result (textview) automatically
-                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                    public void onRatingChanged(RatingBar ratingBar, float rating,
-                                                boolean fromUser) {
-
-                        txtRatingValue = (String.valueOf(rating));
-
-                    }
-                });
-
-
-
-                mDatabase = FirebaseDatabase.getInstance().getReference();
-                mFirebaseAuth = FirebaseAuth.getInstance();
-                mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
-
-                FeedItem item = new FeedItem();
-                item.setTitle(name.getText().toString());
-                item.setThumbnail(R.drawable.common_google_signin_btn_icon_dark);
-                item.setType(type.getText().toString());
-                item.setPrice(price.getText().toString());
-                item.setQuantity(amount.getText().toString());
-                item.setRatingValue(txtRatingValue);
-
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put("users/" + mFirebaseUser_universal.getUid() + "/humidor/", item);
-                Intent intent = new Intent(AddActivity.this, ListingActivity.class);
-                mDatabase.updateChildren(childUpdates);
-                startActivity(intent);
-            }
-        });
-
-    }
-**/
 
 

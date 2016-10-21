@@ -1,7 +1,10 @@
 package com.csci310.ParkHere;
 
 
+import android.graphics.Bitmap;
+
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by seanyuan on 10/7/16.
@@ -23,6 +26,7 @@ public class FeedItem {
     private Boolean activity;
     private List<String> filters;
     private String Host;
+    public Vector<Bitmap> photos;
 
     public String getSpotID() { return spotID; }
 

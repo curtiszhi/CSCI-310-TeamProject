@@ -42,7 +42,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         feedListRowHolder.dates.setText(feedItem.getEndDates() + feedItem.getEndTime());
         String stringdouble= Double.toString(feedItem.getPrice());
         feedListRowHolder.price.setText(stringdouble);
-        feedListRowHolder.rating.setRating(Float.parseFloat(feedItem.getRating()));
+        feedListRowHolder.rating.setRating(feedItem.getRating());
         feedListRowHolder.activity.setText(String.valueOf(feedItem.getActivity()));
         feedListRowHolder.mRootView.setOnClickListener(new ItemOnClickListener(feedListRowHolder.mRootView, i));
     }
