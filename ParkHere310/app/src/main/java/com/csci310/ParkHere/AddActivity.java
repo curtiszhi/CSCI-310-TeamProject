@@ -74,6 +74,7 @@ public class AddActivity extends AppCompatActivity {
     private Bitmap s_image;
     private StorageReference spot_image;
     private FeedItem fd;
+    private AddActivity self;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -85,6 +86,7 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("New Listing");
+        self = this;
         setContentView(R.layout.activity_create);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -168,6 +170,9 @@ public class AddActivity extends AppCompatActivity {
                         fd.setEndTime(endtime);
                         fd.setPrice(price_parking);
                         fd.setFilter(filter);
+
+                        new AddressOperation(self).execute(address);
+
                         write_new_spot(fd);
 
 
