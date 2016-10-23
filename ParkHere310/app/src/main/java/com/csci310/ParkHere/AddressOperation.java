@@ -24,6 +24,36 @@ public class AddressOperation extends AsyncTask<String, Void, String>
     private ProgressDialog progressDialog;
     private Activity activity;
 
+    public AddressOperation(Activity activity)
+    {
+        this.activity = activity;
+        this.progressDialog = new ProgressDialog(activity);
+    }
+
+    @Override
+    protected void onPreExecute()
+    {
+        super.onPreExecute();
+        progressDialog.setMessage("Searching...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+    }
+
+    @Override
+    protected String doInBackground(String... params)
+    {
+        return getJSONfromAddress(params[0]);
+    }
+
+    @Override
+    protected void onPostExecute(String result)
+    {
+        if (activity instanceof AddActivity)
+        {
+            ((AddActivity) activity).setFeedItem(result);
+        }
+    }
+
     //Return the address info in a JSON string:
     public static String getJSONfromAddress(String address)
     {
@@ -97,34 +127,6 @@ public class AddressOperation extends AsyncTask<String, Void, String>
 
     }
 
-    public AddressOperation(Activity activity)
-    {
-        this.activity = activity;
-        this.progressDialog = new ProgressDialog(activity);
-    }
 
-    @Override
-    protected void onPreExecute()
-    {
-        super.onPreExecute();
-        progressDialog.setMessage("Searching...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-    }
-
-    @Override
-    protected String doInBackground(String... params)
-    {
-        return getJSONfromAddress(params[0]);
-    }
-
-    @Override
-    protected void onPostExecute(String result)
-    {
-        if (activity instanceof AddActivity)
-        {
-            ((AddActivity) activity).setFeedItem(result);
-        }
-    }
 
 }

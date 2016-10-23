@@ -156,8 +156,6 @@ public class AddActivity extends AppCompatActivity {
 
                     if(check(starttime,endtime,startdate,enddate)){
 
-
-
                         fd.setActivity(true);
                         fd.setCancel(cancel_policy);
                         fd.setDescription(description_parking);
@@ -172,10 +170,6 @@ public class AddActivity extends AppCompatActivity {
                         fd.setFilter(filter);
 
                         new AddressOperation(self).execute(address);
-
-                        write_new_spot(fd);
-
-
 
                         StorageReference imagesRef = storageRef.child(spotID);
 
@@ -245,6 +239,7 @@ public class AddActivity extends AppCompatActivity {
         fd.setLatitude(latlng[0]);
         fd.setLongitude(latlng[1]);
 
+        write_new_spot(fd);
     }
 
     @Override
