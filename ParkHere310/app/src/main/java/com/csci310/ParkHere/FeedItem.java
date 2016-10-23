@@ -28,6 +28,16 @@ public class FeedItem {
     private String Host;
     public Vector<Bitmap> photos;
 
+    public String getCurrentRenter() {
+        return currentRenter;
+    }
+
+    public void setCurrentRenter(String currentRenter) {
+        this.currentRenter = currentRenter;
+    }
+
+    private String currentRenter;
+
     public String getSpotID() { return spotID; }
 
     public void setSpotID(String spotID) { this.spotID = spotID; }
