@@ -239,6 +239,7 @@ public class AddActivity extends AppCompatActivity {
         fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
         fd.setLatitude(latlng[0]);
         fd.setLongitude(latlng[1]);
+
     }
 
     @Override
