@@ -44,8 +44,10 @@ public class ListingActivity extends AppCompatActivity {
     private static FirebaseUser mFirebaseUser;
     static List<String> rentingList;
     static List<String> hostingList;
-    static List<FeedItem> displayList;
+    //static List<FeedItem> displayList;
     static List<FeedItem> rentingActualList;
+    static List<FeedItem> hostingActualList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +58,9 @@ public class ListingActivity extends AppCompatActivity {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         rentingList = new ArrayList<>();
         hostingList = new ArrayList<>();
-        displayList = new ArrayList<>();
+        //displayList = new ArrayList<>();
         rentingActualList = new ArrayList<>();
+        hostingActualList = new ArrayList<>();
         initDataListenerRental();
         initDataListenerHosting();
         initActionBar();
@@ -104,7 +107,7 @@ public class ListingActivity extends AppCompatActivity {
             ActionBar actionBar = getSupportActionBar();
             actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
             actionBar.addTab(actionBar.newTab()
-                    .setText("Search")
+                    .setText("Renting")
                     .setTabListener(new ActionBar.TabListener() {
                         @Override
                         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -120,11 +123,11 @@ public class ListingActivity extends AppCompatActivity {
                         }
                     }));
             actionBar.addTab(actionBar.newTab()
-                    .setText("Social")
+                    .setText("Hosting")
                     .setTabListener(new ActionBar.TabListener() {
                         @Override
                         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-                            fragmentTransaction.replace(android.R.id.content, new ChatViewFragment());
+                            fragmentTransaction.replace(android.R.id.content, new RecyclerViewFragmentHosting());
                         }
 
                         @Override
@@ -192,28 +195,31 @@ public class ListingActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-
-            //if renting list requested
             getItemsRenting(rentingList);
-            //if renting list requested
-
             MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), rentingActualList);
             recyclerView.setAdapter(adapter);
-            /*FloatingActionButton fab = (FloatingActionButton) root.findViewById(R.id.fab);
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getActivity(), AddActivity.class);
-                    startActivity(intent);
-                }
-            });*/
-
             return root;
         }
     }
+
+    public static class RecyclerViewFragmentHosting extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View root = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+            RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.myList);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(layoutManager);
+            getItemsHosting(hostingList);
+            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), hostingActualList);
+            recyclerView.setAdapter(adapter);
+            return root;
+        }
+    }
+
     private static void getItemsRenting(List<String> rentalIDs){
-        mDatabase.child("parking-spots-rent");
-        mDatabase.orderByChild("ownerID").equalTo(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("parking-spots-renting");
+        mDatabase.orderByChild("currentRenter").equalTo(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot child : dataSnapshot.getChildren()) {
@@ -221,6 +227,26 @@ public class ListingActivity extends AppCompatActivity {
                     Log.d("User ref", child.getRef().toString());
                     Log.d("User val", child.getValue().toString());
                     rentingActualList.add((FeedItem)child.getValue());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private static void getItemsHosting(List<String> hostalIDs){
+        mDatabase.child("parking-spots-hosting");
+        mDatabase.orderByChild("Host").equalTo(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Log.d("User key", child.getKey());
+                    Log.d("User ref", child.getRef().toString());
+                    Log.d("User val", child.getValue().toString());
+                    hostingActualList.add((FeedItem)child.getValue());
                 }
             }
 
