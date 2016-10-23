@@ -124,6 +124,7 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+        fd = new FeedItem();
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,19 +154,14 @@ public class AddActivity extends AppCompatActivity {
 
                     if(check(starttime,endtime,startdate,enddate)){
 
-                        String jsonString = AddressOperation.getJSONfromAddress(address);
-                        double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
 
-                        fd=new FeedItem();
+
                         fd.setActivity(true);
                         fd.setCancel(cancel_policy);
                         fd.setDescription(description_parking);
-                        spotID = AddressOperation.getIDfromJSON(jsonString);
-                        fd.setSpotID(spotID);
+
                         fd.setRating(null);
-                        fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
-                        fd.setLatitude(latlng[0]);
-                        fd.setLongitude(latlng[1]);
+
                         fd.setStartDates(startdate);
                         fd.setEndDates(enddate);
                         fd.setStartTime(starttime);
@@ -233,10 +229,17 @@ public class AddActivity extends AppCompatActivity {
     public void write_new_spot(FeedItem Fd) {
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getSpotID());
         mDatabase.child("parking-spots").child(Fd.getSpotID()).setValue(Fd);
-
-
     }
 
+    public void setFeedItem(String jsonString)
+    {
+        double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
+        spotID = AddressOperation.getIDfromJSON(jsonString);
+        fd.setSpotID(spotID);
+        fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
+        fd.setLatitude(latlng[0]);
+        fd.setLongitude(latlng[1]);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
