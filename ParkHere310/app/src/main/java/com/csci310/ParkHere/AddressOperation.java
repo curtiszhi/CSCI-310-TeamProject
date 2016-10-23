@@ -1,5 +1,9 @@
 package com.csci310.ParkHere;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,9 +18,11 @@ import java.net.URLConnection;
  * Created by curtiszhi on 10/15/16.
  */
 
-public class AddressOperation
+public class AddressOperation extends AsyncTask<String, Void, String>
 {
     private static final String API_KEY = "AIzaSyBxTXSEer2OE4jdVeG6AUa2UWF8QzZJhlo";
+    private ProgressDialog progressDialog;
+    private Activity activity;
 
     //Return the address info in a JSON string:
     public static String getJSONfromAddress(String address)
@@ -25,7 +31,7 @@ public class AddressOperation
         String result = "";
         try
         {
-            URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=AIzaSyBxTXSEer2OE4jdVeG6AUa2UWF8QzZJhlo");
+            URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + API_KEY);
             URLConnection urlConnection = url.openConnection();
             String line = null;
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
@@ -90,4 +96,35 @@ public class AddressOperation
     {
 
     }
+
+    public AddressOperation(Activity activity)
+    {
+        this.activity = activity;
+        this.progressDialog = new ProgressDialog(activity);
+    }
+
+    @Override
+    protected void onPreExecute()
+    {
+        super.onPreExecute();
+        progressDialog.setMessage("Searching...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+    }
+
+    @Override
+    protected String doInBackground(String... params)
+    {
+        return getJSONfromAddress(params[0]);
+    }
+
+    @Override
+    protected void onPostExecute(String result)
+    {
+        if (activity instanceof AddActivity)
+        {
+            ((AddActivity) activity).setFeedItem(result);
+        }
+    }
+
 }
