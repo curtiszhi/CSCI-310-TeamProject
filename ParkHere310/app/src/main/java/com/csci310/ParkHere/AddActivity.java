@@ -1,5 +1,6 @@
 package com.csci310.ParkHere;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -10,6 +11,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -40,6 +42,9 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +57,7 @@ import java.util.Vector;
  */
 
 public class AddActivity extends AppCompatActivity {
-    private TextView location, description, price, startTime, endTime, startDate, endDate;
+    private EditText location, description, price, startTime, endTime, startDate, endDate;
     private Button post, photo;
     private MultiSelectionSpinner spinner;
     private String[] items = {"handicap", "Compact", "SUV", "Truck", "covered parking"};
@@ -69,6 +74,7 @@ public class AddActivity extends AppCompatActivity {
     private Bitmap s_image;
     private StorageReference spot_image;
     private FeedItem fd;
+    private AddActivity self;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -80,6 +86,7 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("New Listing");
+        self = this;
         setContentView(R.layout.activity_create);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -92,13 +99,13 @@ public class AddActivity extends AppCompatActivity {
         photos = new Vector<Bitmap>();
         photo = (Button) findViewById(R.id.photo);
         post = (Button) findViewById(R.id.postButton);
-        location = (TextView) findViewById(R.id.Address);
-        description = (TextView) findViewById(R.id.description);
-        price = (TextView) findViewById(R.id.price);
-        startTime = (TextView) findViewById(R.id.startTimeEditText);
-        endTime = (TextView) findViewById(R.id.endTimeEditText);
-        startDate = (TextView) findViewById(R.id.startDateEditText);
-        endDate = (TextView) findViewById(R.id.endDateEditText);
+        location = (EditText) findViewById(R.id.Address);
+        description = (EditText) findViewById(R.id.description);
+        price = (EditText) findViewById(R.id.price);
+        startTime = (EditText) findViewById(R.id.startTimeEditText);
+        endTime = (EditText) findViewById(R.id.endTimeEditText);
+        startDate = (EditText) findViewById(R.id.startDateEditText);
+        endDate = (EditText) findViewById(R.id.endDateEditText);
 
 
         new DatePicker(AddActivity.this, R.id.startDateEditText);
@@ -119,48 +126,81 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+        fd = new FeedItem();
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                                        filter=spinner.getSelectedStrings();
-                                        String starttime = startTime.getText().toString().trim();
-                                        String endtime = endTime.getText().toString().trim();
-                                        String startdate = startDate.getText().toString().trim();
-                                        String enddate = endDate.getText().toString().trim();
-                                        String address = location.getText().toString().trim();
-                                        String description_parking = description.getText().toString().trim();
-                                        int price_parking=Integer.parseInt(price.getText().toString().trim());
+                filter=spinner.getSelectedStrings();
+                String starttime = startTime.getText().toString().trim();
+                String endtime = endTime.getText().toString().trim();
+                String startdate = startDate.getText().toString().trim();
+                String enddate = endDate.getText().toString().trim();
+                String address = location.getText().toString().trim();
+                String description_parking = description.getText().toString().trim();
+                double price_parking=Double.parseDouble(price.getText().toString().trim());
 
-                String jsonString = AddressOperation.getJSONfromAddress(address);
-                double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
-
-                fd=new FeedItem();
-                fd.setActivity(true);
-                fd.setCancel(cancel_policy);
-                fd.setDescription(description_parking);
-                spotID = AddressOperation.getIDfromJSON(jsonString);
-                fd.setSpotID(spotID);
-                fd.setRating(null);
-                fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
-                fd.setLatitude(latlng[0]);
-                fd.setLongitude(latlng[1]);
-                fd.setStartDates(startdate);
-                fd.setEndDates(enddate);
-                fd.setStartTime(starttime);
-                fd.setEndTime(endtime);
-                fd.setPrice(price_parking);
-                fd.setFilter(filter);
-                write_new_spot(fd);
-
-
-
-                StorageReference imagesRef = storageRef.child(spotID);
-
-                for(int i=0;i<photos.size();i++){
-                    spot_image = imagesRef.child("image" + i + ".jpg");
-                    upload(photos.get(i), spot_image);
+                if(isEmpty(location) ||isEmpty(description)||isEmpty(price)||isEmpty(startTime)||isEmpty(startDate)||isEmpty(endTime)||isEmpty(endDate)){
+                    AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
+                    alertDialog.setTitle("Alert");
+                    alertDialog.setMessage("Please fill all the Text field");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    alertDialog.show();
                 }
+                else{
+
+                    if(check(starttime,endtime,startdate,enddate)){
+
+
+
+                        fd.setActivity(true);
+                        fd.setCancel(cancel_policy);
+                        fd.setDescription(description_parking);
+
+                        fd.setRating(null);
+
+                        fd.setStartDates(startdate);
+                        fd.setEndDates(enddate);
+                        fd.setStartTime(starttime);
+                        fd.setEndTime(endtime);
+                        fd.setPrice(price_parking);
+                        fd.setFilter(filter);
+
+                        new AddressOperation(self).execute(address);
+
+                        write_new_spot(fd);
+
+
+
+                        StorageReference imagesRef = storageRef.child(spotID);
+
+                        for(int i=0;i<photos.size();i++){
+                            spot_image = imagesRef.child("image" + i + ".jpg");
+                            upload(photos.get(i), spot_image);
+                        }
+                    }else{
+                        AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
+                        alertDialog.setTitle("Alert");
+                        alertDialog.setMessage("Please make sure time difference is larger than 1 hour");
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+
+                    }
+                }
+
+
+
+
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -183,21 +223,29 @@ public class AddActivity extends AppCompatActivity {
                     break;
             case R.id.radio_full_50:
                 if (checked)
-                    cancel_policy="Full refund if cancell before 7 days, 50% refund if cancell less than 7 days";
+                    cancel_policy="Full refund if cancel before 7 days, 50% refund if cancel less than 7 days";
                     break;
             case R.id.radio_full_0:
                 if (checked)
-                    cancel_policy="Full refund if cancell before 7 days, no refund if cancell less than 7 days";
+                    cancel_policy="Full refund if cancel before 7 days, no refund if cancel less than 7 days";
                     break;
         }
     }
     public void write_new_spot(FeedItem Fd) {
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getSpotID());
         mDatabase.child("parking-spots").child(Fd.getSpotID()).setValue(Fd);
-
-
     }
 
+    public void setFeedItem(String jsonString)
+    {
+        double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
+        spotID = AddressOperation.getIDfromJSON(jsonString);
+        fd.setSpotID(spotID);
+        fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
+        fd.setLatitude(latlng[0]);
+        fd.setLongitude(latlng[1]);
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -228,6 +276,32 @@ public class AddActivity extends AppCompatActivity {
 
     }
 
+    private boolean check(String starttime,String endtime,String startdate,String enddate){
+        boolean checkdate=true;
+        try{
+
+                SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy hh:mm a");
+                Date time1 = df.parse(startdate+" "+starttime);
+                Date time2 = df.parse(enddate+" "+endtime);
+                long diff = time2.getTime() - time1.getTime();
+                long diffHours = diff / (60 * 60 * 1000) % 24;
+                if(diffHours>=1){
+                    checkdate=true;
+                }else{
+                    checkdate=false;
+                }
+
+
+        }catch(ParseException ex){
+            ex.printStackTrace();
+        }
+
+        return checkdate;
+    }
+
+    private boolean isEmpty(EditText etText) {
+        return etText.getText().toString().trim().length() == 0;
+    }
 
     public void upload(Bitmap image, StorageReference spotImage) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
