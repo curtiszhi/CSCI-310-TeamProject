@@ -52,6 +52,10 @@ public class AddressOperation extends AsyncTask<String, Void, String>
         {
             ((AddActivity) activity).setFeedItem(result);
         }
+        else if (activity instanceof ActionActivity)
+        {
+
+        }
     }
 
     //Return the address info in a JSON string:
@@ -126,7 +130,4 @@ public class AddressOperation extends AsyncTask<String, Void, String>
     {
 
     }
-
-
-
 }
