@@ -23,7 +23,7 @@
         <activity android:name=".ActionActivity" />
         <activity android:name=".ListingActivity" />
         <activity android:name=".AddActivity" />
-        <activity android:name=".RentActivity"/>
+        <activity android:name=".RentActivity" />
         <activity android:name=".RatingActivity" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
@@ -32,6 +32,10 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity
+            android:name=".paymentActivity"
+            android:label="@string/title_activity_payment"></activity>
     </application>
 
 </manifest>
