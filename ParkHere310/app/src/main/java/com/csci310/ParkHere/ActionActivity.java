@@ -137,7 +137,7 @@ public class ActionActivity extends AppCompatActivity {
         }
 
         if(item.getItemId() == R.id.newPosting){
-            Intent intent = new Intent(ActionActivity.this, UserActivity.class);
+            Intent intent = new Intent(ActionActivity.this, AddActivity.class);
             startActivity(intent);
         }
 
