@@ -15,6 +15,13 @@
         android:textColor="#009688"
         android:textStyle="bold"/>
 
+    <ImageView
+        android:id="@+id/profilePicImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center" />
+
+
     <!--Name TextView/EditText-->
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -47,7 +54,8 @@
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@+id/nameTextView"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:gravity="start" />
 
     </RelativeLayout>
 
@@ -84,7 +92,8 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_toRightOf="@+id/emailTextView"
-            android:layout_toEndOf="@+id/emailTextView" />
+            android:layout_toEndOf="@+id/emailTextView"
+            android:gravity="start" />
 
     </RelativeLayout>
 
@@ -121,9 +130,20 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:layout_toRightOf="@+id/phoneTextView"
-            android:layout_toEndOf="@+id/phoneTextView" />
+            android:layout_toEndOf="@+id/phoneTextView"
+            android:gravity="start" />
 
     </RelativeLayout>
+
+    <ToggleButton
+        android:id="@+id/editUserDetailsToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textOn="Done"
+        android:textOff="Edit User Details"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onToggleClicked"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -151,21 +171,11 @@
 
     </RelativeLayout>
 
-    <ToggleButton
-        android:id="@+id/editUserDetailsToggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:textOn="Done"
-        android:textOff="Edit User Details"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onToggleClicked"/>
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Return to Main Screen"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="100dp"
         android:id="@+id/returnHomeScreenButton"
         android:layout_gravity="center_horizontal"/>
 

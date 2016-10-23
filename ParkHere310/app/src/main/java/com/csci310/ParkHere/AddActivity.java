@@ -74,7 +74,7 @@ public class AddActivity extends AppCompatActivity {
     private Bitmap s_image;
     private StorageReference spot_image;
     private FeedItem fd;
-    String value;
+    private AddActivity self;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -86,6 +86,7 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("New Listing");
+        self = this;
         setContentView(R.layout.activity_create);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -94,7 +95,6 @@ public class AddActivity extends AppCompatActivity {
         storageRef = storage.getReferenceFromUrl("gs://parkhere310-3701d.appspot.com");
         spinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner1);
         spinner.setItems(items);
-
 
         photos = new Vector<Bitmap>();
         photo = (Button) findViewById(R.id.photo);
@@ -106,25 +106,6 @@ public class AddActivity extends AppCompatActivity {
         endTime = (EditText) findViewById(R.id.endTimeEditText);
         startDate = (EditText) findViewById(R.id.startDateEditText);
         endDate = (EditText) findViewById(R.id.endDateEditText);
-
-        if(getIntent().getExtras() != null){
-            Bundle bundle = getIntent().getExtras();
-            value = bundle.getString("ItemPosition");
-            int position = Integer.parseInt(value);
-            FeedItem feedItem = MyRecyclerAdapter.feedItemList.get(position);
-
-
-
-            spinner.setSelection(feedItem.getFilter());
-            startTime.setText(feedItem.getStartTime());
-            endTime.setText(feedItem.getEndTime());
-            startDate.setText(feedItem.getStartDates());
-            endDate.setText(feedItem.getEndTime());
-            location.setText(feedItem.getAddress());
-            description.setText(feedItem.getDescription());
-            price.setText(Double.toString(feedItem.getPrice()));
-
-        }
 
 
         new DatePicker(AddActivity.this, R.id.startDateEditText);
@@ -145,6 +126,7 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
+        fd = new FeedItem();
 
         post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,29 +156,20 @@ public class AddActivity extends AppCompatActivity {
 
                     if(check(starttime,endtime,startdate,enddate)){
 
-                        String jsonString = AddressOperation.getJSONfromAddress(address);
-                        double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
-
-                        fd=new FeedItem();
                         fd.setActivity(true);
                         fd.setCancel(cancel_policy);
                         fd.setDescription(description_parking);
-                        spotID = AddressOperation.getIDfromJSON(jsonString);
-                        fd.setSpotID(spotID);
+
                         fd.setRating(null);
-                        fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
-                        fd.setLatitude(latlng[0]);
-                        fd.setLongitude(latlng[1]);
+
                         fd.setStartDates(startdate);
                         fd.setEndDates(enddate);
                         fd.setStartTime(starttime);
                         fd.setEndTime(endtime);
                         fd.setPrice(price_parking);
                         fd.setFilter(filter);
-                        fd.setHost(mFirebaseUser.getUid());
-                        write_new_spot(fd);
 
-
+                        new AddressOperation(self).execute(address);
 
                         StorageReference imagesRef = storageRef.child(spotID);
 
@@ -254,11 +227,20 @@ public class AddActivity extends AppCompatActivity {
     }
     public void write_new_spot(FeedItem Fd) {
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getSpotID());
-        mDatabase.child("parking-spots-hosting").child(Fd.getSpotID()).setValue(Fd);
-
-
+        mDatabase.child("parking-spots").child(Fd.getSpotID()).setValue(Fd);
     }
 
+    public void setFeedItem(String jsonString)
+    {
+        double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
+        spotID = AddressOperation.getIDfromJSON(jsonString);
+        fd.setSpotID(spotID);
+        fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
+        fd.setLatitude(latlng[0]);
+        fd.setLongitude(latlng[1]);
+
+        write_new_spot(fd);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
