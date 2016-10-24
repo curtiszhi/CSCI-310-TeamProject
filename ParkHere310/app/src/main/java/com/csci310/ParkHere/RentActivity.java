@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
+import com.paypal.android.sdk.payments.PayPalService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,11 @@ public class RentActivity extends AppCompatActivity {
     private ImageView image_view;
     private TextView image_label;
     private int count;
+
+    private PayPalConfiguration m_configuration;
+    private String m_clientID;
+    private Intent m_service;
+    private int m_paypalrequestCode=86;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +99,13 @@ public class RentActivity extends AppCompatActivity {
         setUp();
         downloadPhoto();
         display();
+
+
+        m_configuration=new PayPalConfiguration().environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(m_clientID);
+        m_service=new Intent(this, PayPalService.class);
+        m_service.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION,m_configuration);
+        startService(m_service);
+
         image_view.setOnTouchListener(new OnSwipeTouchListener(RentActivity.this) {
 
             public void onSwipeRight() {
@@ -126,9 +140,7 @@ public class RentActivity extends AppCompatActivity {
         rent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(RentActivity.this, PayActivity.class);
-                intent.putExtra("ItemPosition", price.getText());
-                startActivity(intent);
+
             }
         });
     }
