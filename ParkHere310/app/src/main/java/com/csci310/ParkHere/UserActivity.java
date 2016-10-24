@@ -45,25 +45,22 @@ public class UserActivity extends AppCompatActivity {
         viewRentHistoryButton = (Button) findViewById(R.id.viewRentHistoryButton);
         returnHomeScreenButton = (Button) findViewById(R.id.returnHomeScreenButton);
 
-        //Pull User Info
+        //Get User Info
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        //DatabaseReference db = FirebaseDatabase.getInstance().getReference("users");
-        DatabaseReference userRef = mDatabase.child("users/" + mFirebaseUser.getUid() + "/userName/");
-        DatabaseReference phoneRef = mDatabase.child("users/" + mFirebaseUser.getUid() + "/phone/");
-        String name = userRef.getKey();
         String email = mFirebaseUser.getEmail();
-        String phone = phoneRef.getKey();
+        String phone = ActionActivity.user_all.getPhone();
+        String name = ActionActivity.user_all.getUserName();
         Uri uri = mFirebaseUser.getPhotoUrl();
 
-        // Doesn't work
-        /*
-        db.addValueEventListener(new ValueEventListener() {
+        // Doesn't work atm
+/*
+        userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = dataSnapshot.getValue(User.class);
-                nameEditText.setText(user.userName, TextView.BufferType.EDITABLE);
+                String name = dataSnapshot.getValue(String.class);
+                nameEditText.setText(name, TextView.BufferType.EDITABLE);
             }
 
             @Override
@@ -71,12 +68,12 @@ public class UserActivity extends AppCompatActivity {
 
             }
         });
-        */
+*/
 
         //Set User Info
-        nameEditText.setText(name,TextView.BufferType.EDITABLE);
-        emailEditText.setText(email,TextView.BufferType.EDITABLE);
-        phoneEditText.setText(phone,TextView.BufferType.EDITABLE);
+        nameEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
+        emailEditText.setText(email.trim(),TextView.BufferType.EDITABLE);
+        phoneEditText.setText(phone.trim(),TextView.BufferType.EDITABLE);
         profilePicImageView.setImageURI(uri);
 
 
@@ -108,8 +105,7 @@ public class UserActivity extends AppCompatActivity {
                     phoneEditText.setTag(phoneEditText.getKeyListener());
                     phoneEditText.setKeyListener(null);
 
-                    //Update User Info
-
+                    //Update User Info (Not Complete)
                     mFirebaseUser.updateEmail(emailEditText.getText().toString());
                     UserProfileChangeRequest updateName = new UserProfileChangeRequest.Builder().setDisplayName(nameEditText.getText().toString()).build();
                     mFirebaseUser.updateProfile(updateName);

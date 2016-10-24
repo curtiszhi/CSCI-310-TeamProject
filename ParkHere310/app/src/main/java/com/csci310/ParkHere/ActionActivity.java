@@ -22,8 +22,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by seanyuan on 9/28/16.
@@ -37,6 +41,7 @@ public class ActionActivity extends AppCompatActivity {
     private TextView startTime, endTime, startDate, endDate, location;
     private Button search;
     private CheckBox compact, cover, handy;
+    public static User user_all;
 //khjvg
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,7 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        initUserListener();
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
         TabHost.TabSpec spec = host.newTabSpec("Basics");
@@ -83,7 +89,39 @@ public class ActionActivity extends AppCompatActivity {
 //                SearchOperation.search(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped, address);
             }
         });
+    }
 
+    private void initUserListener(){
+        DatabaseReference database = mDatabase.child("users/");
+        System.out.println("inside listener");
+        database.orderByChild("email").equalTo(mFirebaseUser_universal.getEmail()).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
+                user_all = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+            // ...
+        });
     }
 
     private void validateFields(String starttime, String endtime, String startdate, String enddate){
