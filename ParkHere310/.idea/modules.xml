@@ -5,7 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/ParkHere310.iml" filepath="$PROJECT_DIR$/ParkHere310.iml" />
       <module fileurl="file://$PROJECT_DIR$/PayPal_MPL/PayPal_MPL.iml" filepath="$PROJECT_DIR$/PayPal_MPL/PayPal_MPL.iml" />
       <module fileurl="file://$PROJECT_DIR$/PayPal_MPL/PayPal_MPL.iml" filepath="$PROJECT_DIR$/PayPal_MPL/PayPal_MPL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PayPal_MPL/PayPal_MPL.iml" filepath="$PROJECT_DIR$/PayPal_MPL/PayPal_MPL.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/payment/payment.iml" filepath="$PROJECT_DIR$/payment/payment.iml" />
       <module fileurl="file://$PROJECT_DIR$/payment/payment.iml" filepath="$PROJECT_DIR$/payment/payment.iml" />
       <module fileurl="file://$PROJECT_DIR$/payment/payment.iml" filepath="$PROJECT_DIR$/payment/payment.iml" />
     </modules>
