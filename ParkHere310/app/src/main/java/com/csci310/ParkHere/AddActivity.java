@@ -227,7 +227,7 @@ public class AddActivity extends AppCompatActivity {
     }
     public void write_new_spot(FeedItem Fd) {
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getSpotID());
-        mDatabase.child("parking-spots").child(Fd.getSpotID()).setValue(Fd);
+        mDatabase.child("parking-spots-hosting").child(Fd.getSpotID()).setValue(Fd);
     }
 
     public void setFeedItem(String jsonString)

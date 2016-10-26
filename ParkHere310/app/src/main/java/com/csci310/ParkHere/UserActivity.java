@@ -116,16 +116,17 @@ public class UserActivity extends AppCompatActivity {
         viewHostHistoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
-                //Go to Host History
+                Intent intent = new Intent(UserActivity.this, ListingActivity.class);
+                startActivity(intent);
             }
         });
 
-        viewRentHistoryButton.setOnClickListener(new View.OnClickListener() {
+        /*viewRentHistoryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){
                 //Go to Rent History
             }
-        });
+        });*/
 
         returnHomeScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
