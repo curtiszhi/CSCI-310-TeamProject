@@ -97,7 +97,7 @@ public class ActionActivity extends AppCompatActivity {
         database.orderByChild("email").equalTo(mFirebaseUser_universal.getEmail()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                user_all = dataSnapshot.getValue(User.class);
+                //user_all = dataSnapshot.getValue(User.class);
             }
 
             @Override

@@ -170,7 +170,7 @@ public class AddActivity extends AppCompatActivity {
                         fd.setFilter(filter);
 
                         new AddressOperation(self).execute(address);
-
+                        //setFeedItem();
                         StorageReference imagesRef = storageRef.child(spotID);
 
                         for(int i=0;i<photos.size();i++){
@@ -254,7 +254,7 @@ public class AddActivity extends AppCompatActivity {
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
                         photos.add(s_image);
-                        fd.photos.add(s_image);
+                        //fd.photos.add(s_image);
                         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
                         valueTV.setText("image"+photos.size());
