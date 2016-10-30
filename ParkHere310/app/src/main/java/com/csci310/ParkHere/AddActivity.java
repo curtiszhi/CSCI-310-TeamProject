@@ -60,7 +60,7 @@ import java.util.Vector;
 public class AddActivity extends AppCompatActivity {
     private String identifier;
     private EditText location,city,postcode, description, price, startTime, endTime, startDate, endDate;
-    private Button post, photo;
+    private Button post, photoButton;
     private MultiSelectionSpinner spinner;
     private String[] items = {"handicap", "Compact", "SUV", "Truck", "covered parking"};
     private static final int selected_p = 1;
@@ -128,7 +128,9 @@ public class AddActivity extends AppCompatActivity {
             "WV",
             "WI",
             "WY"};
-
+    String value;
+    int position;
+    Boolean isEdit;
 
 
     /**
@@ -142,6 +144,8 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("New Listing");
         self = this;
+
+
         setContentView(R.layout.activity_create);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -152,7 +156,7 @@ public class AddActivity extends AppCompatActivity {
         spinner.setItems(items);
 
         photos = new Vector<Bitmap>();
-        photo = (Button) findViewById(R.id.photo);
+        photoButton = (Button) findViewById(R.id.photo);
         post = (Button) findViewById(R.id.postButton);
         location = (EditText) findViewById(R.id.Address);
         description = (EditText) findViewById(R.id.description);
@@ -172,6 +176,31 @@ public class AddActivity extends AppCompatActivity {
         new DatePicker(AddActivity.this, R.id.endDateEditText);
         new TimePicker(AddActivity.this, R.id.startTimeEditText);
         new TimePicker(AddActivity.this, R.id.endTimeEditText);
+
+        Bundle bundle = getIntent().getExtras();
+        if(bundle != null){
+            value = bundle.getString("ItemPosition");
+            position = Integer.parseInt(value);
+            fd = MyRecyclerAdapter.feedItemList.get(position);
+            isEdit = true;
+            location.setVisibility(View.GONE);
+            city.setVisibility(View.GONE);
+            postcode.setVisibility(View.GONE);
+            dropdown.setVisibility(View.GONE);
+            photos = fd.photos;
+            description.setText(fd.getDescription());
+            price.setText(Double.toString(fd.getPrice()));
+            startTime.setText(fd.getStartTime());
+            endTime.setText(fd.getEndTime());
+            startDate.setText(fd.getStartDates());
+            endDate.setText(fd.getEndDates());
+            spinner.setSelection(fd.getFilter());
+        } else{
+            isEdit = false;
+            fd = new FeedItem();
+        }
+
+
         AdapterView.OnItemSelectedListener statelistener=new AdapterView.OnItemSelectedListener(){
 
             @Override
@@ -187,7 +216,7 @@ public class AddActivity extends AppCompatActivity {
         };
         dropdown.setOnItemSelectedListener(statelistener);
 
-        photo.setOnClickListener(new View.OnClickListener() {
+        photoButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -200,11 +229,60 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
-        fd = new FeedItem();
-
         post.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(isEdit){
+                    filter=spinner.getSelectedStrings();
+                    String starttime = startTime.getText().toString().trim();
+                    String endtime = endTime.getText().toString().trim();
+                    String startdate = startDate.getText().toString().trim();
+                    String enddate = endDate.getText().toString().trim();
+                    String description_parking = description.getText().toString().trim();
+                    double price_parking=Double.parseDouble(price.getText().toString().trim());
+                    if(isEmpty(description)||isEmpty(price)||isEmpty(startTime)||isEmpty(startDate)||isEmpty(endTime)||isEmpty(endDate)){
+                        AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
+                        alertDialog.setTitle("Alert");
+                        alertDialog.setMessage("Please fill all the Text field");
+                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        alertDialog.show();
+                    }
+                    else{
+
+                        if(check(starttime,endtime,startdate,enddate)){
+                            //mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(fd.getIdentifier());
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("filter").setValue(filter);
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("startTime").setValue(starttime);
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("endTime").setValue(endtime);
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("startDates").setValue(startdate);
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("endDates").setValue(enddate);
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("description").setValue(description_parking);
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("price").setValue(price_parking);
+                            Intent intent = new Intent(AddActivity.this, UserActivity.class);//change to UserActivity.class
+                            startActivity(intent);
+
+
+                        }else{
+                            AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
+                            alertDialog.setTitle("Alert");
+                            alertDialog.setMessage("Please make sure time difference is larger than 1 hour");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+
+                        }
+                    }
+
+                }
                 filter=spinner.getSelectedStrings();
                 String starttime = startTime.getText().toString().trim();
                 String endtime = endTime.getText().toString().trim();
@@ -240,6 +318,7 @@ public class AddActivity extends AppCompatActivity {
                         fd.setDescription(description_parking);
 
                         fd.setRating(null);
+                        fd.setHost(mFirebaseAuth.getCurrentUser().getUid());
 
                         fd.setStartDates(startdate);
                         fd.setEndDates(enddate);
@@ -300,7 +379,7 @@ public class AddActivity extends AppCompatActivity {
     }
     public void write_new_spot(FeedItem Fd) {
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getIdentifier());
-        mDatabase.child("parking-spots").child(Fd.getIdentifier()).setValue(Fd);
+        mDatabase.child("parking-spots-hosting").child(Fd.getIdentifier()).setValue(Fd);
     }
 
     public void setFeedItem(String jsonString)
