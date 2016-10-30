@@ -170,13 +170,7 @@ public class AddActivity extends AppCompatActivity {
                         fd.setFilter(filter);
 
                         new AddressOperation(self).execute(address);
-                        //setFeedItem();
-                        StorageReference imagesRef = storageRef.child(spotID);
 
-                        for(int i=0;i<photos.size();i++){
-                            spot_image = imagesRef.child("image" + i + ".jpg");
-                            upload(photos.get(i), spot_image);
-                        }
                     }else{
                         AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
                         alertDialog.setTitle("Alert");
@@ -227,7 +221,7 @@ public class AddActivity extends AppCompatActivity {
     }
     public void write_new_spot(FeedItem Fd) {
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getSpotID());
-        mDatabase.child("parking-spots-hosting").child(Fd.getSpotID()).setValue(Fd);
+        mDatabase.child("parking-spots").child(Fd.getSpotID()).setValue(Fd);
     }
 
     public void setFeedItem(String jsonString)
@@ -240,6 +234,13 @@ public class AddActivity extends AppCompatActivity {
         fd.setLongitude(latlng[1]);
 
         write_new_spot(fd);
+
+        StorageReference imagesRef = storageRef.child(spotID);
+
+        for(int i=0;i<photos.size();i++){
+            spot_image = imagesRef.child("image" + i + ".jpg");
+            upload(photos.get(i), spot_image);
+        }
     }
 
     @Override
@@ -254,7 +255,7 @@ public class AddActivity extends AppCompatActivity {
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
                         photos.add(s_image);
-                        //fd.photos.add(s_image);
+                        fd.photos.add(s_image);
                         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
                         valueTV.setText("image"+photos.size());
