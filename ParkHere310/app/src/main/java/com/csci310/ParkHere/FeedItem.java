@@ -30,6 +30,9 @@ public class FeedItem {
     private String identifier;
     private String[] review;
 
+    FeedItem(){
+        photos=new Vector<Bitmap>();
+    }
     public String[] getReview() {
         return review;
     }

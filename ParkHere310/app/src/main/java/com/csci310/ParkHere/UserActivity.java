@@ -50,7 +50,6 @@ public class UserActivity extends AppCompatActivity {
         editToggleButton = (ToggleButton) findViewById(R.id.editUserDetailsToggleButton);
         viewHostHistoryButton = (Button) findViewById(R.id.viewHostHistoryButton);
         viewRentHistoryButton = (Button) findViewById(R.id.viewRentHistoryButton);
-        returnHomeScreenButton = (Button) findViewById(R.id.returnHomeScreenButton);
 
         // Edit Profile Pic (Not Tested Yet)
 

@@ -115,6 +115,14 @@ public class ActionActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
                 user_all = dataSnapshot.getValue(User.class);
+
+
+
+
+
+
+
+                
             }
 
             @Override

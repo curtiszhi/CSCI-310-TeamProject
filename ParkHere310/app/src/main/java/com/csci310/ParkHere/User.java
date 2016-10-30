@@ -10,7 +10,7 @@ public class User {
     String userName;
     String email;
     String phone;
-    private String[] review;
+    String[] review;
 
     public String[] getReview() {
         return review;

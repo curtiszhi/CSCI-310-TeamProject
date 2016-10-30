@@ -314,12 +314,12 @@ public class AddActivity extends AppCompatActivity {
 
         write_new_spot(fd);
 
-        StorageReference imagesRef = storageRef.child(spotID);
+       /* StorageReference imagesRef = storageRef.child(spotID);
 
         for(int i=0;i<photos.size();i++){
             spot_image = imagesRef.child("image" + i + ".jpg");
             upload(photos.get(i), spot_image);
-        }
+        }*/
     }
 
     @Override
@@ -333,13 +333,13 @@ public class AddActivity extends AppCompatActivity {
                         final Uri imageUri = data.getData();
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
-                        photos.add(s_image);
-//                        fd.photos.add(s_image);
-                        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
+                       // photos.add(s_image);
+                        fd.photos.add(s_image);
+                       /* LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
                         valueTV.setText("image"+photos.size());
                         valueTV.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
-                        ((LinearLayout) linearLayout).addView(valueTV);
+                        ((LinearLayout) linearLayout).addView(valueTV);*/
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
