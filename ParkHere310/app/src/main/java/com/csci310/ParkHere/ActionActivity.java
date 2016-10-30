@@ -28,6 +28,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import static android.text.TextUtils.isEmpty;
+
 /**
  * Created by seanyuan on 9/28/16.
  */
@@ -71,6 +73,7 @@ public class ActionActivity extends AppCompatActivity {
         endTime = (TextView) findViewById(R.id.endTimeText);
         startDate = (TextView) findViewById(R.id.startDateEditText);
         endDate = (TextView) findViewById(R.id.endDateEditText);
+        location = (TextView) findViewById(R.id.locationEditText);
         compact = (CheckBox) findViewById(R.id.compactBox);
         cover = (CheckBox) findViewById(R.id.coverBox);
         handy = (CheckBox) findViewById(R.id.handicappedBox);
@@ -83,16 +86,19 @@ public class ActionActivity extends AppCompatActivity {
                 String startdate = startDate.getText().toString().trim();
                 String enddate = endDate.getText().toString().trim();
                 String address = location.getText().toString().trim();
+
+                System.out.println(starttime);
+                System.out.println(endtime);
+                System.out.println(startdate);
+                System.out.println(enddate);
+
                 boolean requestCompact = compact.isChecked();
                 boolean requestCover = cover.isChecked();
                 boolean handicapped = handy.isChecked();
-                validateFields(starttime, endtime, startdate,enddate);
-
+                validateFields(starttime, endtime, startdate,enddate, address);
                 FeedItem[] tmp = null;
                 tmp = getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped);
-
                 new AddressOperation(self).execute(address);
-
             }
         });
     }
@@ -110,7 +116,6 @@ public class ActionActivity extends AppCompatActivity {
 
     private void initUserListener(){
         DatabaseReference database = mDatabase.child("users/");
-        System.out.println("inside listener");
         database.orderByChild("email").equalTo(mFirebaseUser_universal.getEmail()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
@@ -141,18 +146,38 @@ public class ActionActivity extends AppCompatActivity {
         });
     }
 
-    private void validateFields(String starttime, String endtime, String startdate, String enddate){
+    private void validateFields(String starttime, String endtime, String startdate, String enddate, String address){
         int compare = starttime.compareTo(endtime);
+
         if (compare > 0){
             Toast.makeText(ActionActivity.this, "Please choose later end time",
                     Toast.LENGTH_SHORT).show();
             return;
         }
+
         compare = startdate.compareTo(enddate);
+
         if (compare > 0){
             Toast.makeText(ActionActivity.this, "Please choose later end date",
                     Toast.LENGTH_SHORT).show();
             return;
+        }
+
+        if (address == null || isEmpty(address)){
+            Toast.makeText(ActionActivity.this, "Please enter an address",
+                    Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (startdate == enddate){
+            String[] time1 = starttime.split(":");
+            int hour1 = Integer.parseInt(time1[0]) % 12;
+            String[] time2 = endtime.split(":");
+            int hour2 = Integer.parseInt(time2[0]) % 12;
+            if ((hour2 - hour1) < 1){
+                Toast.makeText(ActionActivity.this, "Spots must be rented for at least 1 hour",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
     }
     @Override
