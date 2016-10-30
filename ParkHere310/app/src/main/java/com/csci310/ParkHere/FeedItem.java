@@ -29,22 +29,22 @@ public class FeedItem {
     private List<String> filters;
     private String Host;
     public Vector<Bitmap> photos;
-    private ArrayList<Map<String,Vector<String>>> rentedTime;
+    public Map<String,Vector<String>> rentedTime;
     private String identifier;
     private String[] review;
 
-    public ArrayList<Map<String,Vector<String>>> getRentedTime() {
+    public Map<String,Vector<String>> getRentedTime() {
         return rentedTime;
     }
 
-    public void setRentedTime(ArrayList<Map<String,Vector<String>>> rentedTime) {
+    public void setRentedTime(Map<String,Vector<String>>rentedTime) {
         this.rentedTime = rentedTime;
     }
 
 
     FeedItem(){
         photos=new Vector<Bitmap>();
-        rentedTime=new ArrayList<Map<String,Vector<String>>>();
+        //rentedTime= Map<String,Vector<String>>();
     }
     public String[] getReview() {
         return review;

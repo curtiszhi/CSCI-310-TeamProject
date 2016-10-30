@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by seanyuan on 9/30/16.
@@ -246,7 +247,12 @@ public class ListingActivity extends AppCompatActivity {
                     Log.d("User key", child.getKey());
                     Log.d("User ref", child.getRef().toString());
                     Log.d("User val", child.getValue().toString());
-                    hostingActualList.add((FeedItem)child.getValue());
+                    FeedItem g = (FeedItem)child.getValue();
+                    Set <String> hi = g.rentedTime.keySet();
+                    for (String s : hi) {
+                        g.setCurrentRenter(s);
+                        hostingActualList.add(g);
+                    }
                 }
             }
 
