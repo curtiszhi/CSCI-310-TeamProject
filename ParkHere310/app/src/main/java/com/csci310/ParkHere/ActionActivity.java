@@ -122,7 +122,9 @@ public class ActionActivity extends AppCompatActivity {
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
                     if (child.child("active").equals("true") &&
-                            dateWithinRange(child.child("startDates").getKey(), child.child("endDates").getKey(), startdate, enddate))
+                            isValidDT(child.child("startDates").getKey(), child.child("endDates").getKey(), startdate, enddate,
+                                    child.child("startTime").getKey(), child.child("endTime").getKey(), ) == 1
+                            )
                     {
 
                     }
@@ -142,7 +144,16 @@ public class ActionActivity extends AppCompatActivity {
 
     }
 
-    private boolean dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
+    private boolean isValidDT (String sDate1str, String eDate1str, String sDate2str, String eDate2str, String sTime1str, String eTime1str, String sTime2str, String eTime2str)
+    {
+        if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
+            return true;
+        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 && timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
+            return true;
+        return false;
+    }
+
+    private int dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
     {
         try
         {
@@ -151,13 +162,25 @@ public class ActionActivity extends AppCompatActivity {
             Date eDate1 = sdf.parse(eDate1str);
             Date eDate2 = sdf.parse(eDate2str);
 
-            return sDate1.compareTo(sDate2) >= 0 && eDate1.compareTo(eDate2) <= 0;
+            //Within range:
+            if (sDate1.compareTo(sDate2) >= 0 && eDate1.compareTo(eDate2) <= 0)
+            {
+                //On a different day:
+                if (sDate1.compareTo(eDate1) > 0)
+                    return 1;
+                //On the same day:
+                else if (sDate1.compareTo(eDate1) == 0)
+                    return 2;
+            }
         }
         catch (ParseException parseException) {parseException.printStackTrace();}
-        return false;
+        return 0;
     }
 
-    private boolean timeWithinRange
+    private boolean timeWithinRange(String sTime1str, String eTime1str, String sTime2str, String eTime2str)
+    {
+        return false;
+    }
 
     private void initUserListener(){
         DatabaseReference database = mDatabase.child("users/");
