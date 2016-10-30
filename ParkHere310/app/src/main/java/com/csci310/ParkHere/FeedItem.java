@@ -109,12 +109,20 @@ public class FeedItem {
         this.cancelpolicy = cancelpolicy;
     }
 
-    public Vector<Float> getRating() {
-        return rating;
+    public Float getRating() {
+        float sum = 0;
+        for(int i = 0; i < rating.size(); i++){
+            sum = sum + rating.get(i);
+        }
+        return sum/(float)rating.size();
     }
 
     public void setRating(Vector<Float> rating) {
         this.rating = rating;
+    }
+
+    public void addRating(Float rating){
+        this.rating.add(rating);
     }
 
     public String getAddress() {

@@ -16,6 +16,10 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
@@ -57,7 +61,10 @@ public class RentActivity extends AppCompatActivity {
     private Vector<String> rentedTime;
     private Map<String,Vector<String>> renterRentTime;
     public static final int PAYPAL_REQUEST_CODE = 123;
+    private static DatabaseReference mDatabase;
     private String total_price;
+    private FirebaseAuth mFirebaseAuth;
+    private static FirebaseUser mFirebaseUser;
 
 
     //Paypal Configuration Object
@@ -73,6 +80,9 @@ public class RentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rent);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
         fd = new FeedItem();
         fd.setActivity(true);
         fd.setCancel("test cancel policy");
@@ -88,7 +98,8 @@ public class RentActivity extends AppCompatActivity {
         dumb.add("Handicapped");
         dumb.add("Shaded");
         fd.setFilter(dumb);
-        fd.setRating(Float.valueOf("4.0"));
+        int r = 4;
+        fd.addRating((float)r);
         rentedTime=new Vector<String>();
         rentedTime.add(0,fd.getStartDates()+" "+fd.getStartTime());
         rentedTime.add(1,fd.getEndDates()+" "+fd.getEndTime());
@@ -214,6 +225,10 @@ public class RentActivity extends AppCompatActivity {
                     // see https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
                     // for more details.
                     //if payment successful add to parking-spots-renting and add userid
+                    mDatabase.child("parking-spots-renting").child(fd.getIdentifier()).setValue(fd);
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").setValue(fd.getIdentifier());
+                    Intent intent = new Intent(RentActivity.this, UserActivity.class);//change to UserActivity.class
+                    startActivity(intent);
 
                 } catch (JSONException e) {
                     Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
