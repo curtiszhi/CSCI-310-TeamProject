@@ -37,6 +37,7 @@ public class ActionActivity extends AppCompatActivity {
     public FirebaseAuth mFirebaseAuth;
     public FirebaseUser mFirebaseUser_universal;
     public DatabaseReference mDatabase;
+    private DatabaseReference spotsDatabase;
     TextView user;
     TabHost host;
     private TextView startTime, endTime, startDate, endDate, location;
@@ -54,6 +55,7 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        spotsDatabase = FirebaseDatabase.getInstance().getReference().child("parking-spots");
         initUserListener();
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
