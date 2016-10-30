@@ -105,7 +105,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                 //address cannot be change
                 //rating cannot be change
                 //review cannot be change
-                
+
             }
         });
         confirmButton.setOnClickListener(new View.OnClickListener(){
