@@ -34,7 +34,7 @@ public class AddressOperation extends AsyncTask<String, Void, String>
     protected void onPreExecute()
     {
         super.onPreExecute();
-        progressDialog.setMessage("Searching...");
+        progressDialog.setMessage("Adding your spot...");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
     }
@@ -51,6 +51,7 @@ public class AddressOperation extends AsyncTask<String, Void, String>
         if (activity instanceof AddActivity)
         {
             ((AddActivity) activity).setFeedItem(result);
+            progressDialog.dismiss();
         }
         else if (activity instanceof ActionActivity)
         {
