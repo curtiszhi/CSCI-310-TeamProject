@@ -1,16 +1,31 @@
 package com.csci310.ParkHere;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 /**
  * Created by seanyuan on 9/30/16.
  */
 
 public class User {
-    String userName;
-    String email;
-    String phone;
-    String[] review;
+    private String userName;
+    private String email;
+    private String phone;
+    private String[] review;
+    private Vector<String> needReview;
+
+
+
+    public Vector<String> getNeedReview() {
+        return needReview;
+    }
+
+    public void setNeedReview(Vector<String> needReview) {
+        this.needReview = needReview;
+    }
+
 
     public String[] getReview() {
         return review;
@@ -70,11 +85,12 @@ public class User {
         this.hosting = hosting;
     }
 
-    Boolean isHost;
-    List<String> renting;
-    List<String> hosting;
+    private Boolean isHost;
+    private List<String> renting;
+    private List<String> hosting;
 
     public User() {
+        needReview=new Vector<String>();
 
     }
 
