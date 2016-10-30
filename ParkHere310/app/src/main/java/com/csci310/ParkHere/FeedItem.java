@@ -28,13 +28,22 @@ public class FeedItem {
     private List<String> filters;
     private String Host;
     public Vector<Bitmap> photos;
-    private ArrayList<String[]> rentedTime;
+    private ArrayList<Vector<String>> rentedTime;
     private String identifier;
     private String[] review;
 
+    public ArrayList<Vector<String>> getRentedTime() {
+        return rentedTime;
+    }
+
+    public void setRentedTime(ArrayList<Vector<String>> rentedTime) {
+        this.rentedTime = rentedTime;
+    }
+
+
     FeedItem(){
         photos=new Vector<Bitmap>();
-        rentedTime=new ArrayList<String[]>();
+        rentedTime=new ArrayList<Vector<String>>();
     }
     public String[] getReview() {
         return review;

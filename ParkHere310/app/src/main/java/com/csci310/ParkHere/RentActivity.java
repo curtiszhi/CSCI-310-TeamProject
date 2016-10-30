@@ -53,6 +53,7 @@ public class RentActivity extends AppCompatActivity {
     private TextView image_label;
     private LinearLayout review_layout;
     private int count;
+    private Vector<String> rentedTime;
     public static final int PAYPAL_REQUEST_CODE = 123;
     private String total_price;
 
@@ -86,6 +87,9 @@ public class RentActivity extends AppCompatActivity {
         dumb.add("Shaded");
         fd.setFilter(dumb);
         fd.setRating(Float.valueOf("4.0"));
+        rentedTime=new Vector<String>();
+        rentedTime.add(0,fd.getStartDates()+" "+fd.getStartTime());
+        rentedTime.add(1,fd.getEndDates()+" "+fd.getEndTime());
         Vector<Bitmap> photodata = new Vector<>();
         Drawable myDrawable = getResources().getDrawable(R.drawable.ic_search);
         Bitmap anImage      = ((BitmapDrawable) myDrawable).getBitmap();
