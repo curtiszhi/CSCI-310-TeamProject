@@ -36,7 +36,8 @@
 
         <activity
             android:name=".paymentActivity"
-            android:label="@string/title_activity_payment"></activity>
+            android:label="@string/title_activity_payment" />
+        <activity android:name=".publicActivity"></activity>
     </application>
 
 </manifest>
