@@ -14,8 +14,11 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -57,6 +60,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     public FirebaseAuth mFirebaseAuth;
     public FirebaseUser mFirebaseUser_universal;
     public DatabaseReference mDatabase;
+    private Vector<String> rateList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,8 +141,21 @@ public class DetailedViewActivity extends AppCompatActivity{
         confirmButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Boolean needsReview = true;
-                mDatabase.child("users").child(renterID).child("rateList").child(fd.getIdentifier()).setValue(needsReview);
+                DatabaseReference ref=mDatabase.child("users").child(renterID).child("rateList");
+                ref.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        rateList= dataSnapshot.getValue(Vector.class);
+                        rateList.add(fd.getIdentifier());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+                ref.setValue(rateList);
+
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener(){
