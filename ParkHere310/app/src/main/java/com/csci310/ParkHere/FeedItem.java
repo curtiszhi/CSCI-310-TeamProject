@@ -27,16 +27,17 @@ public class FeedItem {
     private List<String> filters;
     private String Host;
     public Vector<Bitmap> photos;
+    private String identifier;
 
-    public String getIdeatifier() {
-        return ideatifier;
+
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public void setIdeatifier(String ideatifier) {
-        this.ideatifier = ideatifier;
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
-    private String ideatifier;
 
     public String getCurrentRenter() {
         return currentRenter;
