@@ -27,6 +27,41 @@
             android:focusable="true"
             android:textColorHighlight="#fb00ff"
             android:textColorHint="#2945a3" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="0dp"
+                android:id="@+id/city"
+                android:hint=" City"
+                android:paddingLeft="45dp"
+                android:focusable="true"
+                android:textColorHighlight="#fb00ff"
+                android:textColorHint="#2945a3" />
+            <Spinner
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/btn_dropdown"
+                android:paddingLeft="45dp"
+                android:spinnerMode="dropdown" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="45dp"
+                android:paddingTop="0dp"
+                android:id="@+id/postcode"
+                android:hint="Post code"
+                android:focusable="true"
+                android:textColorHighlight="#fb00ff"
+                android:textColorHint="#2945a3" />
+
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"

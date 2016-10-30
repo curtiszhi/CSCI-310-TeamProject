@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,7 +58,7 @@ import java.util.Vector;
  */
 
 public class AddActivity extends AppCompatActivity {
-    private EditText location, description, price, startTime, endTime, startDate, endDate;
+    private EditText location,city,postcode, description, price, startTime, endTime, startDate, endDate;
     private Button post, photo;
     private MultiSelectionSpinner spinner;
     private String[] items = {"handicap", "Compact", "SUV", "Truck", "covered parking"};
@@ -69,12 +70,65 @@ public class AddActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private String spotID;
     private Vector<Bitmap> photos;
+    private String state;
     private String cancel_policy;
     private List<String> filter;
     private Bitmap s_image;
     private StorageReference spot_image;
     private FeedItem fd;
     private AddActivity self;
+    private Spinner dropdown;
+    private static String[] state_list=new String[]{"AL",
+            "AK",
+            "AZ",
+            "AR",
+            "CA",
+            "CO",
+            "CT",
+            "DE",
+            "GA",
+            "HI",
+            "ID",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "ME",
+            "MD",
+            "MA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "MT",
+            "NE",
+            "NV",
+            "NH",
+            "NJ",
+            "NM",
+            "NY",
+            "NC",
+            "ND",
+            "OH",
+            "OK",
+            "OR",
+            "PA",
+            "RI",
+            "SC",
+            "SD",
+            "TN",
+            "TX",
+            "UT",
+            "VT",
+            "VA",
+            "WA",
+            "WV",
+            "WI",
+            "WY"};
+
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -106,12 +160,31 @@ public class AddActivity extends AppCompatActivity {
         endTime = (EditText) findViewById(R.id.endTimeEditText);
         startDate = (EditText) findViewById(R.id.startDateEditText);
         endDate = (EditText) findViewById(R.id.endDateEditText);
+        city=(EditText)findViewById(R.id.city);
+        postcode=(EditText)findViewById(R.id.postcode);
+        dropdown=(Spinner)findViewById(R.id.state);
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(AddActivity.this,android.R.layout.simple_spinner_dropdown_item,items);
+        dropdown.setAdapter(adapter);
 
 
         new DatePicker(AddActivity.this, R.id.startDateEditText);
         new DatePicker(AddActivity.this, R.id.endDateEditText);
         new TimePicker(AddActivity.this, R.id.startTimeEditText);
         new TimePicker(AddActivity.this, R.id.endTimeEditText);
+        AdapterView.OnItemSelectedListener statelistener=new AdapterView.OnItemSelectedListener(){
+
+            @Override
+                    public void onItemSelected(AdapterView<?>spinner,View container,
+                    int position,long id){
+                state=state_list[position];
+            }
+
+            @Override
+                    public void onNothingSelected(AdapterView<?>arg0){
+                state=null;
+            }
+        };
+        dropdown.setOnItemSelectedListener(statelistener);
 
         photo.setOnClickListener(new View.OnClickListener() {
 
@@ -139,8 +212,11 @@ public class AddActivity extends AppCompatActivity {
                 String address = location.getText().toString().trim();
                 String description_parking = description.getText().toString().trim();
                 double price_parking=Double.parseDouble(price.getText().toString().trim());
+                String city_input=city.getText().toString().trim();
+                String postcode_input=postcode.getText().toString().trim();
 
-                if(isEmpty(location) ||isEmpty(description)||isEmpty(price)||isEmpty(startTime)||isEmpty(startDate)||isEmpty(endTime)||isEmpty(endDate)){
+
+                if((state==null)||isEmpty(postcode)||isEmpty(city)||isEmpty(location) ||isEmpty(description)||isEmpty(price)||isEmpty(startTime)||isEmpty(startDate)||isEmpty(endTime)||isEmpty(endDate)){
                     AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
                     alertDialog.setTitle("Alert");
                     alertDialog.setMessage("Please fill all the Text field");
@@ -155,6 +231,7 @@ public class AddActivity extends AppCompatActivity {
                 else{
 
                     if(check(starttime,endtime,startdate,enddate)){
+                        String full_address=address+","+city_input+","+state+postcode_input;
 
                         fd.setActivity(true);
                         fd.setCancel(cancel_policy);
@@ -169,7 +246,7 @@ public class AddActivity extends AppCompatActivity {
                         fd.setPrice(price_parking);
                         fd.setFilter(filter);
 
-                        new AddressOperation(self).execute(address);
+                        new AddressOperation(self).execute(full_address);
 
                     }else{
                         AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();

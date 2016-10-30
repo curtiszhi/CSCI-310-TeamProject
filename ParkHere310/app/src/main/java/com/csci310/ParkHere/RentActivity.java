@@ -197,7 +197,7 @@ public class RentActivity extends AppCompatActivity {
                 try {
                     Log.i("paymentExample", confirm.toJSONObject().toString(4));
 
-                    
+
                     // see https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
                     // for more details.
 
