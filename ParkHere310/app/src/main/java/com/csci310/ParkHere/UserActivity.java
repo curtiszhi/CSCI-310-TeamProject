@@ -2,15 +2,18 @@ package com.csci310.ParkHere;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.KeyListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -20,7 +23,9 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -31,7 +36,8 @@ public class UserActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
-    private final static int SELECT_PHOTO = 1;
+    private Bitmap s_image;
+    private static final int selected_p = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +53,20 @@ public class UserActivity extends AppCompatActivity {
         returnHomeScreenButton = (Button) findViewById(R.id.returnHomeScreenButton);
 
         // Edit Profile Pic (Not Tested Yet)
+
         profilePicImageView.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v){
-                Intent pickPhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                pickPhotoIntent.setType("image/*");
-                startActivityForResult(Intent.createChooser(pickPhotoIntent,"Select Picture"), SELECT_PHOTO);
+            public void onClick(View v) {
+                if(editToggleButton.isChecked()){
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent,
+                            "Select Picture"), selected_p);
+                }
+
+
             }
         });
 
@@ -125,29 +139,33 @@ public class UserActivity extends AppCompatActivity {
             }
         });*/
 
-        returnHomeScreenButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                Intent intent = new Intent(UserActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+
+
+
     }
-
-
-    //Update Profile Pic (Not Tested Yet)
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK && data != null && data.getData() != null){
-            Uri uri = data.getData();
-            try{
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
 
-                profilePicImageView.setImageBitmap(bitmap);
-            } catch(IOException e){
-                e.printStackTrace();
-            }
+        switch(requestCode) {
+            case selected_p:
+                if(resultCode == RESULT_OK){
+                    try {
+                        final Uri imageUri = data.getData();
+                        final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                        s_image = BitmapFactory.decodeStream(imageStream);
+                        profilePicImageView.setImageBitmap(s_image);
+
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                }
         }
+
+
     }
+
+
+
 }
