@@ -332,7 +332,7 @@ public class AddActivity extends AppCompatActivity {
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
                         photos.add(s_image);
-                        fd.photos.add(s_image);
+//                        fd.photos.add(s_image);
                         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
                         valueTV.setText("image"+photos.size());
