@@ -12,11 +12,21 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -24,6 +34,11 @@ import java.util.Vector;
  */
 public class DetailedViewActivity extends AppCompatActivity{
     private Button hostPublic;
+    private String renterID;
+    private String renterName;
+    private Vector<String> rentTime;
+    private String startT;
+    private String endT;
     private RatingBar ratingBar;
     private TextView address;
     private TextView price;
@@ -39,12 +54,23 @@ public class DetailedViewActivity extends AppCompatActivity{
     private Button editButton,confirmButton,cancelButton;
     int position;
     String value;
+    public FirebaseAuth mFirebaseAuth;
+    public FirebaseUser mFirebaseUser_universal;
+    public DatabaseReference mDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         Bundle bundle = getIntent().getExtras();
         value = bundle.getString("ItemPosition");
+
+        startT=rentTime.get(0);
+        endT=rentTime.get(1);
+
+
         position = Integer.parseInt(value);
         fd = MyRecyclerAdapter.feedItemList.get(position);
         image_view=(ImageView) findViewById(R.id.image);
@@ -111,7 +137,8 @@ public class DetailedViewActivity extends AppCompatActivity{
         confirmButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //only confirm after the whole renting is finished
+                Boolean needsReview = true;
+                mDatabase.child("users").child(renterID).child("rateList").child(fd.getIdentifier()).setValue(needsReview);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener(){
@@ -123,7 +150,8 @@ public class DetailedViewActivity extends AppCompatActivity{
     }
 
     private void setUp(){
-        hostPublic.setText(fd.getHost());
+        hostPublic.setText("Renter:"+renterName);
+        //hostPublic.setText(fd.getHost());
         ratingBar.setRating(fd.getRating());
         address.setText(fd.getAddress());
         price.setText(Double.toString(fd.getPrice()));
@@ -140,6 +168,24 @@ public class DetailedViewActivity extends AppCompatActivity{
         filters.setText(filter_spot);
         description.setText(fd.getDescription());
         cancel.setText(fd.getCancel());
+        if(fd.getHost()!=mFirebaseAuth.getCurrentUser().getUid()){
+            confirmButton.setVisibility(Button.GONE);
+            editButton.setVisibility(Button.GONE);
+        }
+
+        Date date = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy hh:mma");
+        Date time1;
+        long diff=-1;
+        try {
+            time1 = df.parse(endT);
+            diff = time1.getTime() - date.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(diff>=0){
+        confirmButton.setEnabled(false);}
     }
 
     private void downloadPhoto(){
