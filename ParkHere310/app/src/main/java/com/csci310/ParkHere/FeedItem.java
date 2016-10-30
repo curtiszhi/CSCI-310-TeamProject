@@ -32,7 +32,7 @@ public class FeedItem {
     public Vector<Bitmap> photos;
     public Map<String,Vector<String>> rentedTime;
     private String identifier;
-    private String[] review;
+    private Vector<String> review;
     private int numRate;
 
     public int getNumRate() {
@@ -59,11 +59,11 @@ public class FeedItem {
         rentedTime= new HashMap<String,Vector<String>>();
         rating=new Vector<Float>();
     }
-    public String[] getReview() {
+    public Vector<String> getReview() {
         return review;
     }
 
-    public void setReview(String[] review) {
+    public void setReview(Vector<String> review) {
         this.review = review;
     }
 

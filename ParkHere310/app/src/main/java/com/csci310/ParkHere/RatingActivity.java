@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Vector;
+
 public class RatingActivity extends AppCompatActivity {
     private String host_name;
     private float rateHost;
@@ -31,6 +33,14 @@ public class RatingActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
     FeedItem fd;
+    private Vector<Float> originalSpot;
+    private Vector<Float> originalHost;
+    private Vector<String> originalSpotComment;
+    private Vector<String> originalHostComment;
+    private Vector<String> rateList;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +64,8 @@ public class RatingActivity extends AppCompatActivity {
             public void onClick(View v) {
                 rateHost=userRateHost.getRating();
                 rateSpot=userRateSpot.getRating();
-                commentHost=commentHostText.getText().toString();
-                commentSpot=commentSpotText.getText().toString();
+                commentHost=commentHostText.getText().toString().trim();
+                commentSpot=commentSpotText.getText().toString().trim();
                 update(fd);
 
             }
@@ -83,13 +93,91 @@ public class RatingActivity extends AppCompatActivity {
 
     }
     private void update(FeedItem feeder){
-        mDatabase.child("parking-spots-hosting").child(feeder.getIdentifier()).child("rating").setValue(rateSpot);
-        //needs to be calculated, right now it is overwriting
-        mDatabase.child("parking-spots-hosting").child(feeder.getIdentifier()).child("review").child(mFirebaseUser.getUid()).setValue(commentSpot);
+        DatabaseReference ref=mDatabase.child("parking-spots-hosting").child(feeder.getIdentifier()).child("rating");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                originalSpot= dataSnapshot.getValue(Vector.class);
+                originalSpot.add(rateSpot);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        ref.setValue(originalSpot);
 
-        mDatabase.child("users/"+feeder.getHost()+"/hosting").child(feeder.getIdentifier()).child("rating").setValue(rateHost);
-        //needs to be calculated, right now it is overwriting
-        mDatabase.child("users/"+feeder.getHost()+"/hosting").child(feeder.getIdentifier()).child("review").setValue(commentHost);
+        DatabaseReference ref1=mDatabase.child("users").child(feeder.getHost()).child("rating");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                originalHost= dataSnapshot.getValue(Vector.class);
+                originalHost.add(rateSpot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        ref1.setValue(originalHost);
+
+        if(commentSpot.length()!=0) {
+            DatabaseReference ref2=mDatabase.child("parking-spots-hosting").child(feeder.getIdentifier()).child("review");
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    originalSpotComment= dataSnapshot.getValue(Vector.class);
+                    originalSpotComment.add(commentSpot);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+            ref2.setValue(originalSpotComment);
+
+        }
+
+        if(commentHost.length()!=0) {
+            DatabaseReference ref3=mDatabase.child("users").child(feeder.getHost()).child("review");
+            ref.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    originalHostComment= dataSnapshot.getValue(Vector.class);
+                    originalHostComment.add(commentHost);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+            ref3.setValue(originalHostComment);
+
+        }
+
+        DatabaseReference ref4=mDatabase.child("users").child(mFirebaseAuth.getCurrentUser().getUid()).child("rateList");
+        ref4.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                rateList= dataSnapshot.getValue(Vector.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        Vector<String> newRateList=new Vector<String>();
+        for(int i=0;i<rateList.size();i++){
+            if(rateList.get(i)!=fd.getIdentifier()){
+                newRateList.add(rateList.get(i));
+            }
+        }
+        ref4.setValue(newRateList);
+
     }
 }

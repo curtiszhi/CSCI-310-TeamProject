@@ -14,7 +14,7 @@ public class User {
     private String email;
     private String phone;
     private String[] review;
-    private Vector<String> needReview;
+    private Vector<String> rateList;
     private Vector<Float> rating;
 
     public Vector<Float> getRating() {
@@ -27,11 +27,11 @@ public class User {
 
 
     public Vector<String> getNeedReview() {
-        return needReview;
+        return rateList;
     }
 
-    public void setNeedReview(Vector<String> needReview) {
-        this.needReview = needReview;
+    public void setNeedReview(Vector<String> rateList) {
+        this.rateList = rateList;
     }
 
 
@@ -98,8 +98,8 @@ public class User {
     private List<String> hosting;
 
     public User() {
-        needReview=new Vector<String>();
-
+        rateList=new Vector<String>();
+        rating=new Vector<Float>();
     }
 
     public User(String userName, String email, String phone, Boolean isHost, List<String> renting, List<String> hosting) {
