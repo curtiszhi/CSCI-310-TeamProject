@@ -4,6 +4,7 @@ package com.csci310.ParkHere;
 import android.graphics.Bitmap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -24,7 +25,7 @@ public class FeedItem {
     private double price;
     private String cancelpolicy;
     private String description;
-    private Float rating;
+    private Vector<Float> rating;
     private Boolean activity;
     private List<String> filters;
     private String Host;
@@ -32,6 +33,17 @@ public class FeedItem {
     public Map<String,Vector<String>> rentedTime;
     private String identifier;
     private String[] review;
+    private int numRate;
+
+    public int getNumRate() {
+        return numRate;
+    }
+
+    public void setNumRate(int numRate) {
+        this.numRate = numRate;
+    }
+
+
 
     public Map<String,Vector<String>> getRentedTime() {
         return rentedTime;
@@ -44,7 +56,8 @@ public class FeedItem {
 
     FeedItem(){
         photos=new Vector<Bitmap>();
-        //rentedTime= Map<String,Vector<String>>();
+        rentedTime= new HashMap<String,Vector<String>>();
+        rating=new Vector<Float>();
     }
     public String[] getReview() {
         return review;
@@ -96,11 +109,11 @@ public class FeedItem {
         this.cancelpolicy = cancelpolicy;
     }
 
-    public Float getRating() {
+    public Vector<Float> getRating() {
         return rating;
     }
 
-    public void setRating(Float rating) {
+    public void setRating(Vector<Float> rating) {
         this.rating = rating;
     }
 

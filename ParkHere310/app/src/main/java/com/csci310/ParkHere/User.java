@@ -15,7 +15,15 @@ public class User {
     private String phone;
     private String[] review;
     private Vector<String> needReview;
+    private Vector<Float> rating;
 
+    public Vector<Float> getRating() {
+        return rating;
+    }
+
+    public void setRating(Vector<Float> rating) {
+        this.rating = rating;
+    }
 
 
     public Vector<String> getNeedReview() {
