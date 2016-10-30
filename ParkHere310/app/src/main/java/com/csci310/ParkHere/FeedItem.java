@@ -28,6 +28,16 @@ public class FeedItem {
     private String Host;
     public Vector<Bitmap> photos;
 
+    public String getIdeatifier() {
+        return ideatifier;
+    }
+
+    public void setIdeatifier(String ideatifier) {
+        this.ideatifier = ideatifier;
+    }
+
+    private String ideatifier;
+
     public String getCurrentRenter() {
         return currentRenter;
     }
