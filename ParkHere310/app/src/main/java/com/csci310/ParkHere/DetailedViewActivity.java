@@ -59,7 +59,7 @@ public class DetailedViewActivity extends AppCompatActivity{
         cancel= (TextView) findViewById(R.id.cancel);
         editButton= (Button) findViewById(R.id.editButton);
         confirmButton=(Button) findViewById(R.id.confirmButton);
-        cancelButton=(Button) findViewById(R.id.cancelButton);;
+        cancelButton=(Button) findViewById(R.id.cancelButton);
         count=0;
 
         setUp();
