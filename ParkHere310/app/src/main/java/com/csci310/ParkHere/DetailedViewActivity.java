@@ -5,13 +5,18 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -141,6 +146,17 @@ public class DetailedViewActivity extends AppCompatActivity{
         confirmButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "Payout Request");
+                i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a payment for a successful hosting at" + fd.getAddress()
+                + "My PayPal email is: [INSERT EMAIL HERE]");
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
                 DatabaseReference ref=mDatabase.child("users").child(renterID).child("rateList");
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -155,13 +171,25 @@ public class DetailedViewActivity extends AppCompatActivity{
                     }
                 });
                 ref.setValue(rateList);
-
+                Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
+                startActivity(intent);
             }
         });
         cancelButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //check if can cancel
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("message/rfc822");
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
+                i.putExtra(Intent.EXTRA_SUBJECT, "Refund Request");
+                i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a refund. I agree with the cancellation policy of: " + fd.getCancel());
+                try {
+                    startActivity(Intent.createChooser(i, "Send mail..."));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                }
+                Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
+                startActivity(intent);
             }
         });
     }
