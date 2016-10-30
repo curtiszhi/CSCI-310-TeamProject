@@ -27,7 +27,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by seanyuan on 9/28/16.
@@ -97,7 +96,7 @@ public class ActionActivity extends AppCompatActivity {
         database.orderByChild("email").equalTo(mFirebaseUser_universal.getEmail()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                //user_all = dataSnapshot.getValue(User.class);
+                user_all = dataSnapshot.getValue(User.class);
             }
 
             @Override
