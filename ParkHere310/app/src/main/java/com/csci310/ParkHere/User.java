@@ -10,6 +10,17 @@ public class User {
     String userName;
     String email;
     String phone;
+    private String[] review;
+
+    public String[] getReview() {
+        return review;
+    }
+
+    public void setReview(String[] review) {
+        this.review = review;
+    }
+
+
 
     public String getUserName() {
         return userName;

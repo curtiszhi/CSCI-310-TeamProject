@@ -28,6 +28,17 @@ public class FeedItem {
     private String Host;
     public Vector<Bitmap> photos;
     private String identifier;
+    private String[] review;
+
+    public String[] getReview() {
+        return review;
+    }
+
+    public void setReview(String[] review) {
+        this.review = review;
+    }
+
+
 
 
     public String getIdentifier() {

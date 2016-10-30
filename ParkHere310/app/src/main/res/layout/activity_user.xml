@@ -146,7 +146,7 @@
             android:text="Rating: "
             android:layout_alignParentLeft="true"
             android:paddingLeft="30dp"
-            android:paddingTop="20dp"
+            android:paddingTop="15dp"
             android:textSize="20dp"
             android:textColor="#009688" />
 
