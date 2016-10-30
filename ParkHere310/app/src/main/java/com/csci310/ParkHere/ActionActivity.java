@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +28,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Set;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -103,6 +107,29 @@ public class ActionActivity extends AppCompatActivity {
                 new AddressOperation(self).execute(address);
             }
         });
+
+        mDatabase.child("users");
+        mDatabase.orderByChild("rateList").equalTo(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Log.d("User key", child.getKey());
+                    Log.d("User ref", child.getRef().toString());
+                    Log.d("User val", child.getValue().toString());
+                    FeedItem g = (FeedItem)child.getValue();
+                    Set<String> hi = g.rentedTime.keySet();
+                    for (String s : hi) {
+                        g.setCurrentRenter(s);
+                        hostingActualList.add(g);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+    }
     }
 
     private FeedItem[] getListWithOptions(String starttime, String endtime, String startdate, String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
