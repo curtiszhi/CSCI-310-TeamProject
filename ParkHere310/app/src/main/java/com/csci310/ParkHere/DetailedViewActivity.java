@@ -36,7 +36,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     private int count;
     FeedItem fd;
     private Vector<Bitmap> spotPhoto;
-    private Button editButton;
+    private Button editButton,confirmButton,cancelButton;
     int position;
     String value;
     @Override
@@ -57,6 +57,9 @@ public class DetailedViewActivity extends AppCompatActivity{
         filters= (TextView) findViewById(R.id.filters);
         description= (TextView) findViewById(R.id.description);
         cancel= (TextView) findViewById(R.id.cancel);
+        editButton= (Button) findViewById(R.id.editButton);
+        confirmButton=(Button) findViewById(R.id.confirmButton);
+        cancelButton=(Button) findViewById(R.id.cancelButton);;
         count=0;
 
         setUp();
