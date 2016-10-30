@@ -100,7 +100,7 @@ public class RentActivity extends AppCompatActivity {
         fd.setFilter(dumb);
         int r = 4;
         fd.addRating((float)r);
-        rentedTime=new Vector<String>();
+        rentedTime=new Vector<>();
         rentedTime.add(0,fd.getStartDates()+" "+fd.getStartTime());
         rentedTime.add(1,fd.getEndDates()+" "+fd.getEndTime());
         renterRentTime.put(fd.getHost(),rentedTime);
