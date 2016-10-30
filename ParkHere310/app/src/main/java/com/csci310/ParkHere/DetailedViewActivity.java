@@ -102,6 +102,22 @@ public class DetailedViewActivity extends AppCompatActivity{
                 Intent intent = new Intent(DetailedViewActivity.this, AddActivity.class);
                 intent.putExtra("ItemPosition", value);
                 startActivity(intent);
+                //address cannot be change
+                //rating cannot be change
+                //review cannot be change
+                
+            }
+        });
+        confirmButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //only confirm after the whole renting is finished
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //check if can cancel
             }
         });
     }
