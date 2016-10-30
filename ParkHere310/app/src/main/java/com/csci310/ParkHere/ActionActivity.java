@@ -7,11 +7,11 @@ package com.csci310.ParkHere;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,7 +30,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Set;
+import java.text.ParseException;
+import java.util.Date;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -42,6 +43,7 @@ public class ActionActivity extends AppCompatActivity {
     public FirebaseUser mFirebaseUser_universal;
     public DatabaseReference mDatabase;
     private DatabaseReference spotsDatabase;
+    private java.text.SimpleDateFormat sdf;
     TextView user;
     TabHost host;
     private TextView startTime, endTime, startDate, endDate, location;
@@ -60,6 +62,7 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = FirebaseDatabase.getInstance().getReference().child("parking-spots");
+        sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
         initUserListener();
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
@@ -107,20 +110,21 @@ public class ActionActivity extends AppCompatActivity {
                 new AddressOperation(self).execute(address);
             }
         });
+    }
 
-        mDatabase.child("users");
-        mDatabase.orderByChild("rateList").equalTo(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+    private FeedItem[] getListWithOptions(String starttime, String endtime, final String startdate, final String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
+    {
+        spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener()
+        {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Log.d("User key", child.getKey());
-                    Log.d("User ref", child.getRef().toString());
-                    Log.d("User val", child.getValue().toString());
-                    FeedItem g = (FeedItem)child.getValue();
-                    Set<String> hi = g.rentedTime.keySet();
-                    for (String s : hi) {
-                        g.setCurrentRenter(s);
-                        hostingActualList.add(g);
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                for (DataSnapshot child : dataSnapshot.getChildren())
+                {
+                    if (child.child("active").equals("true") &&
+                            dateWithinRange(child.child("startDates").getKey(), child.child("endDates").getKey(), startdate, enddate))
+                    {
+
                     }
                 }
             }
@@ -129,11 +133,7 @@ public class ActionActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-    }
-    }
-
-    private FeedItem[] getListWithOptions(String starttime, String endtime, String startdate, String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
-    {
+        });
         return null;
     }
 
@@ -142,6 +142,22 @@ public class ActionActivity extends AppCompatActivity {
 
     }
 
+    private boolean dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
+    {
+        try
+        {
+            Date sDate1 = sdf.parse(sDate1str);
+            Date sDate2 = sdf.parse(sDate2str);
+            Date eDate1 = sdf.parse(eDate1str);
+            Date eDate2 = sdf.parse(eDate2str);
+
+            return sDate1.compareTo(sDate2) >= 0 && eDate1.compareTo(eDate2) <= 0;
+        }
+        catch (ParseException parseException) {parseException.printStackTrace();}
+        return false;
+    }
+
+    private boolean timeWithinRange
 
     private void initUserListener(){
         DatabaseReference database = mDatabase.child("users/");
