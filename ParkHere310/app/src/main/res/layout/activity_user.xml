@@ -135,49 +135,41 @@
 
     </RelativeLayout>
 
-    <ToggleButton
-        android:id="@+id/editUserDetailsToggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textOn="Done"
-        android:textOff="Edit User Details"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onToggleClicked"/>
 
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View Rental History"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="20dp"
-            android:layout_alignParentLeft="true"
+            android:layout_gravity="center_horizontal"
             android:id="@+id/viewRentHistoryButton"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View Hosting History"
-            android:layout_marginRight="20dp"
+            android:layout_gravity="center_horizontal"
             android:id="@+id/viewHostHistoryButton"
-            android:layout_alignBaseline="@+id/viewRentHistoryButton"
-            android:layout_alignBottom="@+id/viewRentHistoryButton"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+             />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <Button
+    <ToggleButton
+        android:id="@+id/editUserDetailsToggleButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Return to Main Screen"
-        android:layout_marginTop="100dp"
-        android:id="@+id/returnHomeScreenButton"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_marginTop="10dp"
+        android:textOn="Done"
+        android:textOff="Update information"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onToggleClicked"/>
+
+
 
 </LinearLayout>
 

@@ -164,7 +164,7 @@ public class AddActivity extends AppCompatActivity {
         city=(EditText)findViewById(R.id.city);
         postcode=(EditText)findViewById(R.id.postcode);
         dropdown=(Spinner)findViewById(R.id.state);
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(AddActivity.this,android.R.layout.simple_spinner_dropdown_item,items);
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(AddActivity.this,android.R.layout.simple_spinner_dropdown_item,state_list);
         dropdown.setAdapter(adapter);
 
 
