@@ -26,6 +26,7 @@
         <activity android:name=".RentActivity" />
         <activity android:name=".RatingActivity" />
         <activity android:name=".UserActivity" />
+
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
      App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -34,9 +35,7 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity
-            android:name=".paymentActivity"
-            android:label="@string/title_activity_payment" />
+
         <activity android:name=".publicActivity"></activity>
     </application>
 

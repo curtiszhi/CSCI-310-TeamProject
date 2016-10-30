@@ -271,5 +271,5 @@ public class RentActivity extends AppCompatActivity {
         image_label.setText("1 of "+spotPhoto.size()+" images");
     }
 
-   
+
 }
