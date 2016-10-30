@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -34,6 +36,7 @@ public class RentActivity extends AppCompatActivity {
     private FeedItem fd;
     private Vector<Bitmap> spotPhoto;
 
+
     private Button hostPublic;
     private Button rent;
     private RatingBar ratingBar;
@@ -48,6 +51,7 @@ public class RentActivity extends AppCompatActivity {
     private StorageReference imagesRef;
     private ImageView image_view;
     private TextView image_label;
+    private LinearLayout review_layout;
     private int count;
     public static final int PAYPAL_REQUEST_CODE = 123;
     private String total_price;
@@ -108,6 +112,7 @@ public class RentActivity extends AppCompatActivity {
         filters= (TextView) findViewById(R.id.filters);
         description= (TextView) findViewById(R.id.description);
         cancel= (TextView) findViewById(R.id.cancel);
+        review_layout=(LinearLayout) findViewById(R.id.review);
 
         count=0;
 
@@ -232,6 +237,12 @@ public class RentActivity extends AppCompatActivity {
         filters.setText(filter_spot);
         description.setText(fd.getDescription());
         cancel.setText(fd.getCancel());
+        for(int i=0;i<fd.getReview().length;i++){
+            TextView review_text = new TextView(this);
+            review_text.setText(fd.getReview()[i]);
+            review_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
+            ((LinearLayout) review_layout).addView(review_text);
+        }
     }
 
     private void downloadPhoto(){
@@ -260,30 +271,5 @@ public class RentActivity extends AppCompatActivity {
         image_label.setText("1 of "+spotPhoto.size()+" images");
     }
 
-   /* public void initLibrary() {
-        PayPal pp = PayPal.getInstance();
-
-        if (pp == null) {  // Test to see if the library is already initialized
-
-            // This main initialization call takes your Context, AppID, and target server
-            pp = PayPal.initWithAppID(this, "APP-80W284485P519543T", PayPal.ENV_NONE);
-
-            // Required settings:
-
-            // Set the language for the library
-            pp.setLanguage("en_US");
-
-            // Some Optional settings:
-
-            // Sets who pays any transaction fees. Possible values are:
-            // FEEPAYER_SENDER, FEEPAYER_PRIMARYRECEIVER, FEEPAYER_EACHRECEIVER, and FEEPAYER_SECONDARYONLY
-            pp.setFeesPayer(PayPal.FEEPAYER_EACHRECEIVER);
-
-            // true = transaction requires shipping
-            pp.setShippingEnabled(true);
-
-            _paypalLibraryInit = true;
-        }
-    }
-*/
+   
 }

@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="1"
-        tools:ignore="ExtraText">
+        tools:context="com.csci310.ParkHere.RentActivity">
 
         <RelativeLayout
             android:orientation="vertical"
