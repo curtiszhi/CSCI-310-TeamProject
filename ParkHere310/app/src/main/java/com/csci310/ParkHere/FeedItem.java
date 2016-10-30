@@ -3,6 +3,7 @@ package com.csci310.ParkHere;
 
 import android.graphics.Bitmap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -27,11 +28,13 @@ public class FeedItem {
     private List<String> filters;
     private String Host;
     public Vector<Bitmap> photos;
+    private ArrayList<String[]> rentedTime;
     private String identifier;
     private String[] review;
 
     FeedItem(){
         photos=new Vector<Bitmap>();
+        rentedTime=new ArrayList<String[]>();
     }
     public String[] getReview() {
         return review;
