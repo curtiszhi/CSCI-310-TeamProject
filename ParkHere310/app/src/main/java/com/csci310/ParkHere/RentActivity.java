@@ -29,6 +29,7 @@ import org.json.JSONException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 public class RentActivity extends AppCompatActivity {
@@ -54,6 +55,7 @@ public class RentActivity extends AppCompatActivity {
     private LinearLayout review_layout;
     private int count;
     private Vector<String> rentedTime;
+    private Map<String,Vector<String>> renterRentTime;
     public static final int PAYPAL_REQUEST_CODE = 123;
     private String total_price;
 
@@ -90,6 +92,7 @@ public class RentActivity extends AppCompatActivity {
         rentedTime=new Vector<String>();
         rentedTime.add(0,fd.getStartDates()+" "+fd.getStartTime());
         rentedTime.add(1,fd.getEndDates()+" "+fd.getEndTime());
+        renterRentTime.put(fd.getHost(),rentedTime);
         Vector<Bitmap> photodata = new Vector<>();
         Drawable myDrawable = getResources().getDrawable(R.drawable.ic_search);
         Bitmap anImage      = ((BitmapDrawable) myDrawable).getBitmap();

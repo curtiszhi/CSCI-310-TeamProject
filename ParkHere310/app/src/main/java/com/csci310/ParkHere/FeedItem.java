@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -28,22 +29,22 @@ public class FeedItem {
     private List<String> filters;
     private String Host;
     public Vector<Bitmap> photos;
-    private ArrayList<Vector<String>> rentedTime;
+    private ArrayList<Map<String,Vector<String>>> rentedTime;
     private String identifier;
     private String[] review;
 
-    public ArrayList<Vector<String>> getRentedTime() {
+    public ArrayList<Map<String,Vector<String>>> getRentedTime() {
         return rentedTime;
     }
 
-    public void setRentedTime(ArrayList<Vector<String>> rentedTime) {
+    public void setRentedTime(ArrayList<Map<String,Vector<String>>> rentedTime) {
         this.rentedTime = rentedTime;
     }
 
 
     FeedItem(){
         photos=new Vector<Bitmap>();
-        rentedTime=new ArrayList<Vector<String>>();
+        rentedTime=new ArrayList<Map<String,Vector<String>>>();
     }
     public String[] getReview() {
         return review;
