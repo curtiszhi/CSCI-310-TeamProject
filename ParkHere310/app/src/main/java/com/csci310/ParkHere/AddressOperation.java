@@ -34,7 +34,14 @@ public class AddressOperation extends AsyncTask<String, Void, String>
     protected void onPreExecute()
     {
         super.onPreExecute();
-        progressDialog.setMessage("Adding your spot...");
+        if (activity instanceof AddActivity)
+        {
+            progressDialog.setMessage("Adding your spot...");
+        }
+        else if (activity instanceof ActionActivity)
+        {
+            progressDialog.setMessage("Searching...");
+        }
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
     }
@@ -51,12 +58,12 @@ public class AddressOperation extends AsyncTask<String, Void, String>
         if (activity instanceof AddActivity)
         {
             ((AddActivity) activity).setFeedItem(result);
-            progressDialog.dismiss();
         }
         else if (activity instanceof ActionActivity)
         {
-
+            ((ActionActivity) activity).search(result);
         }
+        progressDialog.dismiss();
     }
 
     //Return the address info in a JSON string:

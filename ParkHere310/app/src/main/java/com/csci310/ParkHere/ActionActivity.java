@@ -41,10 +41,13 @@ public class ActionActivity extends AppCompatActivity {
     private Button search;
     private CheckBox compact, cover, handy;
     public static User user_all;
+    private ActionActivity self;
+
 //khjvg
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        self = this;
         setContentView(R.layout.action_activity);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
@@ -85,10 +88,25 @@ public class ActionActivity extends AppCompatActivity {
                 boolean handicapped = handy.isChecked();
                 validateFields(starttime, endtime, startdate,enddate);
 
-//                SearchOperation.search(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped, address);
+                FeedItem[] tmp = null;
+                tmp = getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped);
+
+                new AddressOperation(self).execute(address);
+
             }
         });
     }
+
+    private FeedItem[] getListWithOptions(String starttime, String endtime, String startdate, String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
+    {
+        return null;
+    }
+
+    public void search(String address)
+    {
+
+    }
+
 
     private void initUserListener(){
         DatabaseReference database = mDatabase.child("users/");
