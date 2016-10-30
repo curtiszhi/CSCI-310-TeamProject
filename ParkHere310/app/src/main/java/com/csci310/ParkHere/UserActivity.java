@@ -5,15 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.KeyListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -24,7 +22,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 
 public class UserActivity extends AppCompatActivity {
@@ -38,6 +35,7 @@ public class UserActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private Bitmap s_image;
     private static final int selected_p = 1;
+    private RatingBar ratingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +48,7 @@ public class UserActivity extends AppCompatActivity {
         editToggleButton = (ToggleButton) findViewById(R.id.editUserDetailsToggleButton);
         viewHostHistoryButton = (Button) findViewById(R.id.viewHostHistoryButton);
         viewRentHistoryButton = (Button) findViewById(R.id.viewRentHistoryButton);
+        ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         // Edit Profile Pic (Not Tested Yet)
 
@@ -64,8 +63,6 @@ public class UserActivity extends AppCompatActivity {
                     startActivityForResult(Intent.createChooser(intent,
                             "Select Picture"), selected_p);
                 }
-
-
             }
         });
 
@@ -78,6 +75,7 @@ public class UserActivity extends AppCompatActivity {
         String phone = ActionActivity.user_all.getPhone();
         String name = ActionActivity.user_all.getUserName();
         Uri uri = mFirebaseUser.getPhotoUrl();
+
 
 
         //Set User Info
@@ -97,6 +95,7 @@ public class UserActivity extends AppCompatActivity {
         phoneEditText.setTag(phoneEditText.getKeyListener());
         phoneEditText.setKeyListener(null);
 
+
         editToggleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,10 +114,13 @@ public class UserActivity extends AppCompatActivity {
                     phoneEditText.setTag(phoneEditText.getKeyListener());
                     phoneEditText.setKeyListener(null);
 
-                    //Update User Info (Not Complete)
+                    //Update User Info
                     mFirebaseUser.updateEmail(emailEditText.getText().toString());
                     UserProfileChangeRequest updateName = new UserProfileChangeRequest.Builder().setDisplayName(nameEditText.getText().toString()).build();
                     mFirebaseUser.updateProfile(updateName);
+                    ActionActivity.user_all.setUserName(nameEditText.getText().toString().trim());
+                    ActionActivity.user_all.setEmail(emailEditText.getText().toString().trim());
+                    ActionActivity.user_all.setPhone(phoneEditText.getText().toString().trim());
                 }
             }
         });
