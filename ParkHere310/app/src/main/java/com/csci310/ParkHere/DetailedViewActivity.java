@@ -36,7 +36,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     private int count;
     FeedItem fd;
     private Vector<Bitmap> spotPhoto;
-    private Button editButton;
+    private Button editButton,confirmButton,cancelButton;
     int position;
     String value;
     @Override
@@ -57,6 +57,9 @@ public class DetailedViewActivity extends AppCompatActivity{
         filters= (TextView) findViewById(R.id.filters);
         description= (TextView) findViewById(R.id.description);
         cancel= (TextView) findViewById(R.id.cancel);
+        editButton= (Button) findViewById(R.id.editButton);
+        confirmButton=(Button) findViewById(R.id.confirmButton);
+        cancelButton=(Button) findViewById(R.id.cancelButton);;
         count=0;
 
         setUp();
@@ -99,6 +102,22 @@ public class DetailedViewActivity extends AppCompatActivity{
                 Intent intent = new Intent(DetailedViewActivity.this, AddActivity.class);
                 intent.putExtra("ItemPosition", value);
                 startActivity(intent);
+                //address cannot be change
+                //rating cannot be change
+                //review cannot be change
+                
+            }
+        });
+        confirmButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //only confirm after the whole renting is finished
+            }
+        });
+        cancelButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                //check if can cancel
             }
         });
     }
