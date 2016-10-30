@@ -168,7 +168,7 @@ public class ActionActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             return;
         }
-        if (startdate == enddate){
+        if (startdate.equals(enddate)){
             String[] time1 = starttime.split(":");
             int hour1 = Integer.parseInt(time1[0]) % 12;
             String[] time2 = endtime.split(":");
