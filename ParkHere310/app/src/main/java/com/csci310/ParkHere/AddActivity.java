@@ -58,6 +58,7 @@ import java.util.Vector;
  */
 
 public class AddActivity extends AppCompatActivity {
+    private String identifier;
     private EditText location,city,postcode, description, price, startTime, endTime, startDate, endDate;
     private Button post, photo;
     private MultiSelectionSpinner spinner;
@@ -231,8 +232,9 @@ public class AddActivity extends AppCompatActivity {
                 else{
 
                     if(check(starttime,endtime,startdate,enddate)){
+                        identifier=mFirebaseAuth.getCurrentUser().getUid()+Long.toString(System.currentTimeMillis());
                         String full_address=address+","+city_input+","+state+postcode_input;
-
+                        fd.setIdentifier(identifier);
                         fd.setActivity(true);
                         fd.setCancel(cancel_policy);
                         fd.setDescription(description_parking);
@@ -297,8 +299,8 @@ public class AddActivity extends AppCompatActivity {
         }
     }
     public void write_new_spot(FeedItem Fd) {
-        mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getSpotID());
-        mDatabase.child("parking-spots").child(Fd.getSpotID()).setValue(Fd);
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getIdentifier());
+        mDatabase.child("parking-spots").child(Fd.getIdentifier()).setValue(Fd);
     }
 
     public void setFeedItem(String jsonString)
