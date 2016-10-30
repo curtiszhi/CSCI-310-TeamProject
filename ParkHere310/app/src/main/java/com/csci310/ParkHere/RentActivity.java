@@ -212,6 +212,7 @@ public class RentActivity extends AppCompatActivity {
 
                     // see https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
                     // for more details.
+                    //if payment successful add to parking-spots-renting and add userid
 
                 } catch (JSONException e) {
                     Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
