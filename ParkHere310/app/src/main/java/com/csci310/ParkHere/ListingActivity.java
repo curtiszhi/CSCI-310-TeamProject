@@ -84,6 +84,7 @@ public class ListingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
+                if(user_map != null){
                 FeedItem user_all = new FeedItem();
                 for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
                     String key = entry.getKey();
@@ -144,7 +145,7 @@ public class ListingActivity extends AppCompatActivity {
                     }
 
                 }
-                rentList.add(user_all);
+                    rentList.add(user_all);}
 
             }
 
@@ -156,17 +157,23 @@ public class ListingActivity extends AppCompatActivity {
     }
     public void getItemsHosting(){
         DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/hosting");
+        //DatabaseReference database = mDatabase.child("parking-spots-hosting");
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
-                FeedItem user_all = new FeedItem();
-                for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
-                    String key = entry.getKey();
-                    Object value = entry.getValue();
-                    if(key.equals("latitude")){
-                        user_all.setLatitude((double)value);
-                    }
+                HashMap<String,HashMap<String, Object>> user_map= (HashMap<String,HashMap<String, Object>>)dataSnapshot.getValue();
+                for (HashMap.Entry<String, HashMap<String, Object>> entry : user_map.entrySet()) {
+                    String itemKey = entry.getKey();
+                    System.out.println("itemkey: "+ itemKey);
+                    FeedItem user_all = new FeedItem();
+                    for (HashMap.Entry<String, Object> innerEntry : entry.getValue().entrySet()) {
+                        String key = innerEntry.getKey();
+                        Object value = innerEntry.getValue();
+                        System.out.println("innerkey: "+ key + value);
+                        if(key.equals("latitude")){
+                            user_all.setLatitude((double)value);
+                            System.out.println(value);
+                        }
                     if(key.equals("longitude")){
                         user_all.setLongitude((double)value);
                     }
@@ -220,7 +227,7 @@ public class ListingActivity extends AppCompatActivity {
                     }
 
                 }
-                hostList.add(user_all);
+                hostList.add(user_all);}
 
             }
 
