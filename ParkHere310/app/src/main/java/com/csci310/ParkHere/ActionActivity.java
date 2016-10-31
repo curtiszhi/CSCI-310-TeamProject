@@ -51,8 +51,8 @@ public class ActionActivity extends AppCompatActivity {
     public DatabaseReference mDatabase;
     private DatabaseReference spotsDatabase;
     private java.text.SimpleDateFormat sdf;
-    private HashMap<String, double[]> tempSpots;
-    private ArrayList<String> searchResult;
+    private HashMap<FeedItem, double[]> tempSpots;
+    private ArrayList<FeedItem> searchResult;
     TextView user;
     TabHost host;
     private TextView startTime, endTime, startDate, endDate, location;
@@ -73,8 +73,8 @@ public class ActionActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = mDatabase.child("parking-spots-hosting");
         sdf = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
-        tempSpots = new HashMap<String, double[]>();
-        searchResult = new ArrayList<String>();
+        tempSpots = new HashMap<FeedItem, double[]>();
+        searchResult = new ArrayList<FeedItem>();
         initUserListener();
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
@@ -122,7 +122,8 @@ public class ActionActivity extends AppCompatActivity {
         });
     }
 
-    private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
+    private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate,
+                                    final boolean requestCompact, final boolean requestCover, final boolean handicapped)
     {
         spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -131,10 +132,11 @@ public class ActionActivity extends AppCompatActivity {
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
                     if (child.child("activity").getValue().toString().equals("true") &&
-                            isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
-                                    starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()))
+                        isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
+                                starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
+                        isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))
                     {
-                        tempSpots.put(child.getKey(), new double[]{Double.parseDouble(child.child("latitude").getValue().toString()),
+                        tempSpots.put(child.getValue(FeedItem.class), new double[]{Double.parseDouble(child.child("latitude").getValue().toString()),
                                 Double.parseDouble(child.child("longitude").getValue().toString())});
                     }
                 }
@@ -152,13 +154,13 @@ public class ActionActivity extends AppCompatActivity {
         double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
         if (!tempSpots.isEmpty())
         {
-            for (Map.Entry<String, double[]> entry : tempSpots.entrySet())
+            for (Map.Entry<FeedItem, double[]> entry : tempSpots.entrySet())
             {
                 double[] tmplatlng = entry.getValue();
                 if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0)
                 {
                     searchResult.add(entry.getKey());
-                      System.out.println(entry.getKey());
+                    System.out.println(entry.getKey().getAddress());
                 }
             }
         }
@@ -200,41 +202,18 @@ public class ActionActivity extends AppCompatActivity {
                 return true;
         }
         catch (ParseException parseException) {parseException.printStackTrace();}
-//        if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
-//            return true;
-//        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 &&
-//                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
-//            return true;
         return false;
     }
 
-
-    private int dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
+    private boolean isValidFilters(boolean requestCompact, boolean requestCover, boolean requestHandicap, DataSnapshot filterNode)
     {
-        try
-        {
-            Date sDate1 = sdf.parse(sDate1str);
-            Date sDate2 = sdf.parse(sDate2str);
-            Date eDate1 = sdf.parse(eDate1str);
-            Date eDate2 = sdf.parse(eDate2str);
-
-            //Within range:
-            if (sDate1.compareTo(sDate2) >= 0 && eDate1.compareTo(eDate2) <= 0)
-            {
-                //On a different day:
-                if (sDate1.compareTo(eDate1) < 0)
-                    return 1;
-                //On the same day:
-                else if (sDate1.compareTo(eDate1) == 0)
-                    return 2;
-            }
-        }
-        catch (ParseException parseException) {parseException.printStackTrace();}
-        return 0;
-    }
-
-    private boolean timeWithinRange(String sTime1str, String eTime1str, String sTime2str, String eTime2str)
-    {
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (DataSnapshot filter : filterNode.getChildren())
+            arrayList.add(filter.getValue().toString().toLowerCase());
+        if ((requestCompact && !arrayList.contains("compact")) ||
+            (requestCover && !arrayList.contains("covered parking")) ||
+            (requestHandicap && !arrayList.contains("handicap")))
+            return false;
         return true;
     }
 
