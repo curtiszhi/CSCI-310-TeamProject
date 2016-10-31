@@ -311,7 +311,7 @@ public class AddActivity extends AppCompatActivity {
                             fd.setCancel(cancel_policy);
                             fd.setDescription(description_parking);
 
-                            fd.setRating(null);
+
                             fd.setHost(mFirebaseAuth.getCurrentUser().getUid());
 
                             fd.setStartDates(startdate);
