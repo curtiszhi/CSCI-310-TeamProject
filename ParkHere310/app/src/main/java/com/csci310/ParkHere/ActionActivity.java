@@ -198,6 +198,7 @@ public class ActionActivity extends AppCompatActivity {
         return false;
     }
 
+
     private int dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
     {
         try
