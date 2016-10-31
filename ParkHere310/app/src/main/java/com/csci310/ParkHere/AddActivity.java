@@ -414,11 +414,11 @@ public class AddActivity extends AppCompatActivity {
                         s_image = BitmapFactory.decodeStream(imageStream);
                        // photos.add(s_image);
                         fd.photos.add(s_image);
-                       /* LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
+                        LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
                         valueTV.setText("image"+photos.size());
                         valueTV.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
-                        ((LinearLayout) linearLayout).addView(valueTV);*/
+                        ((LinearLayout) linearLayout).addView(valueTV);
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
