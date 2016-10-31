@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -47,6 +48,7 @@ public class ActionActivity extends AppCompatActivity {
     private DatabaseReference spotsDatabase;
     private java.text.SimpleDateFormat sdf;
     private HashMap<String, double[]> tempSpots;
+    private ArrayList<String> searchResult;
     TextView user;
     TabHost host;
     private TextView startTime, endTime, startDate, endDate, location;
@@ -67,6 +69,7 @@ public class ActionActivity extends AppCompatActivity {
         spotsDatabase = FirebaseDatabase.getInstance().getReference().child("parking-spots");
         sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
         tempSpots = new HashMap<String, double[]>();
+        searchResult = new ArrayList<String>();
         initUserListener();
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
@@ -147,10 +150,11 @@ public class ActionActivity extends AppCompatActivity {
         double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
         if (!tempSpots.isEmpty())
         {
-            for (double[] tmplatlng : tempSpots.values())
+            for (Map.Entry<String, double[]> entry : tempSpots.entrySet())
             {
-                if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) >= 3.0)
-
+                double[] tmplatlng = entry.getValue();
+                if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0)
+                    searchResult.add(entry.getKey());
             }
         }
     }
@@ -172,11 +176,6 @@ public class ActionActivity extends AppCompatActivity {
     private static double rad2deg(double rad)
     {
         return (rad * 180.0 / Math.PI);
-    }
-
-    private double getDistance(double[] latlng1, double[] latlng2)
-    {
-
     }
 
     private boolean isValidDT (String sDate1str, String eDate1str, String sDate2str, String eDate2str,
