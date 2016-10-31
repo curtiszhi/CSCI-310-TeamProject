@@ -202,17 +202,12 @@ public class ActionActivity extends AppCompatActivity {
                 return true;
         }
         catch (ParseException parseException) {parseException.printStackTrace();}
-//        if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
-//            return true;
-//        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 &&
-//                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
-//            return true;
         return false;
     }
 
     private boolean isValidFilters(boolean requestCompact, boolean requestCover, boolean requestHandicap, DataSnapshot filterNode)
     {
-        ArrayList<String> arrayList = new ArrayList<String>();
+        ArrayList<String> arrayList = new ArrayList<>();
         for (DataSnapshot filter : filterNode.getChildren())
             arrayList.add(filter.getValue().toString().toLowerCase());
         if ((requestCompact && !arrayList.contains("compact")) ||
@@ -221,36 +216,6 @@ public class ActionActivity extends AppCompatActivity {
             return false;
         return true;
     }
-
-
-//    private int dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
-//    {
-//        try
-//        {
-//            Date sDate1 = sdf.parse(sDate1str);
-//            Date sDate2 = sdf.parse(sDate2str);
-//            Date eDate1 = sdf.parse(eDate1str);
-//            Date eDate2 = sdf.parse(eDate2str);
-//
-//            //Within range:
-//            if (sDate1.compareTo(sDate2) >= 0 && eDate1.compareTo(eDate2) <= 0)
-//            {
-//                //On a different day:
-//                if (sDate1.compareTo(eDate1) < 0)
-//                    return 1;
-//                //On the same day:
-//                else if (sDate1.compareTo(eDate1) == 0)
-//                    return 2;
-//            }
-//        }
-//        catch (ParseException parseException) {parseException.printStackTrace();}
-//        return 0;
-//    }
-//
-//    private boolean timeWithinRange(String sTime1str, String eTime1str, String sTime2str, String eTime2str)
-//    {
-//        return true;
-//    }
 
     private void initUserListener(){
         DatabaseReference database = mDatabase.child("users/").child(mFirebaseUser_universal.getUid());

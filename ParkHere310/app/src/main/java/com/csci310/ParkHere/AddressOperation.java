@@ -1,7 +1,9 @@
 package com.csci310.ParkHere;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 
 import org.json.JSONArray;
@@ -116,6 +118,7 @@ public class AddressOperation extends AsyncTask<String, Void, String>
 
         } catch (JSONException e) {
             e.printStackTrace();
+
         }
         return new double[]{lat, lng};
     }
@@ -132,5 +135,19 @@ public class AddressOperation extends AsyncTask<String, Void, String>
             e.printStackTrace();
         }
         return formattedAddress;
+    }
+
+    public static void showAddressFaultDialog(Activity activity)
+    {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setTitle("Address Fault");
+        alertDialog.setMessage("Invalid address!");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+        new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog1, int which) {
+                dialog1.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }
