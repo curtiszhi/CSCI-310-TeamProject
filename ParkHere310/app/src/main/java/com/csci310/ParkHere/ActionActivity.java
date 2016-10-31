@@ -158,7 +158,7 @@ public class ActionActivity extends AppCompatActivity {
                 if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0)
                 {
                     searchResult.add(entry.getKey());
-                    System.out.println(entry.getKey());
+                      System.out.println(entry.getKey());
                 }
             }
         }
