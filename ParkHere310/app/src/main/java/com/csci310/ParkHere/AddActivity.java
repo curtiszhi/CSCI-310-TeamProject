@@ -405,7 +405,7 @@ public class AddActivity extends AppCompatActivity {
                         fd.photos.add(s_image);
                         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
-                        valueTV.setText("image"+photos.size());
+                        valueTV.setText("image"+fd.photos.size());
                         valueTV.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
                         ((LinearLayout) linearLayout).addView(valueTV);
 
