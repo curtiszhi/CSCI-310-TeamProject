@@ -62,7 +62,7 @@ import java.util.Vector;
  */
 
 public class AddActivity extends AppCompatActivity {
-    private List<String> hostList;
+    private List<FeedItem> hostList;
     private String identifier;
     private EditText location,city,postcode, description, price, startTime, endTime, startDate, endDate;
     private Button post, photoButton;
@@ -386,15 +386,15 @@ public class AddActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 hostList= (List)dataSnapshot.getValue();
                 if(hostList==null){
-                    List<String> temp= new ArrayList<String>();
+                    List<FeedItem> temp= new ArrayList<FeedItem>();
 
-                    temp.add(identifier);
+                    temp.add(fd);
                     hostList=temp;
                     System.out.println(identifier);
                     System.out.println(hostList.get(0));
                     ref.setValue(hostList);
                 }else{
-                hostList.add(identifier);
+                hostList.add(fd);
                     ref.setValue(hostList);}
             }
 
@@ -404,7 +404,7 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase.child("parking-spots-hosting").child(Fd.getIdentifier()).setValue(Fd);
+        mDatabase.child("parking-spots-hosting").child(fd.getSpotID()).setValue(Fd);
     }
 
     public void setFeedItem(String jsonString)

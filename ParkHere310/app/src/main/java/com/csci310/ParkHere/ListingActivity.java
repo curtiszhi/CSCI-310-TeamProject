@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -34,10 +33,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -53,6 +49,8 @@ public class ListingActivity extends AppCompatActivity {
     //static List<FeedItem> displayList;
     static List<FeedItem> rentingActualList;
     static List<FeedItem> hostingActualList;
+    private static DatabaseReference ref;
+    private static List<FeedItem> hostList;
 
 
     @Override
@@ -65,45 +63,47 @@ public class ListingActivity extends AppCompatActivity {
         rentingList = new ArrayList<>();
         hostingList = new ArrayList<>();
         //displayList = new ArrayList<>();
+        getItemsHosting();
         rentingActualList = new ArrayList<>();
         hostingActualList = new ArrayList<>();
-        initDataListenerRental();
-        initDataListenerHosting();
+        //initDataListenerRental();
+        //initDataListenerHosting();
         initActionBar();
     }
 
-    private void initDataListenerRental(){
-        DatabaseReference database = mDatabase.child("users/" + mFirebaseUser.getUid() + "/renting/");
-        database.addValueEventListener(new ValueEventListener() {
+    private static List<FeedItem> getItemsRenting(){
+        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting");
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                System.out.println("There are " + snapshot.getChildrenCount() + " houses in rent");
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    String houseID = postSnapshot.getValue(String.class);
-                    rentingList.add(houseID);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                hostList= (List)dataSnapshot.getValue();
+                if(hostList==null){
+                    //dosomething
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: ");
+                System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+        return hostList;
     }
-    private void initDataListenerHosting(){
-        DatabaseReference database = mDatabase.child("users/" + mFirebaseUser.getUid() + "/hosting/");
-        database.addValueEventListener(new ValueEventListener() {
+    private static void getItemsHosting(){
+        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                System.out.println("There are " + snapshot.getChildrenCount() + " houses in host");
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    String houseID = postSnapshot.getValue(String.class);
-                    System.out.println(houseID);
-                    hostingList.add(houseID);
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                hostList= (List)dataSnapshot.getValue();
+                System.out.println("cigars: " + hostList.size());
+                if(hostList==null){
+                   //dosomething
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: ");
+                System.out.println("The read failed: " + databaseError.getCode());
             }
         });
     }
@@ -202,7 +202,7 @@ public class ListingActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            getItemsRenting(rentingList);
+            getItemsRenting();
             MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), rentingActualList);
             recyclerView.setAdapter(adapter);
             return root;
@@ -212,19 +212,19 @@ public class ListingActivity extends AppCompatActivity {
     public static class RecyclerViewFragmentHosting extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            getItemsHosting();
             View root = inflater.inflate(R.layout.fragment_recyclerview, container, false);
             RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.myList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            getItemsHosting(hostingList);
-            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), hostingActualList);
+            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), getItemsRenting());
             recyclerView.setAdapter(adapter);
             return root;
         }
     }
 
-    private static void getItemsRenting(List<String> rentalIDs){
+    /*private static void getItemsRenting(List<String> rentalIDs){
         mDatabase.child("parking-spots-renting");
         mDatabase.orderByChild("currentRenter").equalTo(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -242,28 +242,27 @@ public class ListingActivity extends AppCompatActivity {
 
             }
         });
-    }
+    }*/
 
-    private static void getItemsHosting(final List<String> hostalIDs){
-        DatabaseReference database = mDatabase.child("parking-spots-hosting");
-        database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                //cigarActualList = new ArrayList<>();
-                System.out.println("There are " + snapshot.getChildrenCount() + " total cigars in humidor");
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    FeedItem houseID = postSnapshot.getValue(FeedItem.class);
-                    if(houseID.getHost().equals(mFirebaseUser.getUid())){
-                        hostingActualList.add(houseID);
+    /*private static void getItemsHosting(List<String> hostalIDs){
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("parking-spots-hosting").child(key).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        // Get Post value
+                        Post post = dataSnapshot.getValue(Post.class);
+                        // post now has all the values and
+                        // can be used to update the UI
+                        // ...
                     }
-                }
-                //progressDiag.hide();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: ");
-            }
-        });
-    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+                    }
+                });
+
+    }*/
 }
 //TODO: add back button action - should not be able to return to register screen

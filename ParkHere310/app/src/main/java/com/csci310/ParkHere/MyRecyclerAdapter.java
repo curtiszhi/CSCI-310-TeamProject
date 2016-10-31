@@ -23,6 +23,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
     public MyRecyclerAdapter(Context context, List<FeedItem> feedItemList) {
         this.feedItemList = feedItemList;
+        System.out.println("got list" + feedItemList.size());
         this.mContext = context;
     }
 
@@ -36,6 +37,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
     @Override
     public void onBindViewHolder(FeedListRowHolder feedListRowHolder, int i) {
+        System.out.println("creating item");
         FeedItem feedItem = feedItemList.get(i);
         feedListRowHolder.house.setText(feedItem.getAddress());
        // feedListRowHolder.thumbnail.setImageResource(feedItem.getThumbnail());
