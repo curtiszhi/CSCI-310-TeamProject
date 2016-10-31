@@ -319,7 +319,7 @@ public class AddActivity extends AppCompatActivity {
                             fd.setDescription(description_parking);
 
 
-                            fd.setHost(ActionActivity.user_all.getUserName());
+                            fd.setHost(mFirebaseUser.getUid());
 
                             fd.setStartDates(startdate);
                             fd.setEndDates(enddate);
