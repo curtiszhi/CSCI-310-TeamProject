@@ -385,7 +385,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 hostList= (List)dataSnapshot.getValue();
-                if(hostList==null){
+                if(hostList.size()==0){
                     List<FeedItem> temp= new ArrayList<FeedItem>();
 
                     temp.add(fd);
