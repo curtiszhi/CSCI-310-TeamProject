@@ -105,14 +105,14 @@ public class UserActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 if (editToggleButton.isChecked()) {
                     nameEditText.setKeyListener((KeyListener) nameEditText.getTag());
-                    emailEditText.setKeyListener((KeyListener) emailEditText.getTag());
+                    //emailEditText.setKeyListener((KeyListener) emailEditText.getTag());
                     phoneEditText.setKeyListener((KeyListener) phoneEditText.getTag());
                 } else {
                     nameEditText.setTag(nameEditText.getKeyListener());
                     nameEditText.setKeyListener(null);
 
-                    emailEditText.setTag(emailEditText.getKeyListener());
-                    emailEditText.setKeyListener(null);
+                    //emailEditText.setTag(emailEditText.getKeyListener());
+                    //emailEditText.setKeyListener(null);
 
                     phoneEditText.setTag(phoneEditText.getKeyListener());
                     phoneEditText.setKeyListener(null);
@@ -122,8 +122,9 @@ public class UserActivity extends AppCompatActivity {
                     UserProfileChangeRequest updateName = new UserProfileChangeRequest.Builder().setDisplayName(nameEditText.getText().toString()).build();
                     mFirebaseUser.updateProfile(updateName);
                     ActionActivity.user_all.setUserName(nameEditText.getText().toString().trim());
-                    ActionActivity.user_all.setEmail(emailEditText.getText().toString().trim());
+                    //ActionActivity.user_all.setEmail(emailEditText.getText().toString().trim());
                     ActionActivity.user_all.setPhone(phoneEditText.getText().toString().trim());
+                    //update all
                 }
             }
         });

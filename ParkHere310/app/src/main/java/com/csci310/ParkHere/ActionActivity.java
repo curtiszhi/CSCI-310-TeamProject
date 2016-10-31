@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -221,34 +222,29 @@ public class ActionActivity extends AppCompatActivity {
 
     private void initUserListener(){
         DatabaseReference database = mDatabase.child("users/");
-        database.orderByChild("email").equalTo(mFirebaseUser_universal.getEmail()).addChildEventListener(new ChildEventListener() {
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                HashMap<String, User> test = (HashMap<String, User>)dataSnapshot.getValue();
-                user_all = test.get(mFirebaseUser_universal.getEmail());
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    HashMap temp = (HashMap) postSnapshot.getValue();
+                    //Iterator it = temp.entrySet().iterator();
+                    /*while (it.hasNext()) {
+                        Map.Entry pair = (Map.Entry)it.next();
+                        System.out.println(pair.getKey() + " = " + pair.getValue());
+                        it.remove(); // avoids a ConcurrentModificationException
+                    }*/
+                    user_all = new User();
+                    user_all.setPhone((String)temp.get("phone"));
+                    user_all.setUserName((String)temp.get("userName"));
+                    //if(mFirebaseUser_universal.getEmail()){
+                        //user_all = postSnapshot.getValue(User.class);
+                    //}
+                }
             }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                System.out.println("The read failed: ");
             }
-
-            // ...
         });
     }
 
