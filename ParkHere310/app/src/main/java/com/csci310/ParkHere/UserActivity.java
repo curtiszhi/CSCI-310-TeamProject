@@ -86,7 +86,7 @@ public class UserActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        String email = mFirebaseUser.getEmail();
+        String email = user_all.getEmail();
         String phone = user_all.getPhone();
         String name = user_all.getUserName();
         Vector<Integer> rating_host= user_all.getRating();

@@ -139,8 +139,8 @@ public class FeedItem {
         this.rating = rating;
     }
 
-    public void addRating(Integer rating){
-        this.rating.add(rating);
+    public Vector<Integer> getRating(){
+        return rating;
     }
 
     public String getAddress() {
