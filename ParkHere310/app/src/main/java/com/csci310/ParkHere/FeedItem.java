@@ -25,7 +25,7 @@ public class FeedItem {
     private double price;
     private String cancelpolicy;
     private String description;
-    private Vector<Float> rating;
+    private Vector<Integer> rating;
     private Boolean activity;
     private List<String> filters;
     private String Host;
@@ -48,7 +48,8 @@ public class FeedItem {
     FeedItem(){
         photos=new Vector<Bitmap>();
         rentedTime= new HashMap<String,Vector<String>>();
-        rating=new Vector<Float>();
+        rating=new Vector<Integer>();
+        review = new Vector<String>();
     }
     public Vector<String> getReview() {
         return review;
@@ -100,19 +101,23 @@ public class FeedItem {
         this.cancelpolicy = cancelpolicy;
     }
 
-    public Float getRating() {
-        float sum = 0;
+    public int getRating() {
+        int sum = 0;
         for(int i = 0; i < rating.size(); i++){
             sum = sum + rating.get(i);
         }
-        return sum/(float)rating.size();
+        if(rating.size() == 0){
+            return 0;
+        }else{
+            return sum/rating.size();
+        }
     }
 
-    public void setRating(Vector<Float> rating) {
+    public void setRating(Vector<Integer> rating) {
         this.rating = rating;
     }
 
-    public void addRating(Float rating){
+    public void addRating(Integer rating){
         this.rating.add(rating);
     }
 
