@@ -259,12 +259,26 @@ public class AddActivity extends AppCompatActivity {
                         if(check(starttime,endtime,startdate,enddate)){
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("filter").setValue(filter);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("filter").setValue(filter);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("startTime").setValue(starttime);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("startTime").setValue(starttime);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("endTime").setValue(endtime);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("endTime").setValue(endtime);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("startDates").setValue(startdate);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("startDates").setValue(startdate);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("endDates").setValue(enddate);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("endDates").setValue(enddate);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("description").setValue(description_parking);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("description").setValue(description_parking);
+
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("price").setValue(price_parking);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("price").setValue(price_parking);
                             Intent intent = new Intent(AddActivity.this, UserActivity.class);//change to UserActivity.class
                             startActivity(intent);
 
