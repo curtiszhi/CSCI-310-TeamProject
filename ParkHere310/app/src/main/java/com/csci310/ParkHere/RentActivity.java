@@ -71,7 +71,8 @@ public class RentActivity extends AppCompatActivity {
     private String total_price;
     private FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
-
+    String value;
+    int position;
 
     //Paypal Configuration Object
     private static PayPalConfiguration config = new PayPalConfiguration()
@@ -89,35 +90,15 @@ public class RentActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        fd = new FeedItem();
-        fd.setActivity(true);
-        fd.setCancel("test cancel policy");
-        fd.setDescription("test description");
-        fd.setRating(null);
-        fd.setAddress("dummy address");
-        fd.setStartDates("10/4");
-        fd.setEndDates("10/5");
-        fd.setStartTime("9:00");
-        fd.setEndTime("8:00");
-        fd.setPrice(3.45);
-        List<String> dumb = new ArrayList<>();
-        dumb.add("Handicapped");
-        dumb.add("Shaded");
-        fd.setFilter(dumb);
-        int r = 4;
-        fd.addRating(r);
-        rentedTime=new Vector<>();
+        Bundle bundle = getIntent().getExtras();
+        value = bundle.getString("ItemPosition");
+        position = Integer.parseInt(value);
+        fd = MyRecyclerAdapter.feedItemList.get(position);
+
+        /*rentedTime=new Vector<>();
         rentedTime.add(0,fd.getStartDates()+" "+fd.getStartTime());
         rentedTime.add(1,fd.getEndDates()+" "+fd.getEndTime());
-        renterRentTime.put(fd.getHost(),rentedTime); Vector<String> photodata = new Vector<String>();
-
-
-
-
-        //storage = FirebaseStorage.getInstance();
-        //storageRef = storage.getReferenceFromUrl("gs://parkhere310-3701d.appspot.com");
-        //imagesRef = storageRef.child(fd.getSpotID());
-        //spotPhoto= new Vector<Bitmap>();
+        renterRentTime.put(fd.getHost(),rentedTime);*/
 
         image_view=(ImageView) findViewById(R.id.image);
         image_label=(TextView) findViewById(R.id.image_label);
@@ -220,7 +201,7 @@ public class RentActivity extends AppCompatActivity {
             if (confirm != null) {
                 try {
                     Log.i("paymentExample", confirm.toJSONObject().toString(4));
-                    ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getSpotID());
+                    ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting/" + fd.getSpotID());
                     ref.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -233,8 +214,8 @@ public class RentActivity extends AppCompatActivity {
                         }
                     });
 
-                    mDatabase.child("parking-spots-hosting").child(fd.getSpotID()).setValue(fd);
-                    Intent intent = new Intent(RentActivity.this, UserActivity.class);//change to UserActivity.class
+                    mDatabase.child("parking-spots-renting").child(fd.getSpotID()).setValue(fd);
+                    Intent intent = new Intent(RentActivity.this, MainActivity.class);//change to UserActivity.class
                     startActivity(intent);
 
                 } catch (JSONException e) {

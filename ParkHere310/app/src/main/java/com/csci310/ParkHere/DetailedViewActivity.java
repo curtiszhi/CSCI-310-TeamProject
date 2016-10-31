@@ -86,6 +86,8 @@ public class DetailedViewActivity extends AppCompatActivity{
 
         position = Integer.parseInt(value);
         fd = MyRecyclerAdapter.feedItemList.get(position);
+
+
         image_view=(ImageView) findViewById(R.id.image);
         image_label=(TextView) findViewById(R.id.image_label);
         hostPublic = (Button) findViewById(R.id.rentButton);

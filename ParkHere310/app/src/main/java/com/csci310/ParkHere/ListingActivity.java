@@ -85,8 +85,8 @@ public class ListingActivity extends AppCompatActivity {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                    HashMap<String,HashMap<String, Object>> user_map= (HashMap<String,HashMap<String, Object>>)dataSnapshot.getValue();
-                    if(user_map != null){
+                HashMap<String,HashMap<String, Object>> user_map= (HashMap<String,HashMap<String, Object>>)dataSnapshot.getValue();
+                if(user_map != null){
                     for (HashMap.Entry<String, HashMap<String, Object>> entry : user_map.entrySet()) {
                         String itemKey = entry.getKey();
                         System.out.println("itemkey: "+ itemKey);
@@ -99,25 +99,32 @@ public class ListingActivity extends AppCompatActivity {
                                 user_all.setLatitude((double)value);
                                 System.out.println(value);
                             }
+                            if(key.equals("address")){
+                                user_all.setAddress((String)value);
+                            }
+
                             if(key.equals("longitude")){
                                 user_all.setLongitude((double)value);
                             }
-                            if(key.equals("startdates")){
+                            if(key.equals("spotID")){
+                                user_all.setSpotID((String)value);
+                            }
+                            if(key.equals("startDates")){
                                 user_all.setStartDates((String)value);
                             }
-                            if(key.equals("enddates")){
+                            if(key.equals("endDates")){
                                 user_all.setEndDates((String)value);
                             }
-                            if(key.equals("starttime")){
+                            if(key.equals("startTime")){
                                 user_all.setStartTime((String)value);
                             }
-                            if(key.equals("endtime")){
+                            if(key.equals("endTime")){
                                 user_all.setEndTime((String)value);
                             }
                             if(key.equals("price")){
                                 user_all.setPrice((Double)value);
                             }
-                            if(key.equals("cancelpolicy")){
+                            if(key.equals("cancel")){
                                 user_all.setCancel((String)value);
                             }
                             if(key.equals("description")){
@@ -129,14 +136,15 @@ public class ListingActivity extends AppCompatActivity {
                             if(key.equals("activity")){
                                 user_all.setActivity((Boolean)value);
                             }
-                            if(key.equals("filters")){
-                                user_all.setFilter((Vector<String>) value);
+                            if(key.equals("filter")){
+                                Vector v = new Vector((ArrayList<String>) value);
+                                user_all.setFilter(v);
                             }
-                            if(key.equals("Host")){
+                            if(key.equals("host")){
                                 user_all.setHost((String)value);
                             }
                             if(key.equals("photos")){
-                                user_all.photos = (Vector<String>) value;
+                                user_all.setPhotos((ArrayList<String>)value);
                             }
                             if(key.equals("rentedTime")){
                                 user_all.setRentedTime((Map<String,Vector<String>>)value);
@@ -152,7 +160,7 @@ public class ListingActivity extends AppCompatActivity {
                             }
 
                         }
-                        hostList.add(user_all);}
+                        rentList.add(user_all);}
 
                 }}
 
@@ -227,8 +235,7 @@ public class ListingActivity extends AppCompatActivity {
                         user_all.setHost((String)value);
                     }
                     if(key.equals("photos")){
-                        Vector v = new Vector((ArrayList<String>) value);
-                        user_all.setPhotos(v);
+                        user_all.setPhotos((ArrayList<String>)value);
                     }
                     if(key.equals("rentedTime")){
                         user_all.setRentedTime((Map<String,Vector<String>>)value);
