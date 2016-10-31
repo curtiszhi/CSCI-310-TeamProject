@@ -7,6 +7,7 @@ package com.csci310.ParkHere;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -277,6 +278,9 @@ public class ActionActivity extends AppCompatActivity {
                     }
                     if(key.equals("hosting")){
                         user_all.setHosting((List<String>)value);
+                    }
+                    if(key.equals("photo")){
+                        user_all.setPhoto((Bitmap) value);
                     }
 
                 }
