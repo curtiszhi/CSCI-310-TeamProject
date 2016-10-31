@@ -123,33 +123,30 @@ public class ActionActivity extends AppCompatActivity {
 
     private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
     {
-        System.out.println("Start");
-        spotsDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                    System.out.println("Hereererere");
-                }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
+//        spotsDatabase.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                    System.out.println("Hereererere");
+//                }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                System.out.println("The read failed: " + databaseError.getCode());
+//            }
+//        });
 
         spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
-                System.out.println("Here");
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
-                    System.out.println("child's key: " + child.getKey());
-                    if (child.child("activity").equals("true") &&
-                            isValidDT(child.child("startDates").getKey(), child.child("endDates").getKey(), startdate, enddate,
-                                    child.child("startTime").getKey(), child.child("endTime").getKey(), starttime, endtime))
+                    if (child.child("activity").getValue().toString().equals("true") &&
+                            isValidDT(child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(), startdate, enddate,
+                                    child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString(), starttime, endtime))
                     {
-                        tempSpots.put(child.getKey(), new double[]{Double.parseDouble(child.child("latitude").getKey()),
-                                Double.parseDouble(child.child("longitude").getKey())});
+                        tempSpots.put(child.getKey(), new double[]{Double.parseDouble(child.child("latitude").getValue().toString()),
+                                Double.parseDouble(child.child("longitude").getValue().toString())});
                     }
                 }
             }
@@ -169,14 +166,15 @@ public class ActionActivity extends AppCompatActivity {
             for (Map.Entry<String, double[]> entry : tempSpots.entrySet())
             {
                 double[] tmplatlng = entry.getValue();
-                if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0)
+                if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0) {
                     searchResult.add(entry.getKey());
-                System.out.println(entry.getKey());
+                    System.out.println(entry.getKey());
+                }
             }
         }
         else
         {
-            System.out.println("\n\n\n\n\n\n\n\nasdfadfa\n\n\n\n\n\n\n\n");
+            System.out.println("Empty tempSpots!");
         }
     }
 
@@ -202,13 +200,12 @@ public class ActionActivity extends AppCompatActivity {
     private boolean isValidDT (String sDate1str, String eDate1str, String sDate2str, String eDate2str,
                                String sTime1str, String eTime1str, String sTime2str, String eTime2str)
     {
-        return true;
-//        if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
-//            return true;
-//        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 &&
-//                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
-//            return true;
-//        return false;
+        if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
+            return true;
+        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 &&
+                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
+            return true;
+        return false;
     }
 
     private int dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
