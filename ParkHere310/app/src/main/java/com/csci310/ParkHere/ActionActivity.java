@@ -68,7 +68,7 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        spotsDatabase = FirebaseDatabase.getInstance().getReference().child("parking-spots-hosting");
+        spotsDatabase = mDatabase.child("parking-spots-hosting");
         sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
         tempSpots = new HashMap<String, double[]>();
         searchResult = new ArrayList<String>();
@@ -105,11 +105,6 @@ public class ActionActivity extends AppCompatActivity {
                 String enddate = endDate.getText().toString().trim();
                 String address = location.getText().toString().trim();
 
-                System.out.println(starttime);
-                System.out.println(endtime);
-                System.out.println(startdate);
-                System.out.println(enddate);
-
                 boolean requestCompact = compact.isChecked();
                 boolean requestCover = cover.isChecked();
                 boolean handicapped = handy.isChecked();
@@ -126,19 +121,18 @@ public class ActionActivity extends AppCompatActivity {
 
     private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
     {
-        System.out.println("Here1");
-        System.out.println(spotsDatabase.child("ChIJ5blASvDHwoARaMMJbCPgpMs").child("acativity").getKey());
-//        for (DataSnapshot child : spotsDatabase.child(""))
-//        {
-//            System.out.println("child's key: " + child.getKey());
-//            if (child.child("activity").equals("true") &&
-//                    isValidDT(child.child("startDates").getKey(), child.child("endDates").getKey(), startdate, enddate,
-//                            child.child("startTime").getKey(), child.child("endTime").getKey(), starttime, endtime))
-//            {
-//                tempSpots.put(child.getKey(), new double[]{Double.parseDouble(child.child("latitude").getKey()),
-//                        Double.parseDouble(child.child("longitude").getKey())});
-//            }
-//        }
+        System.out.println("Start");
+        spotsDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    System.out.println("Hereererere");
+                }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
 
         spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener()
         {
