@@ -26,6 +26,7 @@
         <activity android:name=".RentActivity" />
         <activity android:name=".RatingActivity" />
         <activity android:name=".UserActivity" />
+        <activity android:name=".DetailedViewActivity" />
 
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for
