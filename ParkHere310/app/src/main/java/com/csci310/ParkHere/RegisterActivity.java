@@ -88,9 +88,9 @@ public class RegisterActivity extends AppCompatActivity {
                                             progressDiag.hide();
                                             return;
                                         }else{
-                                            String name = nameEditText.getText().toString().trim();
-                                            String phone = phoneEditText.getText().toString().trim();
-                                            writeNewUser(name, mFirebaseUser.getEmail(), phone, defaultHost);
+                                            String namey = nameEditText.getText().toString().trim();
+                                            String phoney = phoneEditText.getText().toString().trim();
+                                            writeNewUser(namey, phoney, defaultHost);
                                             Intent intent = new Intent(RegisterActivity.this, ActionActivity.class);
                                             startActivity(intent);
                                         }
@@ -119,11 +119,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void writeNewUser( String userName, String email, String phone, Boolean isHost) {
+    private void writeNewUser( String userName, String phone, Boolean isHost) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         String userID = mFirebaseUser.getUid();
+        String email = mFirebaseUser.getEmail();
         List<String> renting = new ArrayList<>();
         List<String> hosting = new ArrayList<>();
         User database_user = new User(userName, email, phone, isHost, renting, hosting);

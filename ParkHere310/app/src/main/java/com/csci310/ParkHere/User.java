@@ -15,7 +15,7 @@ public class User {
     private String phone;
     private String[] review;
     private Vector<String> rateList;
-    private Vector<Float> rating;
+    private Vector<Integer> rating;
 
     public Float getRating() {
         float sum = 0;
@@ -25,11 +25,11 @@ public class User {
         return sum/(float)rating.size();
     }
 
-    public void setRating(Vector<Float> rating) {
+    public void setRating(Vector<Integer> rating) {
         this.rating = rating;
     }
 
-    public void addRating(Float rating){
+    public void addRating(Integer rating){
         this.rating.add(rating);
     }
 
@@ -107,7 +107,7 @@ public class User {
 
     public User() {
         rateList=new Vector<String>();
-        rating=new Vector<Float>();
+        rating=new Vector<Integer>();
     }
 
     public User(String userName, String email, String phone, Boolean isHost, List<String> renting, List<String> hosting) {
@@ -117,6 +117,8 @@ public class User {
         this.isHost = isHost;
         this.renting = renting;
         this.hosting = hosting;
+        rateList=new Vector<String>();
+        rating=new Vector<Integer>();
     }
 
 }
