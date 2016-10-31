@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
@@ -50,7 +51,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         feedListRowHolder.dates.setText(feedItem.getEndDates() + feedItem.getEndTime());
         String stringdouble= Double.toString(feedItem.getPrice());
         feedListRowHolder.price.setText(stringdouble);
-        //feedListRowHolder.rating.setRating(feedItem.getRating());
+        feedListRowHolder.rating.setRating(feedItem.calculateRate());
         feedListRowHolder.activity.setText(String.valueOf(feedItem.getActivity()));
         feedListRowHolder.mRootView.setOnClickListener(new ItemOnClickListener(feedListRowHolder.mRootView, i));
     }

@@ -80,74 +80,80 @@ public class ListingActivity extends AppCompatActivity {
 
     private  void getItemsRenting(){
         DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/renting");
+        //DatabaseReference database = mDatabase.child("parking-spots-hosting");
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
-                if(user_map != null){
-                FeedItem user_all = new FeedItem();
-                for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
-                    String key = entry.getKey();
-                    Object value = entry.getValue();
-                    if(key.equals("latitude")){
-                        user_all.setLatitude((double)value);
-                    }
-                    if(key.equals("longitude")){
-                        user_all.setLongitude((double)value);
-                    }
-                    if(key.equals("startdates")){
-                        user_all.setStartDates((String)value);
-                    }
-                    if(key.equals("enddates")){
-                        user_all.setEndDates((String)value);
-                    }
-                    if(key.equals("starttime")){
-                        user_all.setStartTime((String)value);
-                    }
-                    if(key.equals("endtime")){
-                        user_all.setEndTime((String)value);
-                    }
-                    if(key.equals("price")){
-                        user_all.setPrice((Double)value);
-                    }
-                    if(key.equals("cancelpolicy")){
-                        user_all.setCancel((String)value);
-                    }
-                    if(key.equals("description")){
-                        user_all.setDescription((String)value);
-                    }
-                    if(key.equals("rating")){
-                        user_all.setRating((Vector<Integer>)value);
-                    }
-                    if(key.equals("activity")){
-                        user_all.setActivity((Boolean)value);
-                    }
-                    if(key.equals("filters")){
-                        user_all.setFilter((Vector<String>) value);
-                    }
-                    if(key.equals("Host")){
-                        user_all.setHost((String)value);
-                    }
-                    if(key.equals("photos")){
-                        user_all.photos = (Vector<String>) value;
-                    }
-                    if(key.equals("rentedTime")){
-                        user_all.setRentedTime((Map<String,Vector<String>>)value);
-                    }
-                    if(key.equals("identifier")){
-                        user_all.setIdentifier((String)value);
-                    }
-                    if(key.equals("review")){
-                        user_all.setReview((Vector<String>) value);
-                    }
-                    if(key.equals("currentRenter")){
-                        user_all.setCurrentRenter((String)value);
-                    }
+                    HashMap<String,HashMap<String, Object>> user_map= (HashMap<String,HashMap<String, Object>>)dataSnapshot.getValue();
+                    if(user_map != null){
+                    for (HashMap.Entry<String, HashMap<String, Object>> entry : user_map.entrySet()) {
+                        String itemKey = entry.getKey();
+                        System.out.println("itemkey: "+ itemKey);
+                        FeedItem user_all = new FeedItem();
+                        for (HashMap.Entry<String, Object> innerEntry : entry.getValue().entrySet()) {
+                            String key = innerEntry.getKey();
+                            Object value = innerEntry.getValue();
+                            System.out.println("innerkey: "+ key + "// innervalue: "+ value);
+                            if(key.equals("latitude")){
+                                user_all.setLatitude((double)value);
+                                System.out.println(value);
+                            }
+                            if(key.equals("longitude")){
+                                user_all.setLongitude((double)value);
+                            }
+                            if(key.equals("startdates")){
+                                user_all.setStartDates((String)value);
+                            }
+                            if(key.equals("enddates")){
+                                user_all.setEndDates((String)value);
+                            }
+                            if(key.equals("starttime")){
+                                user_all.setStartTime((String)value);
+                            }
+                            if(key.equals("endtime")){
+                                user_all.setEndTime((String)value);
+                            }
+                            if(key.equals("price")){
+                                user_all.setPrice((Double)value);
+                            }
+                            if(key.equals("cancelpolicy")){
+                                user_all.setCancel((String)value);
+                            }
+                            if(key.equals("description")){
+                                user_all.setDescription((String)value);
+                            }
+                            if(key.equals("rating")){
+                                user_all.setRating((Vector<Integer>)value);
+                            }
+                            if(key.equals("activity")){
+                                user_all.setActivity((Boolean)value);
+                            }
+                            if(key.equals("filters")){
+                                user_all.setFilter((Vector<String>) value);
+                            }
+                            if(key.equals("Host")){
+                                user_all.setHost((String)value);
+                            }
+                            if(key.equals("photos")){
+                                user_all.photos = (Vector<String>) value;
+                            }
+                            if(key.equals("rentedTime")){
+                                user_all.setRentedTime((Map<String,Vector<String>>)value);
+                            }
+                            if(key.equals("identifier")){
+                                user_all.setIdentifier((String)value);
+                            }
+                            if(key.equals("review")){
+                                user_all.setReview((Vector<String>) value);
+                            }
+                            if(key.equals("currentRenter")){
+                                user_all.setCurrentRenter((String)value);
+                            }
 
-                }
-                    rentList.add(user_all);}
+                        }
+                        hostList.add(user_all);}
 
-            }
+                }}
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -162,14 +168,15 @@ public class ListingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String,HashMap<String, Object>> user_map= (HashMap<String,HashMap<String, Object>>)dataSnapshot.getValue();
-                for (HashMap.Entry<String, HashMap<String, Object>> entry : user_map.entrySet()) {
+                    if(user_map != null){
+                    for (HashMap.Entry<String, HashMap<String, Object>> entry : user_map.entrySet()) {
                     String itemKey = entry.getKey();
                     System.out.println("itemkey: "+ itemKey);
                     FeedItem user_all = new FeedItem();
                     for (HashMap.Entry<String, Object> innerEntry : entry.getValue().entrySet()) {
                         String key = innerEntry.getKey();
                         Object value = innerEntry.getValue();
-                        System.out.println("innerkey: "+ key + value);
+                        System.out.println("innerkey: "+ key + "// innervalue: "+ value);
                         if(key.equals("latitude")){
                             user_all.setLatitude((double)value);
                             System.out.println(value);
@@ -229,7 +236,7 @@ public class ListingActivity extends AppCompatActivity {
                 }
                 hostList.add(user_all);}
 
-            }
+            }}
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
