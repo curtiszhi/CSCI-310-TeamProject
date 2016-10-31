@@ -17,12 +17,16 @@ public class User {
     private Vector<String> rateList;
     private Vector<Integer> rating;
 
-    public Float getRating() {
-        float sum = 0;
+    public int getRating() {
+        int sum = 0;
         for(int i = 0; i < rating.size(); i++){
             sum = sum + rating.get(i);
         }
-        return sum/(float)rating.size();
+        if(rating.size() == 0 ){
+            return 0;
+        } else{
+            return sum/rating.size();
+        }
     }
 
     public void setRating(Vector<Integer> rating) {
