@@ -266,7 +266,7 @@ public class ActionActivity extends AppCompatActivity {
                         user_all.setHosting((List<String>)value);
                     }
                     if(key.equals("photo")){
-                        user_all.setPhoto((Bitmap) value);
+                        user_all.setPhoto((String) value);
                     }
 
                 }

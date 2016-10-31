@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.KeyListener;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,11 +19,17 @@ import android.widget.ToggleButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import static com.csci310.ParkHere.ActionActivity.user_all;
@@ -81,7 +88,7 @@ public class UserActivity extends AppCompatActivity {
         String phone = user_all.getPhone();
         String name = user_all.getUserName();
         Vector<Integer> rating_host= user_all.getRating();
-        Uri uri = mFirebaseUser.getPhotoUrl();
+
 
 
 
@@ -89,7 +96,7 @@ public class UserActivity extends AppCompatActivity {
         nameEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
         emailEditText.setText(email.trim(),TextView.BufferType.EDITABLE);
         phoneEditText.setText(phone.trim(),TextView.BufferType.EDITABLE);
-        profilePicImageView.setImageURI(uri);
+
         if(rating_host.size()==0){
         ratingBar.setRating(0);}
         else{
@@ -101,7 +108,11 @@ public class UserActivity extends AppCompatActivity {
             ratingBar.setRating(rate);
         }
 
-
+        if(user_all.getPhoto()!=null) {
+            byte[] decodedString = Base64.decode(user_all.getPhoto(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            profilePicImageView.setImageBitmap(decodedByte);
+        }
         //Set EditText Not Editable
         nameEditText.setTag(nameEditText.getKeyListener());
         nameEditText.setKeyListener(null);
@@ -165,7 +176,14 @@ public class UserActivity extends AppCompatActivity {
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
                         profilePicImageView.setImageBitmap(s_image);
-                        user_all.setPhoto(s_image);
+                        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
+                        s_image.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
+
+                        byte[] byteArray = bYtE.toByteArray();
+                        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+
+                        user_all.setPhoto(imageFile);
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
