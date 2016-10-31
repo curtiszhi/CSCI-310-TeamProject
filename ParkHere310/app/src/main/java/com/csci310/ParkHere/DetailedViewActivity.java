@@ -302,7 +302,7 @@ public class DetailedViewActivity extends AppCompatActivity{
 
         //ratingBar.setRating(fd.getRating());
         address.setText(fd.getAddress());
-        price.setText(Double.toString(fd.getPrice()));
+        price.setText("$" + Double.toString(fd.getPrice()));
 
         String filter_spot="";
         for(int i=0;i<fd.getFilter().size();i++){
