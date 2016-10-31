@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -33,8 +34,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 /**
  * Created by seanyuan on 9/30/16.
@@ -50,7 +54,9 @@ public class ListingActivity extends AppCompatActivity {
     static List<FeedItem> rentingActualList;
     static List<FeedItem> hostingActualList;
     private static DatabaseReference ref;
-    private static List<FeedItem> hostList;
+    public static ArrayList<FeedItem> hostList;
+    public static ArrayList<FeedItem> rentList;
+    static MyRecyclerAdapter adapter;
 
 
     @Override
@@ -60,10 +66,11 @@ public class ListingActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        rentingList = new ArrayList<>();
-        hostingList = new ArrayList<>();
+        rentList = new ArrayList<>();
+        hostList = new ArrayList<>();
         //displayList = new ArrayList<>();
         getItemsHosting();
+        getItemsRenting();
         rentingActualList = new ArrayList<>();
         hostingActualList = new ArrayList<>();
         //initDataListenerRental();
@@ -71,15 +78,74 @@ public class ListingActivity extends AppCompatActivity {
         initActionBar();
     }
 
-    private static void getItemsRenting(){
-        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting");
-        ref.addValueEventListener(new ValueEventListener() {
+    private  void getItemsRenting(){
+        DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/renting");
+        database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                hostList= (List)dataSnapshot.getValue();
-                if(hostList==null){
-                    //dosomething
+                HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
+                FeedItem user_all = new FeedItem();
+                for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if(key.equals("latitude")){
+                        user_all.setLatitude((double)value);
+                    }
+                    if(key.equals("longitude")){
+                        user_all.setLongitude((double)value);
+                    }
+                    if(key.equals("startdates")){
+                        user_all.setStartDates((String)value);
+                    }
+                    if(key.equals("enddates")){
+                        user_all.setEndDates((String)value);
+                    }
+                    if(key.equals("starttime")){
+                        user_all.setStartTime((String)value);
+                    }
+                    if(key.equals("endtime")){
+                        user_all.setEndTime((String)value);
+                    }
+                    if(key.equals("price")){
+                        user_all.setPrice((Double)value);
+                    }
+                    if(key.equals("cancelpolicy")){
+                        user_all.setCancel((String)value);
+                    }
+                    if(key.equals("description")){
+                        user_all.setDescription((String)value);
+                    }
+                    if(key.equals("rating")){
+                        user_all.setRating((Vector<Integer>)value);
+                    }
+                    if(key.equals("activity")){
+                        user_all.setActivity((Boolean)value);
+                    }
+                    if(key.equals("filters")){
+                        user_all.setFilter((Vector<String>) value);
+                    }
+                    if(key.equals("Host")){
+                        user_all.setHost((String)value);
+                    }
+                    if(key.equals("photos")){
+                        user_all.photos = (Vector<Bitmap>) value;
+                    }
+                    if(key.equals("rentedTime")){
+                        user_all.setRentedTime((Map<String,Vector<String>>)value);
+                    }
+                    if(key.equals("identifier")){
+                        user_all.setIdentifier((String)value);
+                    }
+                    if(key.equals("review")){
+                        user_all.setReview((Vector<String>) value);
+                    }
+                    if(key.equals("currentRenter")){
+                        user_all.setCurrentRenter((String)value);
+                    }
+
                 }
+                rentList.add(user_all);
+
             }
 
             @Override
@@ -88,16 +154,74 @@ public class ListingActivity extends AppCompatActivity {
             }
         });
     }
-    public static void getItemsHosting(){
-        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
-        ref.addValueEventListener(new ValueEventListener() {
+    public void getItemsHosting(){
+        DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/hosting");
+        database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                hostList= (List)dataSnapshot.getValue();
-                System.out.println("cigars: " + hostList.size());
-                if(hostList==null){
-                   //dosomething
+                HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
+                FeedItem user_all = new FeedItem();
+                for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if(key.equals("latitude")){
+                        user_all.setLatitude((double)value);
+                    }
+                    if(key.equals("longitude")){
+                        user_all.setLongitude((double)value);
+                    }
+                    if(key.equals("startdates")){
+                        user_all.setStartDates((String)value);
+                    }
+                    if(key.equals("enddates")){
+                        user_all.setEndDates((String)value);
+                    }
+                    if(key.equals("starttime")){
+                        user_all.setStartTime((String)value);
+                    }
+                    if(key.equals("endtime")){
+                        user_all.setEndTime((String)value);
+                    }
+                    if(key.equals("price")){
+                        user_all.setPrice((Double)value);
+                    }
+                    if(key.equals("cancelpolicy")){
+                        user_all.setCancel((String)value);
+                    }
+                    if(key.equals("description")){
+                        user_all.setDescription((String)value);
+                    }
+                    if(key.equals("rating")){
+                        user_all.setRating((Vector<Integer>)value);
+                    }
+                    if(key.equals("activity")){
+                        user_all.setActivity((Boolean)value);
+                    }
+                    if(key.equals("filters")){
+                        user_all.setFilter((Vector<String>) value);
+                    }
+                    if(key.equals("Host")){
+                        user_all.setHost((String)value);
+                    }
+                    if(key.equals("photos")){
+                        user_all.photos = (Vector<Bitmap>) value;
+                    }
+                    if(key.equals("rentedTime")){
+                        user_all.setRentedTime((Map<String,Vector<String>>)value);
+                    }
+                    if(key.equals("identifier")){
+                        user_all.setIdentifier((String)value);
+                    }
+                    if(key.equals("review")){
+                        user_all.setReview((Vector<String>) value);
+                    }
+                    if(key.equals("currentRenter")){
+                        user_all.setCurrentRenter((String)value);
+                    }
+
                 }
+                hostList.add(user_all);
+
             }
 
             @Override
@@ -105,7 +229,6 @@ public class ListingActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        //return hostList;
     }
 
     @SuppressWarnings("deprecation")
@@ -202,8 +325,7 @@ public class ListingActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            getItemsRenting();
-            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), rentingActualList);
+            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), "rent");
             recyclerView.setAdapter(adapter);
             return root;
         }
@@ -212,14 +334,13 @@ public class ListingActivity extends AppCompatActivity {
     public static class RecyclerViewFragmentHosting extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            //getItemsHosting();
             View root = inflater.inflate(R.layout.fragment_recyclerview, container, false);
             RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.myList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            //MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), getItemsHosting());
-          //  recyclerView.setAdapter(adapter);
+            adapter = new MyRecyclerAdapter(getActivity(), "host");
+            recyclerView.setAdapter(adapter);
             return root;
         }
     }
