@@ -161,6 +161,7 @@ public class ActionActivity extends AppCompatActivity {
                 {
                     searchResult.add(entry.getKey());
                     System.out.println(entry.getKey().getAddress());
+                    
                 }
             }
             //go to resultview
