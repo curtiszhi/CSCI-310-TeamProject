@@ -72,8 +72,10 @@ public class FeedItem {
         return photos;
     }
 
-    public void setPhotos(Vector<String> photos) {
-        this.photos = photos;
+    public void setPhotos(ArrayList<String> photos) {
+        Vector v = new Vector(photos);
+
+        this.photos = v;
     }
 
 

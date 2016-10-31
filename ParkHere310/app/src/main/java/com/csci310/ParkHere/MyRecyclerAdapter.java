@@ -28,6 +28,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
     public static ArrayList<FeedItem> feedItemList;
 
     private Context mContext;
+    Boolean pay = false;
 
     public MyRecyclerAdapter(Context context, String hi) {
         if(hi.equals("rent")){
@@ -37,6 +38,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
             this.feedItemList = ListingActivity.hostList;
         }
         if(hi.equals("results")){
+            pay = true;
             this.feedItemList = ListingResultActivity.resultList;
         }
         System.out.println("got list" + this.feedItemList.size());
@@ -84,9 +86,16 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(current_view.getContext(), DetailedViewActivity.class);
-            intent.putExtra("ItemPosition", position);
-            current_view.getContext().startActivity(intent);
+            if(pay){
+                Intent intent = new Intent(current_view.getContext(), RentActivity.class);
+                intent.putExtra("ItemPosition", position);
+                current_view.getContext().startActivity(intent);
+            }else{
+                Intent intent = new Intent(current_view.getContext(), DetailedViewActivity.class);
+                intent.putExtra("ItemPosition", position);
+                current_view.getContext().startActivity(intent);
+            }
+
         }
     }
 }

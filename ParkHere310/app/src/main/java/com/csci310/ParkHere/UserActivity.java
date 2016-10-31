@@ -154,14 +154,6 @@ public class UserActivity extends AppCompatActivity {
             }
         });
 
-        viewRentHistoryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                //Go to Rent History
-            }
-        });
-
-
 
 
     }

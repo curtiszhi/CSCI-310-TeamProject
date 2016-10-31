@@ -136,7 +136,9 @@ public class ActionActivity extends AppCompatActivity {
                                 starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
                         isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))
                     {
-                        tempSpots.put(child.getValue(FeedItem.class), new double[]{Double.parseDouble(child.child("latitude").getValue().toString()),
+                        //Vector v = new Vector(child.getValue(ArrayList.class));
+                        tempSpots.put(child.getValue(FeedItem.class), new double[]
+                                {Double.parseDouble(child.child("latitude").getValue().toString()),
                                 Double.parseDouble(child.child("longitude").getValue().toString())});
                     }
                 }
@@ -161,7 +163,7 @@ public class ActionActivity extends AppCompatActivity {
                 {
                     searchResult.add(entry.getKey());
                     System.out.println(entry.getKey().getAddress());
-                    
+
                 }
             }
             //go to resultview
