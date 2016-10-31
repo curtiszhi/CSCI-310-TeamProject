@@ -147,6 +147,19 @@ public class FeedItem {
         rating.add(rate);
     }
 
+    public Float calculateRate(){
+        if(rating.size()==0){
+            return (float)0;}
+        else{
+            int total=0;
+            for(int i=0;i<rating.size();i++){
+                total+=rating.get(i);
+            }
+            Float rate=(float)total/(float)rating.size();
+            return rate;
+        }
+    }
+
     public String getAddress() {
         return address;
     }
