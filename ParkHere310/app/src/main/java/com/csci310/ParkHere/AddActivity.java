@@ -35,8 +35,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -58,6 +61,7 @@ import java.util.Vector;
  */
 
 public class AddActivity extends AppCompatActivity {
+    private List<String> hostList;
     private String identifier;
     private EditText location,city,postcode, description, price, startTime, endTime, startDate, endDate;
     private Button post, photoButton;
@@ -372,7 +376,20 @@ public class AddActivity extends AppCompatActivity {
         }
     }
     public void write_new_spot(FeedItem Fd) {
-        mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(Fd.getIdentifier());
+        DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                hostList= dataSnapshot.getValue(List.class);
+                hostList.add(identifier);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        ref.setValue(hostList);
         mDatabase.child("parking-spots-hosting").child(Fd.getIdentifier()).setValue(Fd);
     }
 

@@ -143,7 +143,7 @@ public class RatingActivity extends AppCompatActivity {
 
         if(commentHost.length()!=0) {
             DatabaseReference ref3=mDatabase.child("users").child(feeder.getHost()).child("review");
-            ref.addValueEventListener(new ValueEventListener() {
+            ref3.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     originalHostComment= dataSnapshot.getValue(Vector.class);
