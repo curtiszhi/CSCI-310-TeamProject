@@ -11,9 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,8 +48,7 @@ import static com.csci310.ParkHere.ActionActivity.user_all;
  * Created by seanyuan on 10/17/16.
  */
 public class DetailedViewActivity extends AppCompatActivity{
-    private Button hostPublic;
-    private String renterID;
+    private Button viewButton;
     private String renterName;
     private Vector<String> rentTime;
     private String startT;
@@ -54,12 +56,13 @@ public class DetailedViewActivity extends AppCompatActivity{
     private RatingBar ratingBar;
     private TextView address;
     private TextView price;
-    private TextView time;
+
     private TextView filters;
     private TextView description;
     private TextView cancel;
     private ImageView image_view;
     private TextView image_label;
+    private Spinner dropdown;
     private int count;
     FeedItem fd;
     private Vector<String> spotPhoto;
@@ -70,6 +73,13 @@ public class DetailedViewActivity extends AppCompatActivity{
     public FirebaseUser mFirebaseUser_universal;
     public DatabaseReference mDatabase;
     private Vector<String> rateList;
+    private Vector<String> renterID;
+    private String specific_renterID;
+    private Map<String,Vector<String>> renter_time;
+    private Vector<String> renterTime;
+    private List<String> spinner_item;
+    private String tag_spinner;
+    private String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +89,7 @@ public class DetailedViewActivity extends AppCompatActivity{
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Bundle bundle = getIntent().getExtras();
         value = bundle.getString("ItemPosition");
-
+        renterID=new Vector<String>();
 
         position = Integer.parseInt(value);
         fd = MyRecyclerAdapter.feedItemList.get(position);
@@ -87,22 +97,57 @@ public class DetailedViewActivity extends AppCompatActivity{
 
         image_view=(ImageView) findViewById(R.id.image);
         image_label=(TextView) findViewById(R.id.image_label);
-        hostPublic = (Button) findViewById(R.id.rentButton);
+        viewButton = (Button) findViewById(R.id.viewButton);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         address= (TextView) findViewById(R.id.address);
         price= (TextView) findViewById(R.id.price);
-        time= (TextView) findViewById(R.id.time);
+
         filters= (TextView) findViewById(R.id.filters);
         description= (TextView) findViewById(R.id.description);
         cancel= (TextView) findViewById(R.id.cancel);
         editButton= (Button) findViewById(R.id.editButton);
         confirmButton=(Button) findViewById(R.id.confirmButton);
         cancelButton=(Button) findViewById(R.id.cancelButton);
+        dropdown=(Spinner)findViewById(R.id.renter);
         count=0;
 
         setUp();
         downloadPhoto();
         display();
+        AdapterView.OnItemSelectedListener statelistener=new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void onItemSelected(AdapterView<?>spinner,View container,
+                                       int position,long id) {
+                tag_spinner = spinner_item.get(position);
+                specific_renterID = renterID.get(position);
+                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
+                if (renter_time.size() != 0) {
+                    String endTime = renter_time.get(specific_renterID).get(1);
+                    String today = getToday(df);
+                    Date end;
+                    Date d = null;
+                    try {
+                        d = df.parse(today);
+                        end = df.parse(endTime);
+                        if (d.getTime() < end.getTime()) {
+                            confirmButton.setEnabled(false);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?>arg0){
+                tag_spinner=null;
+            }
+        };
+        dropdown.setOnItemSelectedListener(statelistener);
+
         image_view.setOnTouchListener(new OnSwipeTouchListener(DetailedViewActivity.this) {
             public void onSwipeRight() {
                 if(count>0){
@@ -132,7 +177,7 @@ public class DetailedViewActivity extends AppCompatActivity{
             }
         });
 
-        hostPublic.setOnClickListener(new View.OnClickListener() {
+        viewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //public profile!!!!!
@@ -143,6 +188,19 @@ public class DetailedViewActivity extends AppCompatActivity{
             public void onClick(View v) {
                 Intent intent = new Intent(DetailedViewActivity.this, AddActivity.class);
                 intent.putExtra("ItemPosition", value);
+                startActivity(intent);
+                //address cannot be change
+                //rating cannot be change
+                //review cannot be change
+
+            }
+        });
+
+        viewButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
+                intent.putExtra("ID", specific_renterID);
                 startActivity(intent);
                 //address cannot be change
                 //rating cannot be change
@@ -164,7 +222,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                 }
-                DatabaseReference ref=mDatabase.child("users").child(renterID).child("rateList");
+                DatabaseReference ref=mDatabase.child("users").child(specific_renterID).child("rateList");
                 ref.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -200,15 +258,52 @@ public class DetailedViewActivity extends AppCompatActivity{
             }
         });
     }
-
+    public String getToday(java.text.SimpleDateFormat  dformat){
+        Date date = new Date();
+        return dformat.format(date);
+    }
     private void setUp(){
-        hostPublic.setText("Renter:"+renterName);
+        renterTime=new Vector<String>();
+
+        renter_time=fd.getRentedTime();
+        spinner_item = new ArrayList<String>();
+        if(renter_time.size()!=0) {
+            for (HashMap.Entry<String, Vector<String>> innerEntry : renter_time.entrySet()) {
+                String key = innerEntry.getKey();
+                Vector<String> value = innerEntry.getValue();
+                renterID.add(key);
+
+                DatabaseReference database = mDatabase.child("users/").child(key);
+                database.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        name = (String) dataSnapshot.getValue();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+
+                renterTime.add(name + ":" + value.get(0) + "to" + value.get(1));
+            }
+
+            for(int i=0;i<renterTime.size();i++){
+                spinner_item.add(renterTime.get(i));
+            }
+        }
+
+
+
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(DetailedViewActivity.this,android.R.layout.simple_spinner_dropdown_item,spinner_item);
+        dropdown.setAdapter(adapter);
+        viewButton.setText("view this host");
 
         //ratingBar.setRating(fd.getRating());
         address.setText(fd.getAddress());
         price.setText(Double.toString(fd.getPrice()));
-        String time_frame=fd.getStartDates()+ " "+ fd.getStartTime()+" to "+fd.getEndDates()+" "+fd.getEndTime();
-        time.setText(time_frame);
+
         String filter_spot="";
         for(int i=0;i<fd.getFilter().size();i++){
             if(i!=fd.getFilter().size()-1){
@@ -225,19 +320,6 @@ public class DetailedViewActivity extends AppCompatActivity{
             editButton.setVisibility(Button.GONE);
         }
 
-        Date date = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy hh:mma");
-        Date time1;
-        long diff=-1;
-        try {
-            time1 = df.parse(endT);
-            diff = time1.getTime() - date.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        if(diff>=0){
-        confirmButton.setEnabled(false);}
     }
 
     private void downloadPhoto(){
