@@ -72,7 +72,7 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = mDatabase.child("parking-spots-hosting");
-        sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        sdf = new java.text.SimpleDateFormat("MM-dd-yyyy");
         tempSpots = new HashMap<String, double[]>();
         searchResult = new ArrayList<String>();
         initUserListener();
@@ -124,18 +124,6 @@ public class ActionActivity extends AppCompatActivity {
 
     private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
     {
-//        spotsDatabase.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                    System.out.println("Hereererere");
-//                }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                System.out.println("The read failed: " + databaseError.getCode());
-//            }
-//        });
-
         spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
@@ -143,8 +131,8 @@ public class ActionActivity extends AppCompatActivity {
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
                     if (child.child("activity").getValue().toString().equals("true") &&
-                            isValidDT(child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(), startdate, enddate,
-                                    child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString(), starttime, endtime))
+                            isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
+                                    starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()))
                     {
                         tempSpots.put(child.getKey(), new double[]{Double.parseDouble(child.child("latitude").getValue().toString()),
                                 Double.parseDouble(child.child("longitude").getValue().toString())});
@@ -167,7 +155,8 @@ public class ActionActivity extends AppCompatActivity {
             for (Map.Entry<String, double[]> entry : tempSpots.entrySet())
             {
                 double[] tmplatlng = entry.getValue();
-                if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0) {
+                if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0)
+                {
                     searchResult.add(entry.getKey());
                     System.out.println(entry.getKey());
                 }
@@ -179,7 +168,7 @@ public class ActionActivity extends AppCompatActivity {
         }
     }
 
-    private static double distance(double lat1, double lon1, double lat2, double lon2)
+    private double distance(double lat1, double lon1, double lat2, double lon2)
     {
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
@@ -189,11 +178,11 @@ public class ActionActivity extends AppCompatActivity {
         return (dist);
     }
 
-    private static double deg2rad(double deg)
+    private double deg2rad(double deg)
     {
         return (deg * Math.PI / 180.0);
     }
-    private static double rad2deg(double rad)
+    private double rad2deg(double rad)
     {
         return (rad * 180.0 / Math.PI);
     }
@@ -222,7 +211,7 @@ public class ActionActivity extends AppCompatActivity {
             if (sDate1.compareTo(sDate2) >= 0 && eDate1.compareTo(eDate2) <= 0)
             {
                 //On a different day:
-                if (sDate1.compareTo(eDate1) > 0)
+                if (sDate1.compareTo(eDate1) < 0)
                     return 1;
                 //On the same day:
                 else if (sDate1.compareTo(eDate1) == 0)
