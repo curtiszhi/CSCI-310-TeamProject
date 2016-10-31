@@ -381,7 +381,7 @@ public class AddActivity extends AppCompatActivity {
         }
     }
     public void write_new_spot(FeedItem Fd) {
-        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getSpotID());
+        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier());
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
