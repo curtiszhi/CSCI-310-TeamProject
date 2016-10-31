@@ -90,9 +90,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         }else{
                                             String name = nameEditText.getText().toString().trim();
                                             String phone = phoneEditText.getText().toString().trim();
-                                            mFirebaseAuth = FirebaseAuth.getInstance();
-                                            mFirebaseUser = mFirebaseAuth.getCurrentUser();
-                                            writeNewUser(mFirebaseUser.getUid(), name, mFirebaseUser.getEmail(), phone, defaultHost);
+                                            writeNewUser(name, mFirebaseUser.getEmail(), phone, defaultHost);
                                             Intent intent = new Intent(RegisterActivity.this, ActionActivity.class);
                                             startActivity(intent);
                                         }
@@ -121,12 +119,15 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void writeNewUser(String userId, String userName, String email, String phone, Boolean isHost) {
+    private void writeNewUser( String userName, String email, String phone, Boolean isHost) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        String userID = mFirebaseUser.getUid();
         List<String> renting = new ArrayList<>();
         List<String> hosting = new ArrayList<>();
         User database_user = new User(userName, email, phone, isHost, renting, hosting);
-        mDatabase.child("users").child(userId).setValue(database_user);
+        mDatabase.child("users").child(userID).setValue(database_user);
     }
 
     public static boolean validatePassword(String unhashedPassword) {
