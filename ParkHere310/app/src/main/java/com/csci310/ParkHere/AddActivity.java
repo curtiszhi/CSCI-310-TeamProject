@@ -320,9 +320,7 @@ public class AddActivity extends AppCompatActivity {
                             fd.setEndTime(endtime);
                             fd.setPrice(price_parking);
                             fd.setFilter(filter);
-                            fd.setReview(null);
-                            fd.setRentedTime(null);
-
+                           
                             new AddressOperation(self).execute(full_address);
 
                         } else {
