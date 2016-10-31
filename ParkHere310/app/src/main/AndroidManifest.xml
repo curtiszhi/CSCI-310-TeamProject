@@ -22,6 +22,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ActionActivity" />
         <activity android:name=".ListingActivity" />
+        <activity android:name=".ListingResultActivity" />
         <activity android:name=".AddActivity" />
         <activity android:name=".RentActivity" />
         <activity android:name=".RatingActivity" />

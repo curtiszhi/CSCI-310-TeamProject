@@ -20,8 +20,11 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.paypal.android.sdk.payments.PayPalConfiguration;
@@ -53,6 +56,7 @@ public class RentActivity extends AppCompatActivity {
     private TextView filters;
     private TextView description;
     private TextView cancel;
+    private DatabaseReference ref;
     private FirebaseStorage storage;
     private StorageReference storageRef;
     private StorageReference imagesRef;
@@ -216,14 +220,20 @@ public class RentActivity extends AppCompatActivity {
             if (confirm != null) {
                 try {
                     Log.i("paymentExample", confirm.toJSONObject().toString(4));
-                        //update renting list
-                        //add inside the parking spot rentedlist->userID, time
+                    ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getSpotID());
+                    ref.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            ref.setValue(fd);
+                        }
 
-                    // see https://developer.paypal.com/webapps/developer/docs/integration/mobile/verify-mobile-payment/
-                    // for more details.
-                    //if payment successful add to parking-spots-renting and add userid
-                    mDatabase.child("parking-spots-renting").child(fd.getIdentifier()).setValue(fd);
-                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").setValue(fd.getIdentifier());
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
+
+                    mDatabase.child("parking-spots-hosting").child(fd.getSpotID()).setValue(fd);
                     Intent intent = new Intent(RentActivity.this, UserActivity.class);//change to UserActivity.class
                     startActivity(intent);
 

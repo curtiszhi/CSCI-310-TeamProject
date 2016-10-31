@@ -52,7 +52,7 @@ public class ActionActivity extends AppCompatActivity {
     private DatabaseReference spotsDatabase;
     private java.text.SimpleDateFormat sdf;
     private HashMap<FeedItem, double[]> tempSpots;
-    private ArrayList<FeedItem> searchResult;
+    public static ArrayList<FeedItem> searchResult;
     TextView user;
     TabHost host;
     private TextView startTime, endTime, startDate, endDate, location;
@@ -163,10 +163,15 @@ public class ActionActivity extends AppCompatActivity {
                     System.out.println(entry.getKey().getAddress());
                 }
             }
+            //go to resultview
+            Intent intent = new Intent(ActionActivity.this, ListingResultActivity.class);
+            startActivity(intent);
         }
         else
         {
             System.out.println("Empty tempSpots!");
+            Toast.makeText(ActionActivity.this, "No results found",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -252,9 +257,9 @@ public class ActionActivity extends AppCompatActivity {
                     if(key.equals("renting")){
                         user_all.setRenting((List<String>)value);
                     }
-                    if(key.equals("hosting")){
+                    /*if(key.equals("hosting")){
                         user_all.setHosting((List<String>)value);
-                    }
+                    }*/
                     if(key.equals("photo")){
                         user_all.setPhoto((String) value);
                     }

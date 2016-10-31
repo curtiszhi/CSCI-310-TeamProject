@@ -34,6 +34,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -181,25 +182,32 @@ public class ListingActivity extends AppCompatActivity {
                             user_all.setLatitude((double)value);
                             System.out.println(value);
                         }
+                        if(key.equals("address")){
+                            user_all.setAddress((String)value);
+                        }
+
                     if(key.equals("longitude")){
                         user_all.setLongitude((double)value);
                     }
-                    if(key.equals("startdates")){
+                        if(key.equals("spotID")){
+                            user_all.setSpotID((String)value);
+                        }
+                    if(key.equals("startDates")){
                         user_all.setStartDates((String)value);
                     }
-                    if(key.equals("enddates")){
+                    if(key.equals("endDates")){
                         user_all.setEndDates((String)value);
                     }
-                    if(key.equals("starttime")){
+                    if(key.equals("startTime")){
                         user_all.setStartTime((String)value);
                     }
-                    if(key.equals("endtime")){
+                    if(key.equals("endTime")){
                         user_all.setEndTime((String)value);
                     }
                     if(key.equals("price")){
                         user_all.setPrice((Double)value);
                     }
-                    if(key.equals("cancelpolicy")){
+                    if(key.equals("cancel")){
                         user_all.setCancel((String)value);
                     }
                     if(key.equals("description")){
@@ -211,14 +219,16 @@ public class ListingActivity extends AppCompatActivity {
                     if(key.equals("activity")){
                         user_all.setActivity((Boolean)value);
                     }
-                    if(key.equals("filters")){
-                        user_all.setFilter((Vector<String>) value);
+                    if(key.equals("filter")){
+                        Vector v = new Vector((ArrayList<String>) value);
+                        user_all.setFilter(v);
                     }
-                    if(key.equals("Host")){
+                    if(key.equals("host")){
                         user_all.setHost((String)value);
                     }
                     if(key.equals("photos")){
-                        user_all.photos = (Vector<String>) value;
+                        Vector v = new Vector((ArrayList<String>) value);
+                        user_all.setPhotos(v);
                     }
                     if(key.equals("rentedTime")){
                         user_all.setRentedTime((Map<String,Vector<String>>)value);

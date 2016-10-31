@@ -62,7 +62,7 @@ public class UserActivity extends AppCompatActivity {
         phoneEditText = (EditText) findViewById(R.id.phoneEditText);
         editToggleButton = (ToggleButton) findViewById(R.id.editUserDetailsToggleButton);
         viewHostHistoryButton = (Button) findViewById(R.id.viewHostHistoryButton);
-        viewRentHistoryButton = (Button) findViewById(R.id.viewRentHistoryButton);
+        //viewRentHistoryButton = (Button) findViewById(R.id.viewRentHistoryButton);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
         // Edit Profile Pic (Not Tested Yet)
@@ -95,9 +95,9 @@ public class UserActivity extends AppCompatActivity {
 
 
         //Set User Info
-        /*nameEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
+        nameEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
         emailEditText.setText(email.trim(),TextView.BufferType.EDITABLE);
-        phoneEditText.setText(phone.trim(),TextView.BufferType.EDITABLE);*/
+        phoneEditText.setText(phone.trim(),TextView.BufferType.EDITABLE);
 
         if(rating_host.size()==0){
         ratingBar.setRating(0);}
