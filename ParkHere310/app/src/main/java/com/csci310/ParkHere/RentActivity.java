@@ -242,7 +242,7 @@ public class RentActivity extends AppCompatActivity {
 
     private void setUp(){
         hostPublic.setText(fd.getHost());
-        ratingBar.setRating(fd.getRating());
+       // ratingBar.setRating(fd.getRating());
         address.setText(fd.getAddress());
         price.setText(Double.toString(fd.getPrice()));
         String time_frame=fd.getStartDates()+ " "+ fd.getStartTime()+" to "+fd.getEndDates()+" "+fd.getEndTime();

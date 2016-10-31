@@ -128,7 +128,7 @@ public class ListingActivity extends AppCompatActivity {
                         user_all.setHost((String)value);
                     }
                     if(key.equals("photos")){
-                        user_all.photos = (Vector<Bitmap>) value;
+                        user_all.photos = (Vector<String>) value;
                     }
                     if(key.equals("rentedTime")){
                         user_all.setRentedTime((Map<String,Vector<String>>)value);
@@ -159,7 +159,10 @@ public class ListingActivity extends AppCompatActivity {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    FeedItem user_all= (FeedItem)postSnapshot.getValue();
+                }
+                /*HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
                 FeedItem user_all = new FeedItem();
                 for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
                     String key = entry.getKey();
@@ -204,7 +207,7 @@ public class ListingActivity extends AppCompatActivity {
                         user_all.setHost((String)value);
                     }
                     if(key.equals("photos")){
-                        user_all.photos = (Vector<Bitmap>) value;
+                        user_all.photos = (Vector<String>) value;
                     }
                     if(key.equals("rentedTime")){
                         user_all.setRentedTime((Map<String,Vector<String>>)value);
@@ -220,7 +223,7 @@ public class ListingActivity extends AppCompatActivity {
                     }
 
                 }
-                hostList.add(user_all);
+                hostList.add(user_all);*/
 
             }
 

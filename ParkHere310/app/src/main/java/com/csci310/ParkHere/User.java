@@ -23,6 +23,13 @@ public class User {
     private List<String> renting;
     private List<String> hosting;
     private String photo;
+    public User() {
+        rateList=new Vector<String>();
+        rating=new Vector<Integer>();
+        renting=new ArrayList<String>();
+        hosting=new ArrayList<String>();
+        review=new Vector<String>();
+    }
 
     public String getPhoto() {
         return photo;
@@ -113,13 +120,7 @@ public class User {
 
 
 
-    public User() {
-        rateList=new Vector<String>();
-        rating=new Vector<Integer>();
-        renting=new ArrayList<String>();
-        hosting=new ArrayList<String>();
-        review=new Vector<String>();
-    }
+
 
 
 

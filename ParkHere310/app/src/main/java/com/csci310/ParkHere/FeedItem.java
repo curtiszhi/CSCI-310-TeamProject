@@ -35,7 +35,17 @@ public class FeedItem {
     private Vector<String> review;
     private String currentRenter;
 
-    public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<String> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
+    FeedItem(){
+        photos=new Vector<String>();
+        rentedTime= new HashMap<String,Vector<String>>();
+        rating=new Vector<Integer>();
+        review = new Vector<String>();
+        filters=null;
+    }
+
+
+
+   /* public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<String> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
         this.spotID = spotID;
         this.address = address;
         this.latitude = latitude;
@@ -56,7 +66,7 @@ public class FeedItem {
         this.identifier = identifier;
         this.review = review;
         this.currentRenter = currentRenter;
-    }
+    }*/
 
     public Vector<String> getPhotos() {
         return photos;
@@ -73,15 +83,6 @@ public class FeedItem {
     public void setRentedTime(Map<String,Vector<String>>rentedTime) {
         this.rentedTime = rentedTime;
     }
-
-
-    FeedItem(){
-        photos=new Vector<String>();
-        rentedTime= new HashMap<String,Vector<String>>();
-        rating=new Vector<Integer>();
-        review = new Vector<String>();
-    }
-
 
 
     public Vector<String> getReview() {
@@ -132,7 +133,7 @@ public class FeedItem {
     public void setCancel(String cancelpolicy) {
         this.cancelpolicy = cancelpolicy;
     }
-    
+
 
     public void setRating(Vector<Integer> rating) {
         this.rating = rating;
