@@ -223,34 +223,34 @@ public class ActionActivity extends AppCompatActivity {
     }
 
 
-    private int dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
-    {
-        try
-        {
-            Date sDate1 = sdf.parse(sDate1str);
-            Date sDate2 = sdf.parse(sDate2str);
-            Date eDate1 = sdf.parse(eDate1str);
-            Date eDate2 = sdf.parse(eDate2str);
-
-            //Within range:
-            if (sDate1.compareTo(sDate2) >= 0 && eDate1.compareTo(eDate2) <= 0)
-            {
-                //On a different day:
-                if (sDate1.compareTo(eDate1) < 0)
-                    return 1;
-                //On the same day:
-                else if (sDate1.compareTo(eDate1) == 0)
-                    return 2;
-            }
-        }
-        catch (ParseException parseException) {parseException.printStackTrace();}
-        return 0;
-    }
-
-    private boolean timeWithinRange(String sTime1str, String eTime1str, String sTime2str, String eTime2str)
-    {
-        return true;
-    }
+//    private int dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
+//    {
+//        try
+//        {
+//            Date sDate1 = sdf.parse(sDate1str);
+//            Date sDate2 = sdf.parse(sDate2str);
+//            Date eDate1 = sdf.parse(eDate1str);
+//            Date eDate2 = sdf.parse(eDate2str);
+//
+//            //Within range:
+//            if (sDate1.compareTo(sDate2) >= 0 && eDate1.compareTo(eDate2) <= 0)
+//            {
+//                //On a different day:
+//                if (sDate1.compareTo(eDate1) < 0)
+//                    return 1;
+//                //On the same day:
+//                else if (sDate1.compareTo(eDate1) == 0)
+//                    return 2;
+//            }
+//        }
+//        catch (ParseException parseException) {parseException.printStackTrace();}
+//        return 0;
+//    }
+//
+//    private boolean timeWithinRange(String sTime1str, String eTime1str, String sTime2str, String eTime2str)
+//    {
+//        return true;
+//    }
 
     private void initUserListener(){
         DatabaseReference database = mDatabase.child("users/").child(mFirebaseUser_universal.getUid());
