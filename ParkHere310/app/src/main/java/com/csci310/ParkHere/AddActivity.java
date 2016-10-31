@@ -448,22 +448,24 @@ public class AddActivity extends AppCompatActivity {
         boolean checkdate=true;
         try{
 
-                SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy hh:mma");
-                Date time1 = df.parse(startdate+" "+starttime);
-                Date time2 = df.parse(enddate+" "+endtime);
-                long diff = time2.getTime() - time1.getTime();
-                long diffHours = diff / (60 * 60 * 1000) % 24;
-                if(diffHours>=1){
-                    checkdate=true;
-                }else{
-                    checkdate=false;
-                }
-                Date date = new Date();
-                if(time1.after(date)){
-                    checkdate=true;
-                }else{
-                    checkdate=false;
-                }
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
+            Date time1 = df.parse(startdate+" "+starttime);
+            Date time2 = df.parse(enddate+" "+endtime);
+            long diff = time2.getTime() - time1.getTime();
+            long diffHours = diff / (60 * 60 * 1000) % 24;
+            if(diffHours>=1){
+                checkdate=true;
+            }else{
+                checkdate=false;
+            }
+
+            String today=getToday(df);
+            Date d = df.parse(today);
+            if(time1.getTime() > d.getTime()){
+                checkdate=true;
+            }else{
+                checkdate=false;
+            }
 
 
         }catch(ParseException ex){
@@ -472,7 +474,10 @@ public class AddActivity extends AppCompatActivity {
 
         return checkdate;
     }
-
+    public String getToday(java.text.SimpleDateFormat  dformat){
+        Date date = new Date();
+        return dformat.format(date);
+    }
     private boolean isEmpty(EditText etText) {
         return etText.getText().toString().trim().length() == 0;
     }
