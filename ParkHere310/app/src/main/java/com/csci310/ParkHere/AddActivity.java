@@ -394,7 +394,7 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase.child("parking-spots-hosting").child(fd.getSpotID()).setValue(Fd);
+        mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).setValue(Fd);
     }
 
     public void setFeedItem(String jsonString)
