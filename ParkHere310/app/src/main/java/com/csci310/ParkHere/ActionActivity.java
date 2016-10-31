@@ -112,7 +112,7 @@ public class ActionActivity extends AppCompatActivity {
                 boolean requestCover = cover.isChecked();
                 boolean handicapped = handy.isChecked();
                 if(!validateFields(starttime, endtime, startdate,enddate, address)){
-                    Toast.makeText(ActionActivity.this, "Please enter an address",
+                    Toast.makeText(ActionActivity.this, "please make sure the address is not empty or the time difference is bigger than an hour",
                             Toast.LENGTH_SHORT).show();
                 }else{
 
@@ -276,13 +276,13 @@ public class ActionActivity extends AppCompatActivity {
     }
 
     private boolean validateFields(String starttime, String endtime, String startdate, String enddate, String address){
-
+        boolean checkdate=true;
 
         if (address == null || isEmpty(address)){
 
             return false;
         }
-        boolean checkdate=true;
+
         try{
 
             java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
@@ -295,8 +295,10 @@ public class ActionActivity extends AppCompatActivity {
             }else{
                 checkdate=false;
             }
-            Date date = new Date();
-            if(time1.after(date)){
+
+            String today=getToday(df);
+            Date d = df.parse(today);
+            if(time1.getTime() > d.getTime()){
                 checkdate=true;
             }else{
                 checkdate=false;
@@ -309,6 +311,10 @@ public class ActionActivity extends AppCompatActivity {
 
         return checkdate;
 
+    }
+    public String getToday(java.text.SimpleDateFormat  dformat){
+        Date date = new Date();
+        return dformat.format(date);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
