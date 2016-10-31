@@ -68,7 +68,7 @@ public class AddActivity extends AppCompatActivity {
     private EditText location,city,postcode, description, price, startTime, endTime, startDate, endDate;
     private Button post, photoButton;
     private MultiSelectionSpinner spinner;
-    private String[] items = {"handicap", "Compact", "covered parking"};
+    private String[] items = {"handicap", "compact", "covered parking"};
     private static final int selected_p = 1;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;

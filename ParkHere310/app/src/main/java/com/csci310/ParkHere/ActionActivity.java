@@ -122,7 +122,8 @@ public class ActionActivity extends AppCompatActivity {
         });
     }
 
-    private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
+    private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate,
+                                    final boolean requestCompact, final boolean requestCover, final boolean handicapped)
     {
         spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -131,8 +132,9 @@ public class ActionActivity extends AppCompatActivity {
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
                     if (child.child("activity").getValue().toString().equals("true") &&
-                            isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
-                                    starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()))
+                        isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
+                                starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
+                        isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))
                     {
                         tempSpots.put(child.getKey(), new double[]{Double.parseDouble(child.child("latitude").getValue().toString()),
                                 Double.parseDouble(child.child("longitude").getValue().toString())});
@@ -158,7 +160,7 @@ public class ActionActivity extends AppCompatActivity {
                 if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0)
                 {
                     searchResult.add(entry.getKey());
-                      System.out.println(entry.getKey());
+                    System.out.println(entry.getKey());
                 }
             }
         }
@@ -206,6 +208,18 @@ public class ActionActivity extends AppCompatActivity {
 //                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
 //            return true;
         return false;
+    }
+
+    private boolean isValidFilters(boolean requestCompact, boolean requestCover, boolean requestHandicap, DataSnapshot filterNode)
+    {
+        ArrayList<String> arrayList = new ArrayList<String>();
+        for (DataSnapshot filter : filterNode.getChildren())
+            arrayList.add(filter.getValue().toString().toLowerCase());
+        if ((requestCompact && !arrayList.contains("compact")) ||
+            (requestCover && !arrayList.contains("covered parking")) ||
+            (requestHandicap && !arrayList.contains("handicap")))
+            return false;
+        return true;
     }
 
 
