@@ -99,7 +99,7 @@ public class RentActivity extends AppCompatActivity {
         dumb.add("Shaded");
         fd.setFilter(dumb);
         int r = 4;
-        fd.addRating((float)r);
+        fd.addRating(r);
         rentedTime=new Vector<>();
         rentedTime.add(0,fd.getStartDates()+" "+fd.getStartTime());
         rentedTime.add(1,fd.getEndDates()+" "+fd.getEndTime());
