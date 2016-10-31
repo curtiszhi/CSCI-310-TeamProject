@@ -133,9 +133,4 @@ public class AddressOperation extends AsyncTask<String, Void, String>
         }
         return formattedAddress;
     }
-//
-//    public static void search(String sTime, String eTime, String sDate, String eDate, boolean isCompact, boolean isCovered, boolean isHandicapped, String address)
-//    {
-//
-//    }
 }

@@ -31,7 +31,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -44,6 +46,7 @@ public class ActionActivity extends AppCompatActivity {
     public DatabaseReference mDatabase;
     private DatabaseReference spotsDatabase;
     private java.text.SimpleDateFormat sdf;
+    private HashMap<String, double[]> tempSpots;
     TextView user;
     TabHost host;
     private TextView startTime, endTime, startDate, endDate, location;
@@ -63,6 +66,7 @@ public class ActionActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = FirebaseDatabase.getInstance().getReference().child("parking-spots");
         sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        tempSpots = new HashMap<String, double[]>();
         initUserListener();
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
@@ -105,14 +109,14 @@ public class ActionActivity extends AppCompatActivity {
                 boolean requestCover = cover.isChecked();
                 boolean handicapped = handy.isChecked();
                 validateFields(starttime, endtime, startdate,enddate, address);
-                FeedItem[] tmp = null;
-                tmp = getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped);
+
+                getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped);
                 new AddressOperation(self).execute(address);
             }
         });
     }
 
-    private FeedItem[] getListWithOptions(String starttime, String endtime, final String startdate, final String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
+    private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
     {
         spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener()
         {
@@ -121,34 +125,67 @@ public class ActionActivity extends AppCompatActivity {
             {
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
-                    if (child.child("active").equals("true") &&
+                    if (child.child("activity").equals("true") &&
                             isValidDT(child.child("startDates").getKey(), child.child("endDates").getKey(), startdate, enddate,
-                                    child.child("startTime").getKey(), child.child("endTime").getKey(), ) == 1
-                            )
+                                    child.child("startTime").getKey(), child.child("endTime").getKey(), starttime, endtime))
                     {
-
+                        tempSpots.put(child.getKey(), new double[]{Double.parseDouble(child.child("latitude").getKey()),
+                                Double.parseDouble(child.child("longitude").getKey())});
                     }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                System.out.println(databaseError.getMessage());
             }
         });
-        return null;
     }
 
-    public void search(String address)
+    public void search(String jsonString)
+    {
+        double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
+        if (!tempSpots.isEmpty())
+        {
+            for (double[] tmplatlng : tempSpots.values())
+            {
+                if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) >= 3.0)
+
+            }
+        }
+    }
+
+    private static double distance(double lat1, double lon1, double lat2, double lon2)
+    {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        dist = Math.acos(dist);
+        dist = rad2deg(dist);
+        dist = dist * 60 * 1.1515;
+        return (dist);
+    }
+
+    private static double deg2rad(double deg)
+    {
+        return (deg * Math.PI / 180.0);
+    }
+    private static double rad2deg(double rad)
+    {
+        return (rad * 180.0 / Math.PI);
+    }
+
+    private double getDistance(double[] latlng1, double[] latlng2)
     {
 
     }
 
-    private boolean isValidDT (String sDate1str, String eDate1str, String sDate2str, String eDate2str, String sTime1str, String eTime1str, String sTime2str, String eTime2str)
+    private boolean isValidDT (String sDate1str, String eDate1str, String sDate2str, String eDate2str,
+                               String sTime1str, String eTime1str, String sTime2str, String eTime2str)
     {
         if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
             return true;
-        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 && timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
+        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 &&
+                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
             return true;
         return false;
     }
@@ -179,7 +216,7 @@ public class ActionActivity extends AppCompatActivity {
 
     private boolean timeWithinRange(String sTime1str, String eTime1str, String sTime2str, String eTime2str)
     {
-        return false;
+        return true;
     }
 
     private void initUserListener(){
