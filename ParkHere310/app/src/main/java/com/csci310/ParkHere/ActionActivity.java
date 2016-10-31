@@ -68,7 +68,7 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        spotsDatabase = FirebaseDatabase.getInstance().getReference().child("parking-spots");
+        spotsDatabase = FirebaseDatabase.getInstance().getReference().child("parking-spots-hosting");
         sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
         tempSpots = new HashMap<String, double[]>();
         searchResult = new ArrayList<String>();
@@ -126,13 +126,29 @@ public class ActionActivity extends AppCompatActivity {
 
     private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate, boolean requestCompact, boolean requestCover, boolean handicapped)
     {
+        System.out.println("Here1");
+        System.out.println(spotsDatabase.child("ChIJ5blASvDHwoARaMMJbCPgpMs").child("acativity").getKey());
+//        for (DataSnapshot child : spotsDatabase.child(""))
+//        {
+//            System.out.println("child's key: " + child.getKey());
+//            if (child.child("activity").equals("true") &&
+//                    isValidDT(child.child("startDates").getKey(), child.child("endDates").getKey(), startdate, enddate,
+//                            child.child("startTime").getKey(), child.child("endTime").getKey(), starttime, endtime))
+//            {
+//                tempSpots.put(child.getKey(), new double[]{Double.parseDouble(child.child("latitude").getKey()),
+//                        Double.parseDouble(child.child("longitude").getKey())});
+//            }
+//        }
+
         spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {
+                System.out.println("Here");
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
+                    System.out.println("child's key: " + child.getKey());
                     if (child.child("activity").equals("true") &&
                             isValidDT(child.child("startDates").getKey(), child.child("endDates").getKey(), startdate, enddate,
                                     child.child("startTime").getKey(), child.child("endTime").getKey(), starttime, endtime))
@@ -163,6 +179,10 @@ public class ActionActivity extends AppCompatActivity {
                 System.out.println(entry.getKey());
             }
         }
+        else
+        {
+            System.out.println("\n\n\n\n\n\n\n\nasdfadfa\n\n\n\n\n\n\n\n");
+        }
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2)
@@ -187,12 +207,13 @@ public class ActionActivity extends AppCompatActivity {
     private boolean isValidDT (String sDate1str, String eDate1str, String sDate2str, String eDate2str,
                                String sTime1str, String eTime1str, String sTime2str, String eTime2str)
     {
-        if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
-            return true;
-        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 &&
-                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
-            return true;
-        return false;
+        return true;
+//        if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
+//            return true;
+//        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 &&
+//                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
+//            return true;
+//        return false;
     }
 
     private int dateWithinRange(String sDate1str, String eDate1str, String sDate2str, String eDate2str)
