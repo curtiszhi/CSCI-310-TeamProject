@@ -23,8 +23,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
     private Context mContext;
 
-    public MyRecyclerAdapter(Context context) {
-        this.feedItemList = ListingActivity.hostList;
+    public MyRecyclerAdapter(Context context, String hi) {
+        if(hi.equals("rent")){
+            this.feedItemList = ListingActivity.rentList;
+        }
+        if(hi.equals("host")){
+            this.feedItemList = ListingActivity.hostList;
+        }
         System.out.println("got list" + this.feedItemList.size());
         this.mContext = context;
     }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -35,7 +36,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Vector;
 
 /**
  * Created by seanyuan on 9/30/16.
@@ -52,7 +55,7 @@ public class ListingActivity extends AppCompatActivity {
     static List<FeedItem> hostingActualList;
     private static DatabaseReference ref;
     public static ArrayList<FeedItem> hostList;
-    private  ArrayList<FeedItem> rentList;
+    public static ArrayList<FeedItem> rentList;
     static MyRecyclerAdapter adapter;
 
 
@@ -76,46 +79,156 @@ public class ListingActivity extends AppCompatActivity {
     }
 
     private  void getItemsRenting(){
-        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting");
-        ValueEventListener postListener = new ValueEventListener() {
+        DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/renting");
+        database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
-                    System.out.println("found one");
-                    FeedItem message = messageSnapshot.getValue(FeedItem.class);
-                    rentList.add(message);
+                HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
+                FeedItem user_all = new FeedItem();
+                for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if(key.equals("latitude")){
+                        user_all.setLatitude((double)value);
+                    }
+                    if(key.equals("longitude")){
+                        user_all.setLongitude((double)value);
+                    }
+                    if(key.equals("startdates")){
+                        user_all.setStartDates((String)value);
+                    }
+                    if(key.equals("enddates")){
+                        user_all.setEndDates((String)value);
+                    }
+                    if(key.equals("starttime")){
+                        user_all.setStartTime((String)value);
+                    }
+                    if(key.equals("endtime")){
+                        user_all.setEndTime((String)value);
+                    }
+                    if(key.equals("price")){
+                        user_all.setPrice((Double)value);
+                    }
+                    if(key.equals("cancelpolicy")){
+                        user_all.setCancel((String)value);
+                    }
+                    if(key.equals("description")){
+                        user_all.setDescription((String)value);
+                    }
+                    if(key.equals("rating")){
+                        user_all.setRating((Vector<Integer>)value);
+                    }
+                    if(key.equals("activity")){
+                        user_all.setActivity((Boolean)value);
+                    }
+                    if(key.equals("filters")){
+                        user_all.setFilter((Vector<String>) value);
+                    }
+                    if(key.equals("Host")){
+                        user_all.setHost((String)value);
+                    }
+                    if(key.equals("photos")){
+                        user_all.photos = (Vector<Bitmap>) value;
+                    }
+                    if(key.equals("rentedTime")){
+                        user_all.setRentedTime((Map<String,Vector<String>>)value);
+                    }
+                    if(key.equals("identifier")){
+                        user_all.setIdentifier((String)value);
+                    }
+                    if(key.equals("review")){
+                        user_all.setReview((Vector<String>) value);
+                    }
+                    if(key.equals("currentRenter")){
+                        user_all.setCurrentRenter((String)value);
+                    }
+
                 }
+                rentList.add(user_all);
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                //Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
+                System.out.println("The read failed: " + databaseError.getCode());
             }
-        };
-        ref.addValueEventListener(postListener);
+        });
     }
     public void getItemsHosting(){
-        ref=mDatabase.child("users/" + mFirebaseUser.getUid()).child("hosting/");
-        ValueEventListener postListener = new ValueEventListener() {
+        DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/hosting");
+        database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                System.out.println(dataSnapshot.getChildrenCount());
-                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
-                    FeedItem message = new FeedItem((HashMap<String, String>)messageSnapshot.getValue());
-                    hostList.add(message);
+                HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
+                FeedItem user_all = new FeedItem();
+                for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if(key.equals("latitude")){
+                        user_all.setLatitude((double)value);
+                    }
+                    if(key.equals("longitude")){
+                        user_all.setLongitude((double)value);
+                    }
+                    if(key.equals("startdates")){
+                        user_all.setStartDates((String)value);
+                    }
+                    if(key.equals("enddates")){
+                        user_all.setEndDates((String)value);
+                    }
+                    if(key.equals("starttime")){
+                        user_all.setStartTime((String)value);
+                    }
+                    if(key.equals("endtime")){
+                        user_all.setEndTime((String)value);
+                    }
+                    if(key.equals("price")){
+                        user_all.setPrice((Double)value);
+                    }
+                    if(key.equals("cancelpolicy")){
+                        user_all.setCancel((String)value);
+                    }
+                    if(key.equals("description")){
+                        user_all.setDescription((String)value);
+                    }
+                    if(key.equals("rating")){
+                        user_all.setRating((Vector<Integer>)value);
+                    }
+                    if(key.equals("activity")){
+                        user_all.setActivity((Boolean)value);
+                    }
+                    if(key.equals("filters")){
+                        user_all.setFilter((Vector<String>) value);
+                    }
+                    if(key.equals("Host")){
+                        user_all.setHost((String)value);
+                    }
+                    if(key.equals("photos")){
+                        user_all.photos = (Vector<Bitmap>) value;
+                    }
+                    if(key.equals("rentedTime")){
+                        user_all.setRentedTime((Map<String,Vector<String>>)value);
+                    }
+                    if(key.equals("identifier")){
+                        user_all.setIdentifier((String)value);
+                    }
+                    if(key.equals("review")){
+                        user_all.setReview((Vector<String>) value);
+                    }
+                    if(key.equals("currentRenter")){
+                        user_all.setCurrentRenter((String)value);
+                    }
+
                 }
+                hostList.add(user_all);
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                //Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
+                System.out.println("The read failed: " + databaseError.getCode());
             }
-        };
-        ref.addValueEventListener(postListener);
+        });
     }
 
     @SuppressWarnings("deprecation")
@@ -212,7 +325,7 @@ public class ListingActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity());
+            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), "rent");
             recyclerView.setAdapter(adapter);
             return root;
         }
@@ -226,7 +339,7 @@ public class ListingActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            adapter = new MyRecyclerAdapter(getActivity());
+            adapter = new MyRecyclerAdapter(getActivity(), "host");
             recyclerView.setAdapter(adapter);
             return root;
         }
