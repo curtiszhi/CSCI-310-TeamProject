@@ -16,6 +16,10 @@ public class User {
     private String[] review;
     private Vector<String> rateList;
     private Vector<Float> rating;
+    private Boolean isHost;
+    private List<String> renting;
+    private List<String> hosting;
+
 
     public Float getRating() {
         float sum = 0;
@@ -101,9 +105,6 @@ public class User {
         this.hosting = hosting;
     }
 
-    private Boolean isHost;
-    private List<String> renting;
-    private List<String> hosting;
 
     public User() {
         rateList=new Vector<String>();

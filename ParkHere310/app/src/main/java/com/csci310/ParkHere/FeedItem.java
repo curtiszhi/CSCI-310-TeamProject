@@ -33,15 +33,6 @@ public class FeedItem {
     public Map<String,Vector<String>> rentedTime;
     private String identifier;
     private Vector<String> review;
-    private int numRate;
-
-    public int getNumRate() {
-        return numRate;
-    }
-
-    public void setNumRate(int numRate) {
-        this.numRate = numRate;
-    }
 
 
 
