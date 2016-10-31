@@ -276,14 +276,14 @@ public class ActionActivity extends AppCompatActivity {
     private boolean validateFields(String starttime, String endtime, String startdate, String enddate, String address){
 
 
-        if (address == null || isEmpty(address)){
+        if (address == null || address.length() == 0){
 
             return false;
         }
         boolean checkdate=true;
         try{
 
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
             Date time1 = df.parse(startdate+" "+starttime);
             Date time2 = df.parse(enddate+" "+endtime);
             long diff = time2.getTime() - time1.getTime();
