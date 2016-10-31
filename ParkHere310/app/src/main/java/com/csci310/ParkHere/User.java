@@ -1,5 +1,7 @@
 package com.csci310.ParkHere;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,16 @@ public class User {
     private Boolean isHost;
     private List<String> renting;
     private List<String> hosting;
+    private Bitmap photo;
+
+    public Bitmap getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.photo = photo;
+    }
+
 
 
 

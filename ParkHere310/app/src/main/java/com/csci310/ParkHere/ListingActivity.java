@@ -218,8 +218,8 @@ public class ListingActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-//            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), getItemsHosting());
-//            recyclerView.setAdapter(adapter);
+            //MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), getItemsHosting());
+          //  recyclerView.setAdapter(adapter);
             return root;
         }
     }

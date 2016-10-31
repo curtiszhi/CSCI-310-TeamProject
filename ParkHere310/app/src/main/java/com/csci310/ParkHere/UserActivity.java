@@ -25,6 +25,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Vector;
 
+import static com.csci310.ParkHere.ActionActivity.user_all;
+
 public class UserActivity extends AppCompatActivity {
 
     private Button viewHostHistoryButton, viewRentHistoryButton, returnHomeScreenButton;
@@ -76,9 +78,9 @@ public class UserActivity extends AppCompatActivity {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         String email = mFirebaseUser.getEmail();
-        String phone = ActionActivity.user_all.getPhone();
-        String name = ActionActivity.user_all.getUserName();
-        Vector<Integer> rating_host=ActionActivity.user_all.getRating();
+        String phone = user_all.getPhone();
+        String name = user_all.getUserName();
+        Vector<Integer> rating_host= user_all.getRating();
         Uri uri = mFirebaseUser.getPhotoUrl();
 
 
@@ -117,26 +119,17 @@ public class UserActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 if (editToggleButton.isChecked()) {
                     nameEditText.setKeyListener((KeyListener) nameEditText.getTag());
-                    //emailEditText.setKeyListener((KeyListener) emailEditText.getTag());
                     phoneEditText.setKeyListener((KeyListener) phoneEditText.getTag());
                 } else {
                     nameEditText.setTag(nameEditText.getKeyListener());
                     nameEditText.setKeyListener(null);
-
-                    //emailEditText.setTag(emailEditText.getKeyListener());
-                    //emailEditText.setKeyListener(null);
-
                     phoneEditText.setTag(phoneEditText.getKeyListener());
                     phoneEditText.setKeyListener(null);
-
-                    //Update User Info
-                    mFirebaseUser.updateEmail(emailEditText.getText().toString());
-                    UserProfileChangeRequest updateName = new UserProfileChangeRequest.Builder().setDisplayName(nameEditText.getText().toString()).build();
-                    mFirebaseUser.updateProfile(updateName);
-                    ActionActivity.user_all.setUserName(nameEditText.getText().toString().trim());
-                    //ActionActivity.user_all.setEmail(emailEditText.getText().toString().trim());
-                    ActionActivity.user_all.setPhone(phoneEditText.getText().toString().trim());
-                    //update all
+                    user_all.setUserName(nameEditText.getText().toString().trim());
+                    user_all.setPhone(phoneEditText.getText().toString().trim());
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("userName").setValue(user_all.getUserName());
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("phone").setValue(user_all.getPhone());
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("photo").setValue(user_all.getPhoto());
                 }
             }
         });
@@ -172,6 +165,7 @@ public class UserActivity extends AppCompatActivity {
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
                         profilePicImageView.setImageBitmap(s_image);
+                        user_all.setPhoto(s_image);
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
