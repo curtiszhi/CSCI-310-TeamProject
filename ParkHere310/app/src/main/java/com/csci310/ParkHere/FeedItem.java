@@ -143,6 +143,10 @@ public class FeedItem {
         return rating;
     }
 
+    public void addRating(Integer rate){
+        rating.add(rate);
+    }
+
     public String getAddress() {
         return address;
     }
