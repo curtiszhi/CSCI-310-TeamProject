@@ -134,8 +134,7 @@ public class ActionActivity extends AppCompatActivity {
             }
         });
 
-        spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener()
-        {
+        spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot)
             {

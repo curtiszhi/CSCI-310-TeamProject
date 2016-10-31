@@ -71,7 +71,7 @@ public class ListingActivity extends AppCompatActivity {
         initActionBar();
     }
 
-    private static List<FeedItem> getItemsRenting(){
+    private static void getItemsRenting(){
         ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -87,9 +87,8 @@ public class ListingActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        return hostList;
     }
-    private static void getItemsHosting(){
+    public static void getItemsHosting(){
         ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -106,6 +105,7 @@ public class ListingActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+        //return hostList;
     }
 
     @SuppressWarnings("deprecation")
@@ -212,13 +212,13 @@ public class ListingActivity extends AppCompatActivity {
     public static class RecyclerViewFragmentHosting extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            getItemsHosting();
+            //getItemsHosting();
             View root = inflater.inflate(R.layout.fragment_recyclerview, container, false);
             RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.myList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), getItemsRenting());
+            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), getItemsHosting());
             recyclerView.setAdapter(adapter);
             return root;
         }
