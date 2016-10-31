@@ -113,10 +113,13 @@ public class ActionActivity extends AppCompatActivity {
                 boolean requestCompact = compact.isChecked();
                 boolean requestCover = cover.isChecked();
                 boolean handicapped = handy.isChecked();
-                validateFields(starttime, endtime, startdate,enddate, address);
+                if(!validateFields(starttime, endtime, startdate,enddate, address)){
+                    Toast.makeText(ActionActivity.this, "Please enter an address",
+                            Toast.LENGTH_SHORT).show();
+                }else{
 
                 getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped);
-                new AddressOperation(self).execute(address);
+                new AddressOperation(self).execute(address);}
             }
         });
     }
@@ -157,6 +160,7 @@ public class ActionActivity extends AppCompatActivity {
                 double[] tmplatlng = entry.getValue();
                 if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0)
                     searchResult.add(entry.getKey());
+                System.out.println(entry.getKey());
             }
         }
     }
@@ -248,39 +252,40 @@ public class ActionActivity extends AppCompatActivity {
         });
     }
 
-    private void validateFields(String starttime, String endtime, String startdate, String enddate, String address){
-        int compare = starttime.compareTo(endtime);
+    private boolean validateFields(String starttime, String endtime, String startdate, String enddate, String address){
 
-        if (compare > 0){
-            Toast.makeText(ActionActivity.this, "Please choose later end time",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        compare = startdate.compareTo(enddate);
-
-        if (compare > 0){
-            Toast.makeText(ActionActivity.this, "Please choose later end date",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         if (address == null || isEmpty(address)){
-            Toast.makeText(ActionActivity.this, "Please enter an address",
-                    Toast.LENGTH_SHORT).show();
-            return;
+
+            return false;
         }
-        if (startdate.equals(enddate)){
-            String[] time1 = starttime.split(":");
-            int hour1 = Integer.parseInt(time1[0]) % 12;
-            String[] time2 = endtime.split(":");
-            int hour2 = Integer.parseInt(time2[0]) % 12;
-            if ((hour2 - hour1) < 1){
-                Toast.makeText(ActionActivity.this, "Spots must be rented for at least 1 hour",
-                        Toast.LENGTH_SHORT).show();
-                return;
+        boolean checkdate=true;
+        try{
+
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
+            Date time1 = df.parse(startdate+" "+starttime);
+            Date time2 = df.parse(enddate+" "+endtime);
+            long diff = time2.getTime() - time1.getTime();
+            long diffHours = diff / (60 * 60 * 1000) % 24;
+            if(diffHours>=1){
+                checkdate=true;
+            }else{
+                checkdate=false;
             }
+            Date date = new Date();
+            if(time1.after(date)){
+                checkdate=true;
+            }else{
+                checkdate=false;
+            }
+
+
+        }catch(ParseException ex){
+            ex.printStackTrace();
         }
+
+        return checkdate;
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
