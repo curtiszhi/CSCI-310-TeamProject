@@ -86,10 +86,10 @@ public class UserActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        String email = user_all.getEmail();
-        String phone = user_all.getPhone();
-        String name = user_all.getUserName();
-        Vector<Integer> rating_host= user_all.getRating();
+        String email = ActionActivity.user_all.getEmail();
+        String phone = ActionActivity.user_all.getPhone();
+        String name = ActionActivity.user_all.getUserName();
+        Vector<Integer> rating_host= ActionActivity.user_all.getRating();
 
 
 
@@ -110,8 +110,8 @@ public class UserActivity extends AppCompatActivity {
             ratingBar.setRating(rate);
         }
 
-        if(user_all.getPhoto()!=null) {
-            byte[] decodedString = Base64.decode(user_all.getPhoto(), Base64.DEFAULT);
+        if(ActionActivity.user_all.getPhoto()!=null) {
+            byte[] decodedString = Base64.decode(ActionActivity.user_all.getPhoto(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             profilePicImageView.setImageBitmap(decodedByte);
         }
