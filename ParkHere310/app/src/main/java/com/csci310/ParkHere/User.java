@@ -22,13 +22,13 @@ public class User {
     private Boolean isHost;
     private List<String> renting;
     private List<String> hosting;
-    private Bitmap photo;
+    private String photo;
 
-    public Bitmap getPhoto() {
+    public String getPhoto() {
         return photo;
     }
 
-    public void setPhoto(Bitmap photo) {
+    public void setPhoto(String photo) {
         this.photo = photo;
     }
 
