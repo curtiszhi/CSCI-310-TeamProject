@@ -41,12 +41,7 @@
             android:layout_width="434dp"
             android:layout_height="wrap_content">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Host:emma"
-                android:id="@+id/host_public_button"
-                android:layout_gravity="center_horizontal" />
+
 
             <RatingBar
                 android:id="@+id/ratingBar"
@@ -56,8 +51,28 @@
                 android:stepSize="1.0"
                 android:rating="2.0" />
         </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="434dp"
+        android:layout_height="wrap_content">
+
+        <Spinner
+            android:id="@+id/renter"
+            android:layout_width="wrap_content"
+            android:layout_weight="0.37"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Confirm"
+            android:id="@+id/viewButton" />
 
 
+    </LinearLayout>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"

@@ -80,9 +80,6 @@ public class DetailedViewActivity extends AppCompatActivity{
         Bundle bundle = getIntent().getExtras();
         value = bundle.getString("ItemPosition");
 
-        startT=rentTime.get(0);
-        endT=rentTime.get(1);
-
 
         position = Integer.parseInt(value);
         fd = MyRecyclerAdapter.feedItemList.get(position);
@@ -206,7 +203,7 @@ public class DetailedViewActivity extends AppCompatActivity{
 
     private void setUp(){
         hostPublic.setText("Renter:"+renterName);
-        //hostPublic.setText(fd.getHost());
+
         //ratingBar.setRating(fd.getRating());
         address.setText(fd.getAddress());
         price.setText(Double.toString(fd.getPrice()));
