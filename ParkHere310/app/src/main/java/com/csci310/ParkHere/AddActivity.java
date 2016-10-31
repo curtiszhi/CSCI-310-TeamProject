@@ -48,6 +48,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +72,7 @@ public class AddActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
+    private DatabaseReference ref;
     private String spotID;
     private Vector<Bitmap> photos;
     private String state;
@@ -378,12 +380,22 @@ public class AddActivity extends AppCompatActivity {
         }
     }
     public void write_new_spot(FeedItem Fd) {
-        DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
+        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                hostList= dataSnapshot.getValue(List.class);
+                hostList= (List)dataSnapshot.getValue();
+                if(hostList==null){
+                    List<String> temp= new ArrayList<String>();
+
+                    temp.add(identifier);
+                    hostList=temp;
+                    System.out.println(identifier);
+                    System.out.println(hostList.get(0));
+                    ref.setValue(hostList);
+                }else{
                 hostList.add(identifier);
+                    ref.setValue(hostList);}
             }
 
             @Override
@@ -391,7 +403,7 @@ public class AddActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        ref.setValue(hostList);
+
         mDatabase.child("parking-spots-hosting").child(Fd.getIdentifier()).setValue(Fd);
     }
 
