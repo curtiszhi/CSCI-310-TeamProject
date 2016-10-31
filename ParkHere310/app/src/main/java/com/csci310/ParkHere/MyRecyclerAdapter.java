@@ -63,11 +63,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
             feedListRowHolder.thumbnail.setImageBitmap(decodedByte);
         }
        // feedListRowHolder.thumbnail.setImageResource(feedItem.getThumbnail());
-        feedListRowHolder.dates.setText(feedItem.getEndDates() + feedItem.getEndTime());
+        feedListRowHolder.dates.setText("Start: " + feedItem.getStartDates()+ " End: " + feedItem.getEndDates());
         String stringdouble= Double.toString(feedItem.getPrice());
-        feedListRowHolder.price.setText(stringdouble);
+        feedListRowHolder.price.setText("$" + stringdouble);
         feedListRowHolder.rating.setRating(feedItem.calculateRate());
-        feedListRowHolder.activity.setText(String.valueOf(feedItem.getActivity()));
+        feedListRowHolder.activity.setText(String.valueOf("Available: " + feedItem.getActivity()));
         feedListRowHolder.mRootView.setOnClickListener(new ItemOnClickListener(feedListRowHolder.mRootView, i));
     }
 
