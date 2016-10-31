@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static android.text.TextUtils.isEmpty;
@@ -223,7 +224,8 @@ public class ActionActivity extends AppCompatActivity {
         database.orderByChild("email").equalTo(mFirebaseUser_universal.getEmail()).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String prevChildKey) {
-                user_all = dataSnapshot.getValue(User.class);
+                List<User> userlist = dataSnapshot.getValue(List.class);
+                user_all = userlist.get(0);
             }
 
             @Override
