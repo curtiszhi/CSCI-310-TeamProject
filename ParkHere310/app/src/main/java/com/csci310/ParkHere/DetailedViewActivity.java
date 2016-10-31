@@ -319,6 +319,7 @@ public class DetailedViewActivity extends AppCompatActivity{
             confirmButton.setVisibility(Button.GONE);
             editButton.setVisibility(Button.GONE);
         }
+        ratingBar.setRating(fd.calculateRate());
 
     }
 
