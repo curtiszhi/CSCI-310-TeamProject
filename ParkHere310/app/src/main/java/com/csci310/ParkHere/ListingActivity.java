@@ -169,7 +169,7 @@ public class ListingActivity extends AppCompatActivity {
                     for (HashMap.Entry<String, Object> innerEntry : entry.getValue().entrySet()) {
                         String key = innerEntry.getKey();
                         Object value = innerEntry.getValue();
-                        System.out.println("innerkey: "+ key + value);
+                        System.out.println("innerkey: "+ key + "// innervalue: "+ value);
                         if(key.equals("latitude")){
                             user_all.setLatitude((double)value);
                             System.out.println(value);
