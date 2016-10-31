@@ -17,27 +17,20 @@ public class FeedItem {
     private String spotID;
     private String address;
 
-    public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<Bitmap> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
-        this.spotID = spotID;
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.startdates = startdates;
-        this.enddates = enddates;
-        this.starttime = starttime;
-        this.endtime = endtime;
-        this.price = price;
-        this.cancelpolicy = cancelpolicy;
-        this.description = description;
-        this.rating = rating;
-        this.activity = activity;
-        this.filters = filters;
-        Host = host;
-        this.photos = photos;
-        this.rentedTime = rentedTime;
-        this.identifier = identifier;
-        this.review = review;
-        this.currentRenter = currentRenter;
+    public FeedItem(HashMap<String, String> map) {
+        this.spotID = map.get("spotID");
+        this.address =  map.get("address");
+        //this.latitude =  map.get("latitude");
+        //this.longitude =  map.get("longitude");
+        this.startdates =  map.get("startdates");
+        this.enddates =  map.get("enddates");
+        this.starttime =  map.get("starttime");
+        this.endtime =  map.get("endtime");
+        //this.price =  Double.parseDouble(map.get("price"));
+        this.cancelpolicy =  map.get("cancelpolicy");
+        this.description =  map.get("description");
+        Host =  map.get("Host");
+        this.currentRenter =  map.get("currentRenter");
     }
 
     private double latitude;

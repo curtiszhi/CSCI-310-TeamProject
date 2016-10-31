@@ -380,22 +380,11 @@ public class AddActivity extends AppCompatActivity {
         }
     }
     public void write_new_spot(FeedItem Fd) {
-        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
+        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getSpotID());
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                hostList= (List)dataSnapshot.getValue();
-                if(hostList==null){
-                    List<FeedItem> temp= new ArrayList<FeedItem>();
-
-                    temp.add(fd);
-                    hostList=temp;
-                    System.out.println(identifier);
-                    System.out.println(hostList.get(0));
-                    ref.setValue(hostList);
-                }else{
-                hostList.add(fd);
-                    ref.setValue(hostList);}
+                    ref.setValue(fd);
             }
 
             @Override

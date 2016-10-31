@@ -33,6 +33,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -50,7 +51,9 @@ public class ListingActivity extends AppCompatActivity {
     static List<FeedItem> rentingActualList;
     static List<FeedItem> hostingActualList;
     private static DatabaseReference ref;
-    private static List<FeedItem> hostList;
+    public static ArrayList<FeedItem> hostList;
+    private  ArrayList<FeedItem> rentList;
+    static MyRecyclerAdapter adapter;
 
 
     @Override
@@ -60,10 +63,11 @@ public class ListingActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        rentingList = new ArrayList<>();
-        hostingList = new ArrayList<>();
+        rentList = new ArrayList<>();
+        hostList = new ArrayList<>();
         //displayList = new ArrayList<>();
         getItemsHosting();
+        getItemsRenting();
         rentingActualList = new ArrayList<>();
         hostingActualList = new ArrayList<>();
         //initDataListenerRental();
@@ -71,41 +75,47 @@ public class ListingActivity extends AppCompatActivity {
         initActionBar();
     }
 
-    private static void getItemsRenting(){
+    private  void getItemsRenting(){
         ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting");
-        ref.addValueEventListener(new ValueEventListener() {
+        ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                hostList= (List)dataSnapshot.getValue();
-                if(hostList==null){
-                    //dosomething
+                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+                    System.out.println("found one");
+                    FeedItem message = messageSnapshot.getValue(FeedItem.class);
+                    rentList.add(message);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                // Getting Post failed, log a message
+                //Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
             }
-        });
+        };
+        ref.addValueEventListener(postListener);
     }
-    public static void getItemsHosting(){
-        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
-        ref.addValueEventListener(new ValueEventListener() {
+    public void getItemsHosting(){
+        ref=mDatabase.child("users/" + mFirebaseUser.getUid()).child("hosting/");
+        ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                hostList= (List)dataSnapshot.getValue();
-                System.out.println("cigars: " + hostList.size());
-                if(hostList==null){
-                   //dosomething
+                System.out.println(dataSnapshot.getChildrenCount());
+                for (DataSnapshot messageSnapshot: dataSnapshot.getChildren()) {
+                    FeedItem message = new FeedItem((HashMap<String, String>)messageSnapshot.getValue());
+                    hostList.add(message);
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
+                // Getting Post failed, log a message
+                //Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
             }
-        });
-        //return hostList;
+        };
+        ref.addValueEventListener(postListener);
     }
 
     @SuppressWarnings("deprecation")
@@ -202,8 +212,7 @@ public class ListingActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            getItemsRenting();
-            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), rentingActualList);
+            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity());
             recyclerView.setAdapter(adapter);
             return root;
         }
@@ -212,13 +221,12 @@ public class ListingActivity extends AppCompatActivity {
     public static class RecyclerViewFragmentHosting extends Fragment {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            //getItemsHosting();
             View root = inflater.inflate(R.layout.fragment_recyclerview, container, false);
             RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.myList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), getItemsHosting());
+            adapter = new MyRecyclerAdapter(getActivity());
             recyclerView.setAdapter(adapter);
             return root;
         }

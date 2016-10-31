@@ -11,18 +11,20 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
 
-    public static List<FeedItem> feedItemList;
+    public static ArrayList<FeedItem> feedItemList;
 
     private Context mContext;
 
-    public MyRecyclerAdapter(Context context, List<FeedItem> feedItemList) {
-        this.feedItemList = ListingActivity.getItemsHosting();
+    public MyRecyclerAdapter(Context context) {
+        this.feedItemList = ListingActivity.hostList;
         System.out.println("got list" + this.feedItemList.size());
         this.mContext = context;
     }
@@ -37,14 +39,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
     @Override
     public void onBindViewHolder(FeedListRowHolder feedListRowHolder, int i) {
-        System.out.println("creating item");
         FeedItem feedItem = feedItemList.get(i);
         feedListRowHolder.house.setText(feedItem.getAddress());
        // feedListRowHolder.thumbnail.setImageResource(feedItem.getThumbnail());
         feedListRowHolder.dates.setText(feedItem.getEndDates() + feedItem.getEndTime());
         String stringdouble= Double.toString(feedItem.getPrice());
         feedListRowHolder.price.setText(stringdouble);
-        feedListRowHolder.rating.setRating(feedItem.getRating());
+        //feedListRowHolder.rating.setRating(feedItem.getRating());
         feedListRowHolder.activity.setText(String.valueOf(feedItem.getActivity()));
         feedListRowHolder.mRootView.setOnClickListener(new ItemOnClickListener(feedListRowHolder.mRootView, i));
     }
