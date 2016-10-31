@@ -62,20 +62,17 @@ public class AddActivity extends AppCompatActivity {
     private EditText location,city,postcode, description, price, startTime, endTime, startDate, endDate;
     private Button post, photoButton;
     private MultiSelectionSpinner spinner;
-    private String[] items = {"handicap", "Compact", "SUV", "Truck", "covered parking"};
+    private String[] items = {"handicap", "Compact", "covered parking"};
     private static final int selected_p = 1;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
-    private FirebaseStorage storage;
-    private StorageReference storageRef;
     private String spotID;
     private Vector<Bitmap> photos;
     private String state;
     private String cancel_policy;
     private List<String> filter;
     private Bitmap s_image;
-    private StorageReference spot_image;
     private FeedItem fd;
     private AddActivity self;
     private Spinner dropdown;
@@ -150,8 +147,6 @@ public class AddActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReferenceFromUrl("gs://parkhere310-3701d.appspot.com");
         spinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner1);
         spinner.setItems(items);
 
@@ -255,7 +250,7 @@ public class AddActivity extends AppCompatActivity {
                     else{
 
                         if(check(starttime,endtime,startdate,enddate)){
-                            //mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").setValue(fd.getIdentifier());
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("filter").setValue(filter);
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("startTime").setValue(starttime);
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("endTime").setValue(endtime);
@@ -282,57 +277,23 @@ public class AddActivity extends AppCompatActivity {
                         }
                     }
 
-                }
-                filter=spinner.getSelectedStrings();
-                String starttime = startTime.getText().toString().trim();
-                String endtime = endTime.getText().toString().trim();
-                String startdate = startDate.getText().toString().trim();
-                String enddate = endDate.getText().toString().trim();
-                String address = location.getText().toString().trim();
-                String description_parking = description.getText().toString().trim();
-                double price_parking=Double.parseDouble(price.getText().toString().trim());
-                String city_input=city.getText().toString().trim();
-                String postcode_input=postcode.getText().toString().trim();
+                }else {
+                    filter = spinner.getSelectedStrings();
+                    String starttime = startTime.getText().toString().trim();
+                    String endtime = endTime.getText().toString().trim();
+                    String startdate = startDate.getText().toString().trim();
+                    String enddate = endDate.getText().toString().trim();
+                    String address = location.getText().toString().trim();
+                    String description_parking = description.getText().toString().trim();
+                    double price_parking = Double.parseDouble(price.getText().toString().trim());
+                    String city_input = city.getText().toString().trim();
+                    String postcode_input = postcode.getText().toString().trim();
 
 
-                if((state==null)||isEmpty(postcode)||isEmpty(city)||isEmpty(location) ||isEmpty(description)||isEmpty(price)||isEmpty(startTime)||isEmpty(startDate)||isEmpty(endTime)||isEmpty(endDate)){
-                    AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
-                    alertDialog.setTitle("Alert");
-                    alertDialog.setMessage("Please fill all the Text field");
-                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                    alertDialog.show();
-                }
-                else{
-
-                    if(check(starttime,endtime,startdate,enddate)){
-                        identifier=mFirebaseAuth.getCurrentUser().getUid()+Long.toString(System.currentTimeMillis());
-                        String full_address=address+","+city_input+","+state+postcode_input;
-                        fd.setIdentifier(identifier);
-                        fd.setActivity(true);
-                        fd.setCancel(cancel_policy);
-                        fd.setDescription(description_parking);
-
-                        fd.setRating(null);
-                        fd.setHost(mFirebaseAuth.getCurrentUser().getUid());
-
-                        fd.setStartDates(startdate);
-                        fd.setEndDates(enddate);
-                        fd.setStartTime(starttime);
-                        fd.setEndTime(endtime);
-                        fd.setPrice(price_parking);
-                        fd.setFilter(filter);
-
-                        new AddressOperation(self).execute(full_address);
-
-                    }else{
+                    if ((state == null) || isEmpty(postcode) || isEmpty(city) || isEmpty(location) || isEmpty(description) || isEmpty(price) || isEmpty(startTime) || isEmpty(startDate) || isEmpty(endTime) || isEmpty(endDate)) {
                         AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
                         alertDialog.setTitle("Alert");
-                        alertDialog.setMessage("Please make sure time difference is larger than 1 hour");
+                        alertDialog.setMessage("Please fill all the Text field");
                         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
@@ -340,12 +301,47 @@ public class AddActivity extends AppCompatActivity {
                                     }
                                 });
                         alertDialog.show();
+                    } else {
 
+                        if (check(starttime, endtime, startdate, enddate)) {
+                            identifier = mFirebaseAuth.getCurrentUser().getUid() + Long.toString(System.currentTimeMillis());
+                            String full_address = address + "," + city_input + "," + state + postcode_input;
+                            fd.setIdentifier(identifier);
+                            fd.setActivity(true);
+                            fd.setCancel(cancel_policy);
+                            fd.setDescription(description_parking);
+
+                            fd.setRating(null);
+                            fd.setHost(mFirebaseAuth.getCurrentUser().getUid());
+
+                            fd.setStartDates(startdate);
+                            fd.setEndDates(enddate);
+                            fd.setStartTime(starttime);
+                            fd.setEndTime(endtime);
+                            fd.setPrice(price_parking);
+                            fd.setFilter(filter);
+                            fd.setReview(null);
+                            fd.setRentedTime(null);
+
+                            new AddressOperation(self).execute(full_address);
+
+                        } else {
+                            AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
+                            alertDialog.setTitle("Alert");
+                            alertDialog.setMessage("Please make sure time difference is larger than 1 hour");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.show();
+
+                        }
                     }
+
+
                 }
-
-
-
 
             }
         });
@@ -393,12 +389,6 @@ public class AddActivity extends AppCompatActivity {
 
         write_new_spot(fd);
 
-       /* StorageReference imagesRef = storageRef.child(spotID);
-
-        for(int i=0;i<photos.size();i++){
-            spot_image = imagesRef.child("image" + i + ".jpg");
-            upload(photos.get(i), spot_image);
-        }*/
     }
 
     @Override
@@ -412,7 +402,6 @@ public class AddActivity extends AppCompatActivity {
                         final Uri imageUri = data.getData();
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
-                       // photos.add(s_image);
                         fd.photos.add(s_image);
                         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
@@ -444,6 +433,12 @@ public class AddActivity extends AppCompatActivity {
                 }else{
                     checkdate=false;
                 }
+                Date date = new Date();
+                if(time1.after(date)){
+                    checkdate=true;
+                }else{
+                    checkdate=false;
+                }
 
 
         }catch(ParseException ex){
@@ -457,7 +452,7 @@ public class AddActivity extends AppCompatActivity {
         return etText.getText().toString().trim().length() == 0;
     }
 
-    public void upload(Bitmap image, StorageReference spotImage) {
+   /* public void upload(Bitmap image, StorageReference spotImage) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -476,7 +471,7 @@ public class AddActivity extends AppCompatActivity {
                 //Uri downloadUrl = taskSnapshot.getDownloadUrl();
             }
         });
-    }
+    }*/
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
