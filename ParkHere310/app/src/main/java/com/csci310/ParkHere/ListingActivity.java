@@ -129,7 +129,7 @@ public class ListingActivity extends AppCompatActivity {
                         user_all.setHost((String)value);
                     }
                     if(key.equals("photos")){
-                        user_all.photos = (Vector<Bitmap>) value;
+                        user_all.photos = (Vector<String>) value;
                     }
                     if(key.equals("rentedTime")){
                         user_all.setRentedTime((Map<String,Vector<String>>)value);
@@ -211,7 +211,7 @@ public class ListingActivity extends AppCompatActivity {
                         user_all.setHost((String)value);
                     }
                     if(key.equals("photos")){
-                        user_all.photos = (Vector<Bitmap>) value;
+                        user_all.photos = (Vector<String>) value;
                     }
                     if(key.equals("rentedTime")){
                         user_all.setRentedTime((Map<String,Vector<String>>)value);
