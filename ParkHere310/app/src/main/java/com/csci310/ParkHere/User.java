@@ -1,5 +1,6 @@
 package com.csci310.ParkHere;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,45 +14,38 @@ public class User {
     private String userName;
     private String email;
     private String phone;
-    private String[] review;
+    private Vector<String> review;
     private Vector<String> rateList;
     private Vector<Integer> rating;
+    private Boolean isHost;
+    private List<String> renting;
+    private List<String> hosting;
 
-    public int getRating() {
-        int sum = 0;
-        for(int i = 0; i < rating.size(); i++){
-            sum = sum + rating.get(i);
-        }
-        if(rating.size() == 0 ){
-            return 0;
-        } else{
-            return sum/rating.size();
-        }
-    }
+
 
     public void setRating(Vector<Integer> rating) {
         this.rating = rating;
     }
 
-    public void addRating(Integer rating){
-        this.rating.add(rating);
+    public Vector<Integer> getRating(){
+        return rating;
     }
 
 
-    public Vector<String> getNeedReview() {
+    public Vector<String> getRateList() {
         return rateList;
     }
 
-    public void setNeedReview(Vector<String> rateList) {
+    public void setRateList(Vector<String> rateList) {
         this.rateList = rateList;
     }
 
 
-    public String[] getReview() {
+    public Vector<String> getReview() {
         return review;
     }
 
-    public void setReview(String[] review) {
+    public void setReview(Vector<String> review) {
         this.review = review;
     }
 
@@ -105,24 +99,16 @@ public class User {
         this.hosting = hosting;
     }
 
-    private Boolean isHost;
-    private List<String> renting;
-    private List<String> hosting;
+
 
     public User() {
         rateList=new Vector<String>();
         rating=new Vector<Integer>();
+        renting=new ArrayList<String>();
+        hosting=new ArrayList<String>();
+        review=new Vector<String>();
     }
 
-    public User(String userName, String email, String phone, Boolean isHost, List<String> renting, List<String> hosting) {
-        this.userName = userName;
-        this.email = email;
-        this.phone = phone;
-        this.isHost = isHost;
-        this.renting = renting;
-        this.hosting = hosting;
-        rateList=new Vector<String>();
-        rating=new Vector<Integer>();
-    }
+
 
 }

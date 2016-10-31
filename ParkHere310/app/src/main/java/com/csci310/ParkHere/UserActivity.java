@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Vector;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -77,6 +78,7 @@ public class UserActivity extends AppCompatActivity {
         String email = mFirebaseUser.getEmail();
         String phone = ActionActivity.user_all.getPhone();
         String name = ActionActivity.user_all.getUserName();
+        Vector<Integer> rating_host=ActionActivity.user_all.getRating();
         Uri uri = mFirebaseUser.getPhotoUrl();
 
 
@@ -86,6 +88,16 @@ public class UserActivity extends AppCompatActivity {
         emailEditText.setText(email.trim(),TextView.BufferType.EDITABLE);
         phoneEditText.setText(phone.trim(),TextView.BufferType.EDITABLE);
         profilePicImageView.setImageURI(uri);
+        if(rating_host.size()==0){
+        ratingBar.setRating(0);}
+        else{
+            int total=0;
+            for(int i=0;i<rating_host.size();i++){
+                total+=rating_host.get(i);
+            }
+            Float rate=(float)total/(float)rating_host.size();
+            ratingBar.setRating(rate);
+        }
 
 
         //Set EditText Not Editable
