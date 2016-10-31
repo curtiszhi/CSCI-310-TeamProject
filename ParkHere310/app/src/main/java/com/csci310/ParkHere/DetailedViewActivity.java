@@ -2,11 +2,13 @@ package com.csci310.ParkHere;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -37,6 +39,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import static com.csci310.ParkHere.ActionActivity.user_all;
+
 /**
  * Created by seanyuan on 10/17/16.
  */
@@ -58,7 +62,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     private TextView image_label;
     private int count;
     FeedItem fd;
-    private Vector<Bitmap> spotPhoto;
+    private Vector<String> spotPhoto;
     private Button editButton,confirmButton,cancelButton;
     int position;
     String value;
@@ -105,7 +109,9 @@ public class DetailedViewActivity extends AppCompatActivity{
                 if(count>0){
                     System.out.println("swiped right" + count);
                     count--;
-                    Bitmap b = spotPhoto.get(count);
+                    String temp_p = spotPhoto.get(count);
+                    byte[] decodedString = Base64.decode(temp_p, Base64.DEFAULT);
+                    Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     image_view.setImageBitmap(b);
                     int temp=count+1;
                     image_label.setText(temp+" of "+spotPhoto.size()+" images");
@@ -116,7 +122,9 @@ public class DetailedViewActivity extends AppCompatActivity{
                 if(count<spotPhoto.size()-1){
                     System.out.println("swiped left" + count);
                     count++;
-                    Bitmap b = spotPhoto.get(count);
+                    String temp_p = spotPhoto.get(count);
+                    byte[] decodedString = Base64.decode(temp_p, Base64.DEFAULT);
+                    Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     image_view.setImageBitmap(b);
                     int temp=count+1;
                     image_label.setText(temp+" of "+spotPhoto.size()+" images");
@@ -197,7 +205,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     private void setUp(){
         hostPublic.setText("Renter:"+renterName);
         //hostPublic.setText(fd.getHost());
-        ratingBar.setRating(fd.getRating());
+        //ratingBar.setRating(fd.getRating());
         address.setText(fd.getAddress());
         price.setText(Double.toString(fd.getPrice()));
         String time_frame=fd.getStartDates()+ " "+ fd.getStartTime()+" to "+fd.getEndDates()+" "+fd.getEndTime();
@@ -238,7 +246,9 @@ public class DetailedViewActivity extends AppCompatActivity{
     }
 
     public void display(){
-        image_view.setImageBitmap(spotPhoto.get(0));
+        byte[] decodedString = Base64.decode(spotPhoto.get(0), Base64.DEFAULT);
+        Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        image_view.setImageBitmap(b);
         image_label.setText("1 of "+spotPhoto.size()+" images");
     }
 

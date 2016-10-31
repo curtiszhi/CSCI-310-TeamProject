@@ -196,8 +196,7 @@
             android:layout_marginTop="10dp"
             android:textOn="Done"
             android:textOff="Update information"
-            android:layout_gravity="center_horizontal"
-            android:onClick="onToggleClicked"/>
+            android:layout_gravity="center_horizontal" />
 
 
 

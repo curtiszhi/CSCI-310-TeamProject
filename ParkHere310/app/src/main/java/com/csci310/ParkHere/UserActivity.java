@@ -10,6 +10,7 @@ import android.text.method.KeyListener;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -46,6 +47,7 @@ public class UserActivity extends AppCompatActivity {
     private Bitmap s_image;
     private static final int selected_p = 1;
     private RatingBar ratingBar;
+    private boolean check=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,9 +126,8 @@ public class UserActivity extends AppCompatActivity {
         phoneEditText.setKeyListener(null);
 
 
-        editToggleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        editToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // TODO Auto-generated method stub
                 if (editToggleButton.isChecked()) {
                     nameEditText.setKeyListener((KeyListener) nameEditText.getTag());

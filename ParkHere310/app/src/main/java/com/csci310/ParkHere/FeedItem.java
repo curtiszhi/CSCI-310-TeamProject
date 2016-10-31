@@ -16,23 +16,6 @@ import java.util.Vector;
 public class FeedItem {
     private String spotID;
     private String address;
-
-    public FeedItem(HashMap<String, String> map) {
-        this.spotID = map.get("spotID");
-        this.address =  map.get("address");
-        //this.latitude =  map.get("latitude");
-        //this.longitude =  map.get("longitude");
-        this.startdates =  map.get("startdates");
-        this.enddates =  map.get("enddates");
-        this.starttime =  map.get("starttime");
-        this.endtime =  map.get("endtime");
-        //this.price =  Double.parseDouble(map.get("price"));
-        this.cancelpolicy =  map.get("cancelpolicy");
-        this.description =  map.get("description");
-        Host =  map.get("Host");
-        this.currentRenter =  map.get("currentRenter");
-    }
-
     private double latitude;
     private double longitude;
     private String startdates;
@@ -46,26 +29,60 @@ public class FeedItem {
     private Boolean activity;
     private List<String> filters;
     private String Host;
-    public Vector<Bitmap> photos;
+    public Vector<String> photos;
     public Map<String,Vector<String>> rentedTime;
     private String identifier;
     private Vector<String> review;
     private String currentRenter;
+
+    FeedItem(){
+        photos=new Vector<String>();
+        rentedTime= new HashMap<String,Vector<String>>();
+        rating=new Vector<Integer>();
+        review = new Vector<String>();
+        filters=null;
+    }
+
+
+
+   /* public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<String> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
+        this.spotID = spotID;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.startdates = startdates;
+        this.enddates = enddates;
+        this.starttime = starttime;
+        this.endtime = endtime;
+        this.price = price;
+        this.cancelpolicy = cancelpolicy;
+        this.description = description;
+        this.rating = rating;
+        this.activity = activity;
+        this.filters = filters;
+        Host = host;
+        this.photos = photos;
+        this.rentedTime = rentedTime;
+        this.identifier = identifier;
+        this.review = review;
+        this.currentRenter = currentRenter;
+    }*/
+
+    public Vector<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(Vector<String> photos) {
+        this.photos = photos;
+    }
+
+
     public Map<String,Vector<String>> getRentedTime() {
         return rentedTime;
     }
     public void setRentedTime(Map<String,Vector<String>>rentedTime) {
         this.rentedTime = rentedTime;
     }
-
-
-    FeedItem(){
-        photos=new Vector<Bitmap>();
-        rentedTime= new HashMap<String,Vector<String>>();
-        rating=new Vector<Integer>();
-        review = new Vector<String>();
-    }
-
 
 
     public Vector<String> getReview() {
@@ -117,17 +134,6 @@ public class FeedItem {
         this.cancelpolicy = cancelpolicy;
     }
 
-    public int getRating() {
-        int sum = 0;
-        for(int i = 0; i < rating.size(); i++){
-            sum = sum + rating.get(i);
-        }
-        if(rating.size() == 0){
-            return 0;
-        }else{
-            return sum/rating.size();
-        }
-    }
 
     public void setRating(Vector<Integer> rating) {
         this.rating = rating;
