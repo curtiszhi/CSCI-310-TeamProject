@@ -127,7 +127,11 @@ public class RegisterActivity extends AppCompatActivity {
         String email = mFirebaseUser.getEmail();
         List<String> renting = new ArrayList<>();
         List<String> hosting = new ArrayList<>();
-        User database_user = new User(userName, email, phone, isHost, renting, hosting);
+        User database_user = new User();
+        database_user.setEmail(email);
+        database_user.setHost(isHost);
+        database_user.setPhone(phone);
+        database_user.setUserName(userName);
         mDatabase.child("users").child(userID).setValue(database_user);
     }
 

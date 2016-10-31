@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.method.KeyListener;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,11 +19,20 @@ import android.widget.ToggleButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
+
+import static com.csci310.ParkHere.ActionActivity.user_all;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -75,9 +85,10 @@ public class UserActivity extends AppCompatActivity {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         String email = mFirebaseUser.getEmail();
-        String phone = ActionActivity.user_all.getPhone();
-        String name = ActionActivity.user_all.getUserName();
-        Uri uri = mFirebaseUser.getPhotoUrl();
+        String phone = user_all.getPhone();
+        String name = user_all.getUserName();
+        Vector<Integer> rating_host= user_all.getRating();
+
 
 
 
@@ -85,9 +96,23 @@ public class UserActivity extends AppCompatActivity {
         nameEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
         emailEditText.setText(email.trim(),TextView.BufferType.EDITABLE);
         phoneEditText.setText(phone.trim(),TextView.BufferType.EDITABLE);
-        profilePicImageView.setImageURI(uri);
 
+        if(rating_host.size()==0){
+        ratingBar.setRating(0);}
+        else{
+            int total=0;
+            for(int i=0;i<rating_host.size();i++){
+                total+=rating_host.get(i);
+            }
+            Float rate=(float)total/(float)rating_host.size();
+            ratingBar.setRating(rate);
+        }
 
+        if(user_all.getPhoto()!=null) {
+            byte[] decodedString = Base64.decode(user_all.getPhoto(), Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            profilePicImageView.setImageBitmap(decodedByte);
+        }
         //Set EditText Not Editable
         nameEditText.setTag(nameEditText.getKeyListener());
         nameEditText.setKeyListener(null);
@@ -105,26 +130,17 @@ public class UserActivity extends AppCompatActivity {
                 // TODO Auto-generated method stub
                 if (editToggleButton.isChecked()) {
                     nameEditText.setKeyListener((KeyListener) nameEditText.getTag());
-                    //emailEditText.setKeyListener((KeyListener) emailEditText.getTag());
                     phoneEditText.setKeyListener((KeyListener) phoneEditText.getTag());
                 } else {
                     nameEditText.setTag(nameEditText.getKeyListener());
                     nameEditText.setKeyListener(null);
-
-                    //emailEditText.setTag(emailEditText.getKeyListener());
-                    //emailEditText.setKeyListener(null);
-
                     phoneEditText.setTag(phoneEditText.getKeyListener());
                     phoneEditText.setKeyListener(null);
-
-                    //Update User Info
-                    mFirebaseUser.updateEmail(emailEditText.getText().toString());
-                    UserProfileChangeRequest updateName = new UserProfileChangeRequest.Builder().setDisplayName(nameEditText.getText().toString()).build();
-                    mFirebaseUser.updateProfile(updateName);
-                    ActionActivity.user_all.setUserName(nameEditText.getText().toString().trim());
-                    //ActionActivity.user_all.setEmail(emailEditText.getText().toString().trim());
-                    ActionActivity.user_all.setPhone(phoneEditText.getText().toString().trim());
-                    //update all
+                    user_all.setUserName(nameEditText.getText().toString().trim());
+                    user_all.setPhone(phoneEditText.getText().toString().trim());
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("userName").setValue(user_all.getUserName());
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("phone").setValue(user_all.getPhone());
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("photo").setValue(user_all.getPhoto());
                 }
             }
         });
@@ -160,6 +176,14 @@ public class UserActivity extends AppCompatActivity {
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
                         profilePicImageView.setImageBitmap(s_image);
+                        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
+                        s_image.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
+
+                        byte[] byteArray = bYtE.toByteArray();
+                        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
+
+                        user_all.setPhoto(imageFile);
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();

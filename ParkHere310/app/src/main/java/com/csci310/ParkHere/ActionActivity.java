@@ -7,6 +7,7 @@ package com.csci310.ParkHere;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -65,6 +67,7 @@ public class ActionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         self = this;
         setContentView(R.layout.action_activity);
+        user_all=new User();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -239,29 +242,54 @@ public class ActionActivity extends AppCompatActivity {
     }
 
     private void initUserListener(){
-        DatabaseReference database = mDatabase.child("users/");
-        database.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference database = mDatabase.child("users/").child(mFirebaseUser_universal.getUid());
+        database.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                    HashMap temp = (HashMap) postSnapshot.getValue();
-                    //Iterator it = temp.entrySet().iterator();
-                    /*while (it.hasNext()) {
-                        Map.Entry pair = (Map.Entry)it.next();
-                        System.out.println(pair.getKey() + " = " + pair.getValue());
-                        it.remove(); // avoids a ConcurrentModificationException
-                    }*/
-                    user_all = new User();
-                    user_all.setPhone((String)temp.get("phone"));
-                    user_all.setUserName((String)temp.get("userName"));
-                    //if(mFirebaseUser_universal.getEmail()){
-                        //user_all = postSnapshot.getValue(User.class);
-                    //}
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
+
+                for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
+                    String key = entry.getKey();
+                    Object value = entry.getValue();
+                    if(key.equals("email")){
+                        user_all.setEmail((String)value);
+                        System.out.println((String)value);
+                    }
+                    if(key.equals("userName")){
+                        user_all.setUserName((String)value);
+                    }
+                    if(key.equals("phone")){
+                        user_all.setPhone((String)value);
+                    }
+                    if(key.equals("host")){
+                        user_all.setHost((Boolean)value);
+                    }
+                    if(key.equals("review")){
+                        user_all.setReview((Vector<String>)value);
+                    }
+                    if(key.equals("rateList")){
+                        user_all.setRateList((Vector<String>)value);
+                    }
+                    if(key.equals("rating")){
+                        user_all.setRating((Vector<Integer>)value);
+                    }
+                    if(key.equals("renting")){
+                        user_all.setRenting((List<String>)value);
+                    }
+                    if(key.equals("hosting")){
+                        user_all.setHosting((List<String>)value);
+                    }
+                    if(key.equals("photo")){
+                        user_all.setPhoto((String) value);
+                    }
+
                 }
+
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: ");
+                System.out.println("The read failed: " + databaseError.getCode());
             }
         });
     }

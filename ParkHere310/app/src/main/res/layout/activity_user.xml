@@ -1,201 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User Profile"
-        android:layout_gravity="center_horizontal"
-        android:paddingTop="20dp"
-        android:textSize="30dp"
-        android:textColor="#009688"
-        android:textStyle="bold"/>
-
-    <ImageView
-        android:id="@+id/profilePicImageView"
-        android:src="@drawable/ic_face_black_24dp"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_gravity="center" />
-
-
-    <!--Name TextView/EditText-->
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+    android:fillViewport="true">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height= "wrap_content"
-            android:id="@+id/nameTextView"
-            android:text="Name: "
-            android:layout_alignParentLeft="true"
-            android:paddingLeft="30dp"
+            android:layout_height="wrap_content"
+            android:text="User Profile"
+            android:layout_gravity="center_horizontal"
             android:paddingTop="20dp"
-            android:textSize="20dp"
-            android:textColor="#009688" />
+            android:textSize="30dp"
+            android:textColor="#009688"
+            android:textStyle="bold"/>
 
-        <EditText
+        <ImageView
+            android:id="@+id/profilePicImageView"
+            android:src="@drawable/ic_face_black_24dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center" />
+
+
+        <!--Name TextView/EditText-->
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height= "wrap_content"
+                android:id="@+id/nameTextView"
+                android:text="Name: "
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="30dp"
+                android:paddingTop="20dp"
+                android:textSize="20dp"
+                android:textColor="#009688" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/nameEditText"
+                android:hint=""
+                android:paddingTop="20dp"
+                android:paddingLeft="10dp"
+                android:textSize="20dp"
+                android:background="@android:color/transparent"
+                android:focusable="true"
+                android:inputType="textCapWords"
+                android:textColorHighlight="#fb00ff"
+                android:textColorHint="#009688"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/nameTextView"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:gravity="start" />
+
+        </RelativeLayout>
+
+        <!--Email TextView/EditText-->
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height= "wrap_content"
+                android:id="@+id/emailTextView"
+                android:text="Email: "
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="30dp"
+                android:paddingTop="20dp"
+                android:textSize="20dp"
+                android:textColor="#009688" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/emailEditText"
+                android:hint=""
+                android:paddingTop="20dp"
+                android:paddingLeft="10dp"
+                android:textSize="20dp"
+                android:background="@android:color/transparent"
+                android:focusable="true"
+                android:inputType="textEmailAddress"
+                android:textColorHighlight="#fb00ff"
+                android:textColorHint="#009688"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_toRightOf="@+id/emailTextView"
+                android:layout_toEndOf="@+id/emailTextView"
+                android:gravity="start" />
+
+        </RelativeLayout>
+
+        <!--Phone TextView/EditText-->
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height= "wrap_content"
+                android:id="@+id/phoneTextView"
+                android:text="Phone: "
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="30dp"
+                android:paddingTop="20dp"
+                android:textSize="20dp"
+                android:textColor="#009688" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/phoneEditText"
+                android:hint=""
+                android:paddingTop="20dp"
+                android:paddingLeft="10dp"
+                android:textSize="20dp"
+                android:background="@android:color/transparent"
+                android:focusable="true"
+                android:inputType="phone"
+                android:textColorHighlight="#fb00ff"
+                android:textColorHint="#009688"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_toRightOf="@+id/phoneTextView"
+                android:layout_toEndOf="@+id/phoneTextView"
+                android:gravity="start" />
+
+        </RelativeLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="434dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height= "wrap_content"
+                android:id="@+id/ratingTextView"
+                android:text="Rating: "
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="30dp"
+                android:paddingTop="15dp"
+                android:textSize="20dp"
+                android:textColor="#009688" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:rating="2.0" />
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Rental History"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/viewRentHistoryButton"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Hosting History"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/viewHostHistoryButton"
+                 />
+
+        </LinearLayout>
+
+        <ToggleButton
+            android:id="@+id/editUserDetailsToggleButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/nameEditText"
-            android:hint=""
-            android:paddingTop="20dp"
-            android:paddingLeft="10dp"
-            android:textSize="20dp"
-            android:background="@android:color/transparent"
-            android:focusable="true"
-            android:inputType="textCapWords"
-            android:textColorHighlight="#fb00ff"
-            android:textColorHint="#009688"
-            android:layout_alignParentTop="true"
-            android:layout_toRightOf="@+id/nameTextView"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="start" />
+            android:layout_marginTop="10dp"
+            android:textOn="Done"
+            android:textOff="Update information"
+            android:layout_gravity="center_horizontal"
+            android:onClick="onToggleClicked"/>
 
-    </RelativeLayout>
 
-    <!--Email TextView/EditText-->
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height= "wrap_content"
-            android:id="@+id/emailTextView"
-            android:text="Email: "
-            android:layout_alignParentLeft="true"
-            android:paddingLeft="30dp"
-            android:paddingTop="20dp"
-            android:textSize="20dp"
-            android:textColor="#009688" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/emailEditText"
-            android:hint=""
-            android:paddingTop="20dp"
-            android:paddingLeft="10dp"
-            android:textSize="20dp"
-            android:background="@android:color/transparent"
-            android:focusable="true"
-            android:inputType="textEmailAddress"
-            android:textColorHighlight="#fb00ff"
-            android:textColorHint="#009688"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/emailTextView"
-            android:layout_toEndOf="@+id/emailTextView"
-            android:gravity="start" />
-
-    </RelativeLayout>
-
-    <!--Phone TextView/EditText-->
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height= "wrap_content"
-            android:id="@+id/phoneTextView"
-            android:text="Phone: "
-            android:layout_alignParentLeft="true"
-            android:paddingLeft="30dp"
-            android:paddingTop="20dp"
-            android:textSize="20dp"
-            android:textColor="#009688" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/phoneEditText"
-            android:hint=""
-            android:paddingTop="20dp"
-            android:paddingLeft="10dp"
-            android:textSize="20dp"
-            android:background="@android:color/transparent"
-            android:focusable="true"
-            android:inputType="phone"
-            android:textColorHighlight="#fb00ff"
-            android:textColorHint="#009688"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_toRightOf="@+id/phoneTextView"
-            android:layout_toEndOf="@+id/phoneTextView"
-            android:gravity="start" />
-
-    </RelativeLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="434dp"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height= "wrap_content"
-            android:id="@+id/ratingTextView"
-            android:text="Rating: "
-            android:layout_alignParentLeft="true"
-            android:paddingLeft="30dp"
-            android:paddingTop="15dp"
-            android:textSize="20dp"
-            android:textColor="#009688" />
-
-        <RatingBar
-            android:id="@+id/ratingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:isIndicator="true"
-            android:numStars="5"
-            android:stepSize="1.0"
-            android:rating="2.0" />
     </LinearLayout>
 
-
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View Rental History"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/viewRentHistoryButton"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="View Hosting History"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/viewHostHistoryButton"
-             />
-
-    </LinearLayout>
-
-    <ToggleButton
-        android:id="@+id/editUserDetailsToggleButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:textOn="Done"
-        android:textOff="Update information"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onToggleClicked"/>
-
-
-
-</LinearLayout>
-
+</ScrollView>
