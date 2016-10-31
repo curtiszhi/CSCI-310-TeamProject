@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +34,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -92,6 +97,7 @@ public class ListingActivity extends AppCompatActivity {
                 System.out.println("There are " + snapshot.getChildrenCount() + " houses in host");
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                     String houseID = postSnapshot.getValue(String.class);
+                    System.out.println(houseID);
                     hostingList.add(houseID);
                 }
             }
@@ -238,27 +244,24 @@ public class ListingActivity extends AppCompatActivity {
         });
     }
 
-    private static void getItemsHosting(List<String> hostalIDs){
-        mDatabase.child("parking-spots-hosting");
-        mDatabase.orderByChild("Host").equalTo(mFirebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+    private static void getItemsHosting(final List<String> hostalIDs){
+        DatabaseReference database = mDatabase.child("parking-spots-hosting");
+        database.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Log.d("User key", child.getKey());
-                    Log.d("User ref", child.getRef().toString());
-                    Log.d("User val", child.getValue().toString());
-                    FeedItem g = (FeedItem)child.getValue();
-                    Set <String> hi = g.rentedTime.keySet();
-                    for (String s : hi) {
-                        g.setCurrentRenter(s);
-                        hostingActualList.add(g);
+            public void onDataChange(DataSnapshot snapshot) {
+                //cigarActualList = new ArrayList<>();
+                System.out.println("There are " + snapshot.getChildrenCount() + " total cigars in humidor");
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    FeedItem houseID = postSnapshot.getValue(FeedItem.class);
+                    if(houseID.getHost().equals(mFirebaseUser.getUid())){
+                        hostingActualList.add(houseID);
                     }
                 }
+                //progressDiag.hide();
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                System.out.println("The read failed: ");
             }
         });
     }

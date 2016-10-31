@@ -378,7 +378,7 @@ public class AddActivity extends AppCompatActivity {
         }
     }
     public void write_new_spot(FeedItem Fd) {
-        DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
+        /*DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -391,8 +391,8 @@ public class AddActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        ref.setValue(hostList);
-        mDatabase.child("parking-spots-hosting").child(Fd.getIdentifier()).setValue(Fd);
+        ref.setValue(hostList);*/
+        mDatabase.child("parking-spots-hosting").setValue(Fd);
     }
 
     public void setFeedItem(String jsonString)

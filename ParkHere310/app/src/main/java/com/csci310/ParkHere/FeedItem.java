@@ -16,6 +16,30 @@ import java.util.Vector;
 public class FeedItem {
     private String spotID;
     private String address;
+
+    public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<Bitmap> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
+        this.spotID = spotID;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.startdates = startdates;
+        this.enddates = enddates;
+        this.starttime = starttime;
+        this.endtime = endtime;
+        this.price = price;
+        this.cancelpolicy = cancelpolicy;
+        this.description = description;
+        this.rating = rating;
+        this.activity = activity;
+        this.filters = filters;
+        Host = host;
+        this.photos = photos;
+        this.rentedTime = rentedTime;
+        this.identifier = identifier;
+        this.review = review;
+        this.currentRenter = currentRenter;
+    }
+
     private double latitude;
     private double longitude;
     private String startdates;
@@ -33,13 +57,10 @@ public class FeedItem {
     public Map<String,Vector<String>> rentedTime;
     private String identifier;
     private Vector<String> review;
-
-
-
+    private String currentRenter;
     public Map<String,Vector<String>> getRentedTime() {
         return rentedTime;
     }
-
     public void setRentedTime(Map<String,Vector<String>>rentedTime) {
         this.rentedTime = rentedTime;
     }
@@ -51,6 +72,9 @@ public class FeedItem {
         rating=new Vector<Integer>();
         review = new Vector<String>();
     }
+
+
+
     public Vector<String> getReview() {
         return review;
     }
@@ -79,7 +103,6 @@ public class FeedItem {
         this.currentRenter = currentRenter;
     }
 
-    private String currentRenter;
 
     public String getSpotID() { return spotID; }
 
