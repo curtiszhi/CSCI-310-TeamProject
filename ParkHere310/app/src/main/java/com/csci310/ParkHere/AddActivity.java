@@ -326,6 +326,8 @@ public class AddActivity extends AppCompatActivity {
                             fd.setFilter(filter);
                            
                             new AddressOperation(self).execute(full_address);
+                            Intent intent = new Intent(AddActivity.this, UserActivity.class);//change to UserActivity.class
+                            startActivity(intent);
 
                         } else {
                             AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
