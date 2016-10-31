@@ -22,7 +22,7 @@ public class User {
     private Boolean isHost;
     private List<String> renting;
     private List<String> hosting;
-    private String photo;
+    private String photo=null;
     public User() {
         rateList=new Vector<String>();
         rating=new Vector<Integer>();
