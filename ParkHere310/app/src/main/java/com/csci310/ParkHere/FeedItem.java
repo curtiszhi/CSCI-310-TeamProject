@@ -16,6 +16,24 @@ import java.util.Vector;
 public class FeedItem {
     private String spotID;
     private String address;
+    private double latitude;
+    private double longitude;
+    private String startdates;
+    private String enddates;
+    private String starttime;
+    private String endtime;
+    private double price;
+    private String cancelpolicy;
+    private String description;
+    private Vector<Integer> rating;
+    private Boolean activity;
+    private List<String> filters;
+    private String Host;
+    public Vector<String> photos;
+    public Map<String,Vector<String>> rentedTime;
+    private String identifier;
+    private Vector<String> review;
+    private String currentRenter;
 
     public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<String> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
         this.spotID = spotID;
@@ -40,20 +58,6 @@ public class FeedItem {
         this.currentRenter = currentRenter;
     }
 
-    private double latitude;
-    private double longitude;
-    private String startdates;
-    private String enddates;
-    private String starttime;
-    private String endtime;
-    private double price;
-    private String cancelpolicy;
-    private String description;
-    private Vector<Integer> rating;
-    private Boolean activity;
-    private List<String> filters;
-    private String Host;
-
     public Vector<String> getPhotos() {
         return photos;
     }
@@ -62,11 +66,7 @@ public class FeedItem {
         this.photos = photos;
     }
 
-    public Vector<String> photos;
-    public Map<String,Vector<String>> rentedTime;
-    private String identifier;
-    private Vector<String> review;
-    private String currentRenter;
+
     public Map<String,Vector<String>> getRentedTime() {
         return rentedTime;
     }
@@ -132,18 +132,7 @@ public class FeedItem {
     public void setCancel(String cancelpolicy) {
         this.cancelpolicy = cancelpolicy;
     }
-
-    public int getRating() {
-        int sum = 0;
-        for(int i = 0; i < rating.size(); i++){
-            sum = sum + rating.get(i);
-        }
-        if(rating.size() == 0){
-            return 0;
-        }else{
-            return sum/rating.size();
-        }
-    }
+    
 
     public void setRating(Vector<Integer> rating) {
         this.rating = rating;
