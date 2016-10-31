@@ -252,11 +252,8 @@ public class ActionActivity extends AppCompatActivity {
                     if(key.equals("renting")){
                         user_all.setRenting((List<String>)value);
                     }
-                    if(key.equals("hosting")){
-                        user_all.setHosting((List<String>)value);
-                    }
-                    if(key.equals("renting")){
-                        user_all.setRenting((List<String>)value);
+                    if(key.equals("hosting")) {
+                        user_all.setHosting((List<String>) value);
                     }
                     if(key.equals("photo")){
                         user_all.setPhoto((String) value);
