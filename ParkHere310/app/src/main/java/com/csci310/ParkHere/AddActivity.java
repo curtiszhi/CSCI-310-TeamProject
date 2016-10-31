@@ -13,6 +13,7 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -74,7 +75,7 @@ public class AddActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private DatabaseReference ref;
     private String spotID;
-    private Vector<Bitmap> photos;
+    private Vector<String> photos;
     private String state;
     private String cancel_policy;
     private List<String> filter;
@@ -156,7 +157,7 @@ public class AddActivity extends AppCompatActivity {
         spinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner1);
         spinner.setItems(items);
 
-        photos = new Vector<Bitmap>();
+        photos = new Vector<String>();
         photoButton = (Button) findViewById(R.id.photo);
         post = (Button) findViewById(R.id.postButton);
         location = (EditText) findViewById(R.id.Address);
@@ -385,7 +386,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 hostList= (List)dataSnapshot.getValue();
-                if(hostList.size()==0){
+                if(hostList==null){
                     List<FeedItem> temp= new ArrayList<FeedItem>();
 
                     temp.add(fd);
@@ -431,7 +432,13 @@ public class AddActivity extends AppCompatActivity {
                         final Uri imageUri = data.getData();
                         final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                         s_image = BitmapFactory.decodeStream(imageStream);
-                        fd.photos.add(s_image);
+
+                        ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
+                        s_image.compress(Bitmap.CompressFormat.PNG, 100, bYtE);
+
+                        byte[] byteArray = bYtE.toByteArray();
+                        String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                        fd.photos.add(imageFile);
                         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
                         valueTV.setText("image"+fd.photos.size());

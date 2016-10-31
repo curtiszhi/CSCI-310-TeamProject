@@ -17,7 +17,7 @@ public class FeedItem {
     private String spotID;
     private String address;
 
-    public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<Bitmap> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
+    public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<String> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
         this.spotID = spotID;
         this.address = address;
         this.latitude = latitude;
@@ -53,7 +53,16 @@ public class FeedItem {
     private Boolean activity;
     private List<String> filters;
     private String Host;
-    public Vector<Bitmap> photos;
+
+    public Vector<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(Vector<String> photos) {
+        this.photos = photos;
+    }
+
+    public Vector<String> photos;
     public Map<String,Vector<String>> rentedTime;
     private String identifier;
     private Vector<String> review;
@@ -67,7 +76,7 @@ public class FeedItem {
 
 
     FeedItem(){
-        photos=new Vector<Bitmap>();
+        photos=new Vector<String>();
         rentedTime= new HashMap<String,Vector<String>>();
         rating=new Vector<Integer>();
         review = new Vector<String>();

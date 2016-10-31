@@ -3,11 +3,13 @@ package com.csci310.ParkHere;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -39,7 +41,7 @@ import java.util.Vector;
 public class RentActivity extends AppCompatActivity {
 
     private FeedItem fd;
-    private Vector<Bitmap> spotPhoto;
+    private Vector<String> spotPhoto;
 
 
     private Button hostPublic;
@@ -103,15 +105,8 @@ public class RentActivity extends AppCompatActivity {
         rentedTime=new Vector<>();
         rentedTime.add(0,fd.getStartDates()+" "+fd.getStartTime());
         rentedTime.add(1,fd.getEndDates()+" "+fd.getEndTime());
-        renterRentTime.put(fd.getHost(),rentedTime);
-        Vector<Bitmap> photodata = new Vector<>();
-        Drawable myDrawable = getResources().getDrawable(R.drawable.ic_search);
-        Bitmap anImage      = ((BitmapDrawable) myDrawable).getBitmap();
-        photodata.add(anImage);
-        Drawable myDrawable2 = getResources().getDrawable(R.drawable.ic_user);
-        Bitmap anImage2      = ((BitmapDrawable) myDrawable2).getBitmap();
-        photodata.add(anImage2);
-        fd.photos = photodata;
+        renterRentTime.put(fd.getHost(),rentedTime); Vector<String> photodata = new Vector<String>();
+
 
 
 
@@ -152,9 +147,10 @@ public class RentActivity extends AppCompatActivity {
                 if(count>0){
                     System.out.println("swiped right" + count);
                     count--;
-                    Bitmap b = spotPhoto.get(count);
+                    String temp_p = spotPhoto.get(count);
+                    byte[] decodedString = Base64.decode(temp_p, Base64.DEFAULT);
+                    Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     image_view.setImageBitmap(b);
-                    //image_view.setImageBitmap(spotPhoto.get(count));
                     int temp=count+1;
                     image_label.setText(temp+" of "+spotPhoto.size()+" images");
                 }
@@ -165,9 +161,10 @@ public class RentActivity extends AppCompatActivity {
                 if(count<spotPhoto.size()-1){
                     System.out.println("swiped left" + count);
                     count++;
-                    Bitmap b = spotPhoto.get(count);
+                    String temp_p = spotPhoto.get(count);
+                    byte[] decodedString = Base64.decode(temp_p, Base64.DEFAULT);
+                    Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     image_view.setImageBitmap(b);
-                    //image_view.setImageBitmap(spotPhoto.get(count));
                     int temp=count+1;
                     image_label.setText(temp+" of "+spotPhoto.size()+" images");
                 }
@@ -291,7 +288,9 @@ public class RentActivity extends AppCompatActivity {
     }
 
     public void display(){
-        image_view.setImageBitmap(spotPhoto.get(0));
+        byte[] decodedString = Base64.decode(spotPhoto.get(0), Base64.DEFAULT);
+        Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        image_view.setImageBitmap(b);
         image_label.setText("1 of "+spotPhoto.size()+" images");
     }
 
