@@ -72,7 +72,7 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = mDatabase.child("parking-spots-hosting");
-        sdf = new java.text.SimpleDateFormat("MM-dd-yyyy");
+        sdf = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
         tempSpots = new HashMap<String, double[]>();
         searchResult = new ArrayList<String>();
         initUserListener();
@@ -190,11 +190,21 @@ public class ActionActivity extends AppCompatActivity {
     private boolean isValidDT (String sDate1str, String eDate1str, String sDate2str, String eDate2str,
                                String sTime1str, String eTime1str, String sTime2str, String eTime2str)
     {
-        if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
-            return true;
-        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 &&
-                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
-            return true;
+        try
+        {
+            long userStartTime = sdf.parse(sDate1str + " " + sTime1str).getTime();
+            long userEndTime = sdf.parse(eDate1str + " " + eTime1str).getTime();
+            long spotStartTime = sdf.parse(sDate2str + " " + sTime2str).getTime();
+            long spotEndTime = sdf.parse(eDate2str + " " + eTime2str).getTime();
+            if (userStartTime >= spotStartTime && userEndTime <= spotEndTime)
+                return true;
+        }
+        catch (ParseException parseException) {parseException.printStackTrace();}
+//        if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 1)
+//            return true;
+//        else if (dateWithinRange(sDate1str, eDate1str, sDate2str, eDate2str) == 2 &&
+//                timeWithinRange(sTime1str, eTime1str, sTime2str, eTime2str))
+//            return true;
         return false;
     }
 
