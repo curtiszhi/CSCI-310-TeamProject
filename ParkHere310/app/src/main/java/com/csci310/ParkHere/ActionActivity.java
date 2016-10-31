@@ -72,7 +72,7 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = mDatabase.child("parking-spots-hosting");
-        sdf = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mmaa");
+        sdf = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
         tempSpots = new HashMap<FeedItem, double[]>();
         searchResult = new ArrayList<FeedItem>();
         initUserListener();
