@@ -261,9 +261,9 @@ public class RentActivity extends AppCompatActivity {
         filters.setText(filter_spot);
         description.setText(fd.getDescription());
         cancel.setText(fd.getCancel());
-        for(int i=0;i<fd.getReview().length;i++){
+        for(int i=0;i<fd.getReview().size();i++){
             TextView review_text = new TextView(this);
-            review_text.setText(fd.getReview()[i]);
+            review_text.setText(fd.getReview().get(i));
             review_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
             ((LinearLayout) review_layout).addView(review_text);
         }
