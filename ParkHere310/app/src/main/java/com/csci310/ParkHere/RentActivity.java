@@ -111,6 +111,8 @@ public class RentActivity extends AppCompatActivity {
         description= (TextView) findViewById(R.id.description);
         cancel= (TextView) findViewById(R.id.cancel);
         review_layout=(LinearLayout) findViewById(R.id.review);
+        hostPublic = (Button) findViewById(R.id.host_public_button);
+        //address = (TextView) findViewById(R.id.address);
 
         count=0;
 
@@ -235,7 +237,7 @@ public class RentActivity extends AppCompatActivity {
         hostPublic.setText(fd.getHost());
        // ratingBar.setRating(fd.getRating());
         address.setText(fd.getAddress());
-        price.setText(Double.toString(fd.getPrice()));
+        price.setText("$" + Double.toString(fd.getPrice()));
         String time_frame=fd.getStartDates()+ " "+ fd.getStartTime()+" to "+fd.getEndDates()+" "+fd.getEndTime();
         time.setText(time_frame);
         String filter_spot="";

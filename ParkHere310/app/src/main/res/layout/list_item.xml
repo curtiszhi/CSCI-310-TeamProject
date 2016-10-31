@@ -26,8 +26,9 @@
             android:maxLines="3"
             android:paddingTop="8dp"
             android:text="House 1"
+            android:textStyle="bold"
             android:textColor="#222"
-            android:textSize="20dp" />
+            android:textSize="10dp" />
         <TextView
             android:id="@+id/dates"
             android:layout_width="match_parent"
