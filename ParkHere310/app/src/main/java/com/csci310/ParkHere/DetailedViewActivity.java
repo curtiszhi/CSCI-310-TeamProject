@@ -257,15 +257,7 @@ public class DetailedViewActivity extends AppCompatActivity{
             specific_renterID=key;
         }}
 
-        if(specific_renterID.equals(mFirebaseUser_universal.getUid())){
-            viewButton.post(new Runnable(){
-                    @Override
-                    public void run(){
-                        viewButton.setText("Host:"+fd.getHost());
-                    }
-                });
-            }
-        else{
+        if((specific_renterID!=null)&&(specific_renterID.equals(mFirebaseUser_universal.getUid()))){
             DatabaseReference database = mDatabase.child("users").child(specific_renterID);
             database.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -278,12 +270,34 @@ public class DetailedViewActivity extends AppCompatActivity{
                     System.out.println("The read failed: " + databaseError.getCode());
                 }
             });
-                viewButton.post(new Runnable(){
+            viewButton.post(new Runnable(){
                     @Override
                     public void run(){
-                        viewButton.setText("Renter:"+name);
+                        viewButton.setText("Host:"+name);
                     }
                 });
+            }
+        else{
+            if(specific_renterID!=null) {
+                DatabaseReference database = mDatabase.child("users").child(specific_renterID);
+                database.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        name = (String) dataSnapshot.getValue();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+                viewButton.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        viewButton.setText("Renter:" + name);
+                    }
+                });
+            }
             }
 
         if (renterTime.size() != 0) {
@@ -333,7 +347,8 @@ public class DetailedViewActivity extends AppCompatActivity{
         time.post(new Runnable(){
             @Override
             public void run(){
-                time.setText(renterTime.get(0)+" to "+renterTime.get(1));
+                if(renterTime.size()!=0){
+                time.setText(renterTime.get(0)+" to "+renterTime.get(1));}
             }
         });
 
