@@ -172,6 +172,8 @@ public class ActionActivity extends AppCompatActivity {
                 }
                 //go to resultview
                 Intent intent = new Intent(ActionActivity.this, ListingResultActivity.class);
+                intent.putExtra("start", startDate.getText().toString().trim()+" "+startTime.getText().toString().trim() );
+                intent.putExtra("end", endDate.getText().toString().trim()+" "+endTime.getText().toString().trim() );
                 startActivity(intent);
             } else {
                 System.out.println("Empty tempSpots!");

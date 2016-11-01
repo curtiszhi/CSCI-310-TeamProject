@@ -36,7 +36,10 @@ import com.paypal.android.sdk.payments.PaymentConfirmation;
 import org.json.JSONException;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -72,7 +75,11 @@ public class RentActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
     String value;
+    private String start;
+    private String end;
     int position;
+    private Vector<String> rateList;
+    private Map<String,ArrayList<String>> rentList;
 
     //Paypal Configuration Object
     private static PayPalConfiguration config = new PayPalConfiguration()
@@ -94,6 +101,10 @@ public class RentActivity extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         value = bundle.getString("ItemPosition");
+        start = bundle.getString("start");
+        end = bundle.getString("end");
+        System.out.println(start+"rent");
+        System.out.println(end+"rent");
         position = Integer.parseInt(value);
         fd = MyRecyclerAdapter.feedItemList.get(position);
 
@@ -214,7 +225,8 @@ public class RentActivity extends AppCompatActivity {
             if (confirm != null) {
                 try {
                     Log.i("paymentExample", confirm.toJSONObject().toString(4));
-                   /* ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting/" + fd.get());
+
+                    ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(fd.getIdentifier());
                     ref.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -227,9 +239,68 @@ public class RentActivity extends AppCompatActivity {
                         }
                     });
 
-                    mDatabase.child("parking-spots-renting").child(fd.getSpotID()).setValue(fd);
+                    mDatabase.child("parking-spots-renting").child(fd.getIdentifier()).setValue(fd);
+
+                    rateList=new Vector<String>();
+                    rateList.add(fd.getIdentifier());
+
+                    DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("rateList");
+                    ref.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
+                                for(int i=0;i<tempList.size();i++){
+                                    rateList.add(tempList.get(i));
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
+                    ref.setValue(rateList);
+
+                    rentList=new HashMap<String,ArrayList<String>>();
+                    ArrayList<String> startend=new ArrayList<String>();
+                    startend.add(start);
+                    startend.add(end);
+                    rentList.put(mFirebaseUser.getUid(),startend);
+                    DatabaseReference ref1=mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime");
+                    ref1.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                HashMap<String,ArrayList<String>> tempList = (HashMap) dataSnapshot.getValue();
+                                for (HashMap.Entry<String,ArrayList<String>> entry : tempList.entrySet()) {
+                                    String key = entry.getKey();
+                                    ArrayList<String> value = entry.getValue();
+                                    rentList.put(key,value);
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
+                    ref1.setValue(rentList);
+
+
+
+
+
+
+
+
+
+
+
+
                     Intent intent = new Intent(RentActivity.this, MainActivity.class);//change to UserActivity.class
-                    startActivity(intent);*/
+                    startActivity(intent);
 
                 } catch (JSONException e) {
                     Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
@@ -268,8 +339,19 @@ public class RentActivity extends AppCompatActivity {
         //hostPublic.setText(name);
         ratingBar.setRating(fd.calculateRate());
         address.setText(fd.getAddress());
-        price.setText("$" + Double.toString(fd.getPrice()));
-        String time_frame=fd.getStartDates()+ " "+ fd.getStartTime()+" to "+fd.getEndDates()+" "+fd.getEndTime();
+        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
+        Date time1 = null;
+        Date time2=null;
+        try {
+            time1 = df.parse(start);
+             time2 = df.parse(end);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long diff = time2.getTime() - time1.getTime();
+        long diffHours = diff / (60 * 60 * 1000) % 24;
+        price.setText("$" + Double.toString(fd.getPrice()*diffHours));
+        String time_frame=start+" to "+end;
         time.setText(time_frame);
         String filter_spot="";
         for(int i=0;i<fd.getFilter().size();i++){

@@ -146,7 +146,7 @@ public class publicActivity extends AppCompatActivity {
                 ratingBar.setRating(rating);
             }
         });
-        
+
 
         for(int i=0;i<review.size();i++){
             TextView review_text = new TextView(this);

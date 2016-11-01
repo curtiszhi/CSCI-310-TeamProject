@@ -26,6 +26,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
 
     public static ArrayList<FeedItem> feedItemList;
+    private String start;
+    private String end;
 
     private Context mContext;
     Boolean pay = false;
@@ -43,6 +45,15 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         }
         System.out.println("got list" + this.feedItemList.size());
         this.mContext = context;
+        this.start =start;
+        this.end=end;
+    }
+
+    public void setTime(String start, String end){
+        this.start=start;
+        this.end=end;
+        System.out.println(this.start+"recycle");
+        System.out.println(this.end+"recycle");
     }
 
     @Override
@@ -91,6 +102,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
             if(pay){
                 Intent intent = new Intent(current_view.getContext(), RentActivity.class);
                 intent.putExtra("ItemPosition", position);
+                intent.putExtra("start", start);
+                intent.putExtra("end", end);
                 current_view.getContext().startActivity(intent);
             }else{
                 Intent intent = new Intent(current_view.getContext(), DetailedViewActivity.class);
