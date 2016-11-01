@@ -57,10 +57,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
     public void onBindViewHolder(FeedListRowHolder feedListRowHolder, int i) {
         FeedItem feedItem = feedItemList.get(i);
         feedListRowHolder.house.setText(feedItem.getAddress());
-        if(feedItem.getPhotos().get(0) != null) {
-            byte[] decodedString = Base64.decode(feedItem.getPhotos().get(0), Base64.DEFAULT);
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            feedListRowHolder.thumbnail.setImageBitmap(decodedByte);
+        if (!feedItem.getPhotos().isEmpty()) {
+            if (feedItem.getPhotos().get(0) != null) {
+                byte[] decodedString = Base64.decode(feedItem.getPhotos().get(0), Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                feedListRowHolder.thumbnail.setImageBitmap(decodedByte);
+            }
         }
        // feedListRowHolder.thumbnail.setImageResource(feedItem.getThumbnail());
         feedListRowHolder.dates.setText("Start: " + feedItem.getStartDates()+ " End: " + feedItem.getEndDates());

@@ -144,7 +144,7 @@ public class ActionActivity extends AppCompatActivity {
                         tempSpots.put(child.getValue(FeedItem.class), new double[]
                                 {Double.parseDouble(child.child("latitude").getValue().toString()),
                                 Double.parseDouble(child.child("longitude").getValue().toString())});
-                        System.out.println("Spot: " + child.child("address").getValue().toString());
+                        System.out.println("Spot: " + child.getKey());
                     }
                 }
                 new AddressOperation(self).execute(address);
