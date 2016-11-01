@@ -232,9 +232,11 @@ public class DetailedViewActivity extends AppCompatActivity{
                     mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                     mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
                 }
-                else if(specific_renterID.equals(mFirebaseUser_universal.getUid())){
-                    mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-                    mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
+                else if(specific_renterID!=null) {
+                    if (specific_renterID.equals(mFirebaseUser_universal.getUid())) {
+                        mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
+                        mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
+                    }
                 }
 
 
