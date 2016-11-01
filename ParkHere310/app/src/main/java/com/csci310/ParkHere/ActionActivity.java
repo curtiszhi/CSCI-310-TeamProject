@@ -50,7 +50,6 @@ public class ActionActivity extends AppCompatActivity {
     public FirebaseUser mFirebaseUser_universal;
     public DatabaseReference mDatabase;
     private DatabaseReference spotsDatabase;
-    private java.text.SimpleDateFormat sdf;
     private HashMap<FeedItem, double[]> tempSpots;
     public static ArrayList<FeedItem> searchResult;
     TextView user;
@@ -72,7 +71,6 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = mDatabase.child("parking-spots-hosting");
-        sdf = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
         tempSpots = new HashMap<FeedItem, double[]>();
         searchResult = new ArrayList<FeedItem>();
         initUserListener();
@@ -202,15 +200,30 @@ public class ActionActivity extends AppCompatActivity {
     {
         try
         {
-            long userStartTime = sdf.parse(sDate1str + " " + sTime1str).getTime();
-            long userEndTime = sdf.parse(eDate1str + " " + eTime1str).getTime();
-            long spotStartTime = sdf.parse(sDate2str + " " + sTime2str).getTime();
-            long spotEndTime = sdf.parse(eDate2str + " " + eTime2str).getTime();
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
+            long userStartTime = sdf.parse(sDate1str + " " + tryConvertTimeFormat(sTime1str)).getTime();
+            long userEndTime = sdf.parse(eDate1str + " " + tryConvertTimeFormat(eTime1str)).getTime();
+            long spotStartTime = sdf.parse(sDate2str + " " + tryConvertTimeFormat(sTime2str)).getTime();
+            long spotEndTime = sdf.parse(eDate2str + " " + tryConvertTimeFormat(eTime2str)).getTime();
             if (userStartTime >= spotStartTime && userEndTime <= spotEndTime)
                 return true;
         }
         catch (ParseException parseException) {parseException.printStackTrace();}
         return false;
+    }
+
+    private String tryConvertTimeFormat(String time)
+    {
+        String[] hhmm = time.split(":");
+        int tmp;
+
+        if ((tmp = Integer.parseInt(hhmm[0])) > 12)
+        {
+            tmp -= 12;
+            return Integer.toString(tmp) + ":" + hhmm[1];
+        }
+        else
+            return time;
     }
 
     private boolean isValidFilters(boolean requestCompact, boolean requestCover, boolean requestHandicap, DataSnapshot filterNode)
