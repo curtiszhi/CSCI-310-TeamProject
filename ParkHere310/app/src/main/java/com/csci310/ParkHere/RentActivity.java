@@ -172,6 +172,7 @@ public class RentActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(RentActivity.this, publicActivity.class);
                 intent.putExtra("ID", fd.getHost());
+                System.out.println(fd.getHost());
                 startActivity(intent);
             }
         });
@@ -248,6 +249,7 @@ public class RentActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 name = (String) dataSnapshot.getValue();
+                System.out.println(name);
             }
 
             @Override
@@ -255,9 +257,14 @@ public class RentActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-
-        hostPublic.setText(name);
-       // ratingBar.setRating(fd.getRating());
+        hostPublic.post(new Runnable(){
+            @Override
+            public void run(){
+                hostPublic.setText(name);
+            }
+        });
+        //hostPublic.setText(name);
+        ratingBar.setRating(fd.calculateRate());
         address.setText(fd.getAddress());
         price.setText("$" + Double.toString(fd.getPrice()));
         String time_frame=fd.getStartDates()+ " "+ fd.getStartTime()+" to "+fd.getEndDates()+" "+fd.getEndTime();

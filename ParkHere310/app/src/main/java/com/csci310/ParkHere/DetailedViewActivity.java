@@ -194,9 +194,10 @@ public class DetailedViewActivity extends AppCompatActivity{
         viewButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                if(renterID.size()!=0){
                 Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
                 intent.putExtra("ID", specific_renterID);
-                startActivity(intent);
+                startActivity(intent);}
                 //address cannot be change
                 //rating cannot be change
                 //review cannot be change

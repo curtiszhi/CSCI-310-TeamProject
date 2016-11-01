@@ -24,7 +24,7 @@ import java.util.Vector;
 
 public class publicActivity extends AppCompatActivity {
     private String name;
-    private Float rating;
+    private Float rating=(float)0;
     private String profiel_pic;
     private Vector<String> review;
     private TextView name_text;
@@ -54,9 +54,7 @@ public class publicActivity extends AppCompatActivity {
 
         name_text.setText("name: "+name);
         ratingBar.setRating(rating);
-        byte[] decodedString = Base64.decode(profiel_pic, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        pic_image.setImageBitmap(decodedByte);
+
         for(int i=0;i<review.size();i++){
             TextView review_text = new TextView(this);
             review_text.setText(review.get(i));
@@ -84,6 +82,7 @@ public class publicActivity extends AppCompatActivity {
         database1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
                 ArrayList<Integer> tempList = (ArrayList) dataSnapshot.getValue();
                 if(tempList.size()!=0){
                 int total=0;
@@ -92,6 +91,9 @@ public class publicActivity extends AppCompatActivity {
                 }
                     rating=(float)total/(float)tempList.size();
                 }
+                else{
+                    rating=(float)0;
+                }}
 
             }
 
@@ -106,6 +108,9 @@ public class publicActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 profiel_pic = (String) dataSnapshot.getValue();
+                byte[] decodedString = Base64.decode(profiel_pic, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                pic_image.setImageBitmap(decodedByte);
 
             }
 
@@ -119,12 +124,13 @@ public class publicActivity extends AppCompatActivity {
         database3.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
                 ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
                 if(tempList.size()!=0){
                     for(int i=0;i<tempList.size();i++) {
                         review.add(tempList.get(i));
                     }
-                }
+                }}
 
             }
 
