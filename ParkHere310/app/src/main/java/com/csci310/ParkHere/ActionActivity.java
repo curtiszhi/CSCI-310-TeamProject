@@ -138,7 +138,7 @@ public class ActionActivity extends AppCompatActivity {
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
                     if (child.child("activity").getValue().toString().equals("true") &&
-                        child.child("rentedTime").getValue() == null &&
+//                        child.child("rentedTime").getValue() == null &&
                         isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
                                 starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
                         isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))

@@ -309,11 +309,14 @@ public class DetailedViewActivity extends AppCompatActivity{
         price.setText("$" + Double.toString(fd.getPrice()));
 
         String filter_spot="";
-        for(int i=0;i<fd.getFilter().size();i++){
-            if(i!=fd.getFilter().size()-1){
-                filter_spot=filter_spot+fd.getFilter().get(i)+", ";}
-            else{
-                filter_spot=filter_spot+fd.getFilter().get(i);
+        if (fd.getFilter() != null)
+        {
+            for(int i=0;i<fd.getFilter().size();i++){
+                if(i!=fd.getFilter().size()-1){
+                    filter_spot=filter_spot+fd.getFilter().get(i)+", ";}
+                else{
+                    filter_spot=filter_spot+fd.getFilter().get(i);
+                }
             }
         }
         filters.setText(filter_spot);
@@ -333,10 +336,12 @@ public class DetailedViewActivity extends AppCompatActivity{
     }
 
     public void display(){
-        byte[] decodedString = Base64.decode(spotPhoto.get(0), Base64.DEFAULT);
-        Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        image_view.setImageBitmap(b);
-        image_label.setText("1 of "+spotPhoto.size()+" images");
+        if (spotPhoto.size() > 0) {
+            byte[] decodedString = Base64.decode(spotPhoto.get(0), Base64.DEFAULT);
+            Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            image_view.setImageBitmap(b);
+            image_label.setText("1 of " + spotPhoto.size() + " images");
+        }
     }
 
 }

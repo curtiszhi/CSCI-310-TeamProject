@@ -97,10 +97,12 @@ public class MultiSelectionSpinner extends Spinner implements
         for (int i = 0; i < mSelection.length; i++) {
             mSelection[i] = false;
         }
-        for (String sel : selection) {
-            for (int j = 0; j < _items.length; ++j) {
-                if (_items[j].equals(sel)) {
-                    mSelection[j] = true;
+        if (selection != null) {
+            for (String sel : selection) {
+                for (int j = 0; j < _items.length; ++j) {
+                    if (_items[j].equals(sel)) {
+                        mSelection[j] = true;
+                    }
                 }
             }
         }
