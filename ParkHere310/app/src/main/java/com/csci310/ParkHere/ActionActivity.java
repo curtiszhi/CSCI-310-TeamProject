@@ -115,6 +115,8 @@ public class ActionActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 }else{
 
+                tempSpots.clear();
+                searchResult.clear();
                 getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped);
                 new AddressOperation(self).execute(address);}
             }
