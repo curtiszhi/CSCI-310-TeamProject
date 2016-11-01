@@ -51,19 +51,12 @@ public class ListingResultActivity extends AppCompatActivity {
     private static FirebaseUser mFirebaseUser;
     public static ArrayList<FeedItem> resultList;
     static MyRecyclerAdapter adapter;
-    private  static String start;
-    private  static String end;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing);
-        Bundle bundle = getIntent().getExtras();
-        start = bundle.getString("start");
-        end = bundle.getString("end");
-        System.out.println(start);
-        System.out.println(end);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -182,7 +175,6 @@ public class ListingResultActivity extends AppCompatActivity {
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
             MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), "results");
-            adapter.setTime(start,end);
             recyclerView.setAdapter(adapter);
             return root;
         }
@@ -198,7 +190,6 @@ public class ListingResultActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(layoutManager);
             adapter = new MyRecyclerAdapter(getActivity(), "results");
             recyclerView.setAdapter(adapter);
-            adapter.setTime(start,end);
             return root;
         }
     }
@@ -213,7 +204,6 @@ public class ListingResultActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(layoutManager);
             adapter = new MyRecyclerAdapter(getActivity(), "results");
             recyclerView.setAdapter(adapter);
-            adapter.setTime(start,end);
             return root;
         }
     }
