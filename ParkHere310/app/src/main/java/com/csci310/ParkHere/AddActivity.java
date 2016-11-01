@@ -355,7 +355,7 @@ public class AddActivity extends AppCompatActivity {
                         } else {
                             AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
                             alertDialog.setTitle("Alert");
-                            alertDialog.setMessage("Please make sure time difference is larger than 1 hour");
+                            alertDialog.setMessage("Please make sure time difference is larger than 1 hour or the starting time is before the current time ");
                             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
