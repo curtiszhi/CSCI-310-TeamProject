@@ -259,37 +259,69 @@ public class ActionActivity extends AppCompatActivity {
 
                 for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
                     String key = entry.getKey();
-                    Object value = entry.getValue();
                     if(key.equals("email")){
-                        user_all.setEmail((String)value);
+                        String value = (String)entry.getValue();
+                        user_all.setEmail(value);
+
                         System.out.println((String)value);
                     }
                     if(key.equals("userName")){
-                        user_all.setUserName((String)value);
+                        String value = (String)entry.getValue();
+                        user_all.setUserName(value);
                     }
                     if(key.equals("phone")){
-                        user_all.setPhone((String)value);
+                        String value = (String)entry.getValue();
+                        user_all.setPhone(value);
                     }
                     if(key.equals("host")){
-                        user_all.setHost((Boolean)value);
+                        Boolean value = (Boolean)entry.getValue();
+                        user_all.setHost(value);
                     }
                     if(key.equals("review")){
-                        user_all.setReview((Vector<String>)value);
+                        ArrayList<String> value = ( ArrayList<String>)entry.getValue();
+                        Vector<String> temp=new Vector<String>();
+                        for(int i=0;i<value.size();i++){
+                            temp.add(value.get(i));
+                        }
+                        user_all.setReview(temp);
                     }
                     if(key.equals("rateList")){
-                        user_all.setRateList((Vector<String>)value);
+                        ArrayList<String> value = ( ArrayList<String>)entry.getValue();
+                        Vector<String> temp=new Vector<String>();
+                        for(int i=0;i<value.size();i++){
+                            temp.add(value.get(i));
+                        }
+                        user_all.setRateList(temp);
                     }
                     if(key.equals("rating")){
-                        user_all.setRating((Vector<Integer>)value);
+                        ArrayList<Integer> value = ( ArrayList<Integer>)entry.getValue();
+                        Vector<Integer> temp=new Vector<Integer>();
+                        for(int i=0;i<value.size();i++){
+                            temp.add(value.get(i));
+                        }
+                        user_all.setRating(temp);
                     }
                     if(key.equals("renting")){
-                        user_all.setRenting((List<String>)value);
+                        Vector<String> temp = new Vector<String>();
+                        HashMap<String,HashMap<String, Object>> temp_map= (HashMap<String,HashMap<String, Object>>)entry.getValue();
+                        for (HashMap.Entry<String, HashMap<String, Object>> entry1 : temp_map.entrySet()) {
+                            String itemKey = entry1.getKey();
+                            temp.add(itemKey);
+                        }
+                        user_all.setRenting(temp);
                     }
-                    /*if(key.equals("hosting")){
-                        user_all.setHosting((List<String>)value);
-                    }*/
+                    if(key.equals("hosting")){
+                        Vector<String> temp = new Vector<String>();
+                        HashMap<String,HashMap<String, Object>> temp_map= (HashMap<String,HashMap<String, Object>>)entry.getValue();
+                        for (HashMap.Entry<String, HashMap<String, Object>> entry1 : temp_map.entrySet()) {
+                            String itemKey = entry1.getKey();
+                            temp.add(itemKey);
+                        }
+                        user_all.setHosting(temp);
+                    }
                     if(key.equals("photo")){
-                        user_all.setPhoto((String) value);
+                        String value = (String)entry.getValue();
+                        user_all.setPhoto(value);
                     }
 
                 }
