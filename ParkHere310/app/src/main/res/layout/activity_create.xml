@@ -27,42 +27,53 @@
             android:focusable="true"
             android:textColorHighlight="#fb00ff"
             android:textColorHint="#2945a3" />
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="0dp"
-            android:id="@+id/city"
-            android:hint="City"
-            android:paddingLeft="45dp"
-            android:focusable="true"
-            android:textColorHighlight="#fb00ff"
-            android:textColorHint="#2945a3" />
+            android:text="City:"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"/>
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Spinner
-                android:id="@+id/state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:drawable/btn_dropdown"
-                android:paddingLeft="45dp"
-                android:spinnerMode="dropdown" />
+            android:layout_height="40dp">
 
             <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="15dp"
-                android:paddingTop="0dp"
-                android:id="@+id/postcode"
-                android:hint="Post code"
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:id="@+id/city"
+                android:hint=" Enter City"
                 android:focusable="true"
                 android:textColorHighlight="#fb00ff"
                 android:textColorHint="#2945a3" />
 
+            <Spinner
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@android:drawable/btn_dropdown"
+                android:spinnerMode="dropdown" />
+
 
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Zip Code"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingTop="0dp"
+            android:id="@+id/postcode"
+            android:hint="Enter Zip Code"
+            android:focusable="true"
+            android:textColorHighlight="#fb00ff"
+            android:textColorHint="#2945a3" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -71,16 +82,29 @@
             android:paddingLeft="10dp"
             android:textSize="16dp"
             android:paddingBottom="2dp" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$"
+            android:paddingLeft="10dp"
+            android:textSize="16dp"
+            android:paddingBottom="2dp" />
+
         <EditText
             android:layout_width="120dp"
-            android:paddingBottom="0dp"
+            android:paddingTop="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/price"
-            android:hint=" $"
+            android:hint="Price"
             android:inputType="numberDecimal"
             android:focusable="true"
             android:textColorHighlight="#fb00ff"
             android:textColorHint="#2945a3" />
+    </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,36 +117,29 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center">
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
                 android:focusable="false"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/stepTwo"
                 android:textColorHint="#2945a3"
                 android:id="@+id/startDateEditText"
-                android:hint="Pick Start Date"
-                android:paddingLeft="@dimen/activity_horizontal_margin"/>
+                android:hint="Pick Start Date" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.8"
                 android:focusable="false"
                 android:layout_below="@+id/stepTwo"
-                android:layout_centerHorizontal="true"
                 android:id="@+id/toText"
-                android:paddingTop="10dp"
                 android:textSize="20dp"
-                android:text="to" />
+                android:text="  to  " />
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
                 android:focusable="false"
-                android:layout_alignParentRight="true"
                 android:textColorHint="#2945a3"
                 android:layout_below="@+id/stepTwo"
                 android:id="@+id/endDateEditText"
@@ -132,38 +149,30 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:gravity="center">
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
                 android:focusable="false"
-                android:layout_alignParentLeft="true"
                 android:textColorHint="#2945a3"
                 android:layout_below="@+id/stepTwo"
                 android:id="@+id/startTimeEditText"
-                android:hint="Pick Start Time"
-                android:paddingLeft="@dimen/activity_horizontal_margin"/>
+                android:hint="Pick Start Time" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.8"
                 android:focusable="false"
                 android:layout_below="@+id/stepTwo"
-                android:layout_centerHorizontal="true"
                 android:id="@+id/toTimeText"
-                android:paddingTop="10dp"
                 android:textSize="20dp"
-                android:text="to" />
+                android:text="   to   " />
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
                 android:focusable="false"
-                android:layout_alignParentRight="true"
                 android:textColorHint="#2945a3"
-                android:layout_below="@+id/stepTwo"
                 android:id="@+id/endTimeEditText"
                 android:hint="Pick End Time"/>
         </LinearLayout>
