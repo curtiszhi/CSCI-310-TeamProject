@@ -44,6 +44,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import org.json.JSONException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -416,14 +419,22 @@ public class AddActivity extends AppCompatActivity {
 
     public void setFeedItem(String jsonString)
     {
-        double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
-        spotID = AddressOperation.getIDfromJSON(jsonString);
-        fd.setSpotID(spotID);
-        fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
-        fd.setLatitude(latlng[0]);
-        fd.setLongitude(latlng[1]);
+        try
+        {
+            double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
+            spotID = AddressOperation.getIDfromJSON(jsonString);
+            fd.setSpotID(spotID);
+            fd.setAddress(AddressOperation.getFormattedAddressFromJSON(jsonString));
+            fd.setLatitude(latlng[0]);
+            fd.setLongitude(latlng[1]);
 
-        write_new_spot(fd);
+            write_new_spot(fd);
+        }
+        catch (JSONException e)
+        {
+            e.printStackTrace();
+            AddressOperation.showAddressFaultDialog(self);
+        }
 
     }
 

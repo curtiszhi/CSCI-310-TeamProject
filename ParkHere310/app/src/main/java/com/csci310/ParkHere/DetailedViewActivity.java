@@ -121,7 +121,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                                        int position,long id) {
                 tag_spinner = spinner_item.get(position);
                 specific_renterID = renterID.get(position);
-                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
+                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
                 if (renter_time.size() != 0) {
                     String endTime = renter_time.get(specific_renterID).get(1);
                     String today = getToday(df);

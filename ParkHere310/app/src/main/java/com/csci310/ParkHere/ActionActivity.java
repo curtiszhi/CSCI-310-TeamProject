@@ -31,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,7 +52,6 @@ public class ActionActivity extends AppCompatActivity {
     public FirebaseUser mFirebaseUser_universal;
     public DatabaseReference mDatabase;
     private DatabaseReference spotsDatabase;
-    private java.text.SimpleDateFormat sdf;
     private HashMap<FeedItem, double[]> tempSpots;
     public static ArrayList<FeedItem> searchResult;
     TextView user;
@@ -72,7 +73,6 @@ public class ActionActivity extends AppCompatActivity {
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = mDatabase.child("parking-spots-hosting");
-        sdf = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
         tempSpots = new HashMap<FeedItem, double[]>();
         searchResult = new ArrayList<FeedItem>();
         for(int i=0;i<1;i++){
@@ -117,6 +117,8 @@ public class ActionActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                 }else{
 
+                tempSpots.clear();
+                searchResult.clear();
                 getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped);
                 new AddressOperation(self).execute(address);}
             }
@@ -154,28 +156,32 @@ public class ActionActivity extends AppCompatActivity {
 
     public void search(String jsonString)
     {
-        double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
-        if (!tempSpots.isEmpty())
+        try
         {
-            for (Map.Entry<FeedItem, double[]> entry : tempSpots.entrySet())
-            {
-                double[] tmplatlng = entry.getValue();
-                if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0)
-                {
-                    searchResult.add(entry.getKey());
-                    System.out.println(entry.getKey().getAddress());
+            double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
 
+            if (!tempSpots.isEmpty()) {
+                for (Map.Entry<FeedItem, double[]> entry : tempSpots.entrySet()) {
+                    double[] tmplatlng = entry.getValue();
+                    if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0) {
+                        searchResult.add(entry.getKey());
+                        System.out.println(entry.getKey().getAddress());
+
+                    }
                 }
+                //go to resultview
+                Intent intent = new Intent(ActionActivity.this, ListingResultActivity.class);
+                startActivity(intent);
+            } else {
+                System.out.println("Empty tempSpots!");
+                Toast.makeText(ActionActivity.this, "No results found",
+                        Toast.LENGTH_SHORT).show();
             }
-            //go to resultview
-            Intent intent = new Intent(ActionActivity.this, ListingResultActivity.class);
-            startActivity(intent);
         }
-        else
+        catch (JSONException e)
         {
-            System.out.println("Empty tempSpots!");
-            Toast.makeText(ActionActivity.this, "No results found",
-                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            AddressOperation.showAddressFaultDialog(self);
         }
     }
 
@@ -203,15 +209,30 @@ public class ActionActivity extends AppCompatActivity {
     {
         try
         {
-            long userStartTime = sdf.parse(sDate1str + " " + sTime1str).getTime();
-            long userEndTime = sdf.parse(eDate1str + " " + eTime1str).getTime();
-            long spotStartTime = sdf.parse(sDate2str + " " + sTime2str).getTime();
-            long spotEndTime = sdf.parse(eDate2str + " " + eTime2str).getTime();
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
+            long userStartTime = sdf.parse(sDate1str + " " + tryConvertTimeFormat(sTime1str)).getTime();
+            long userEndTime = sdf.parse(eDate1str + " " + tryConvertTimeFormat(eTime1str)).getTime();
+            long spotStartTime = sdf.parse(sDate2str + " " + tryConvertTimeFormat(sTime2str)).getTime();
+            long spotEndTime = sdf.parse(eDate2str + " " + tryConvertTimeFormat(eTime2str)).getTime();
             if (userStartTime >= spotStartTime && userEndTime <= spotEndTime)
                 return true;
         }
         catch (ParseException parseException) {parseException.printStackTrace();}
         return false;
+    }
+
+    private String tryConvertTimeFormat(String time)
+    {
+        String[] hhmm = time.split(":");
+        int tmp;
+
+        if ((tmp = Integer.parseInt(hhmm[0])) > 12)
+        {
+            tmp -= 12;
+            return Integer.toString(tmp) + ":" + hhmm[1];
+        }
+        else
+            return time;
     }
 
     private boolean isValidFilters(boolean requestCompact, boolean requestCover, boolean requestHandicap, DataSnapshot filterNode)
