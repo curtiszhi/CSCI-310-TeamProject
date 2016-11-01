@@ -144,7 +144,6 @@ public class ActionActivity extends AppCompatActivity {
                         tempSpots.put(child.getValue(FeedItem.class), new double[]
                                 {Double.parseDouble(child.child("latitude").getValue().toString()),
                                 Double.parseDouble(child.child("longitude").getValue().toString())});
-                        System.out.println("Spot: " + child.getKey());
                     }
                 }
                 new AddressOperation(self).execute(address);
@@ -168,8 +167,7 @@ public class ActionActivity extends AppCompatActivity {
                     double[] tmplatlng = entry.getValue();
                     if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0) {
                         searchResult.add(entry.getKey());
-                        System.out.println(entry.getKey().getAddress());
-
+                        System.out.println("Spot: " + entry.getKey().getIdentifier());
                     }
                 }
                 //go to resultview
@@ -177,8 +175,7 @@ public class ActionActivity extends AppCompatActivity {
                 startActivity(intent);
             } else {
                 System.out.println("Empty tempSpots!");
-                Toast.makeText(ActionActivity.this, "No results found",
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActionActivity.this, "No results found", Toast.LENGTH_SHORT).show();
             }
         }
         catch (JSONException e)
