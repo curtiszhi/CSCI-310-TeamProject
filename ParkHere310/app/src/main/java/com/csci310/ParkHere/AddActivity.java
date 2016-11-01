@@ -279,6 +279,9 @@ public class AddActivity extends AppCompatActivity {
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("price").setValue(price_parking);
                             mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("price").setValue(price_parking);
+
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
                             Intent intent = new Intent(AddActivity.this, UserActivity.class);//change to UserActivity.class
                             startActivity(intent);
 

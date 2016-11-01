@@ -75,7 +75,8 @@ public class ActionActivity extends AppCompatActivity {
         sdf = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
         tempSpots = new HashMap<FeedItem, double[]>();
         searchResult = new ArrayList<FeedItem>();
-        initUserListener();
+        for(int i=0;i<1;i++){
+        initUserListener();}
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
         TabHost.TabSpec spec = host.newTabSpec("Basics");

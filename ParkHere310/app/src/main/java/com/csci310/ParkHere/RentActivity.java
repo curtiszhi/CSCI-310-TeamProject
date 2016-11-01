@@ -234,6 +234,7 @@ public class RentActivity extends AppCompatActivity {
     }
 
     private void setUp(){
+
         hostPublic.setText(fd.getHost());
        // ratingBar.setRating(fd.getRating());
         address.setText(fd.getAddress());
