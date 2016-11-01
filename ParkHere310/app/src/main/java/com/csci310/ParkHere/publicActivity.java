@@ -47,20 +47,7 @@ public class publicActivity extends AppCompatActivity {
         ID = bundle.getString("ID");
         review=new Vector<String>();
         pull_info();
-        name_text=(TextView) findViewById(R.id.public_name);
-        ratingBar=(RatingBar) findViewById(R.id.ratingBar);
-        pic_image=(ImageView) findViewById(R.id.Public_image);
-        review_layout=(LinearLayout) findViewById(R.id.review);
 
-        name_text.setText("name: "+name);
-        ratingBar.setRating(rating);
-
-        for(int i=0;i<review.size();i++){
-            TextView review_text = new TextView(this);
-            review_text.setText(review.get(i));
-            review_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
-            ((LinearLayout) review_layout).addView(review_text);
-        }
 
     }
 
@@ -70,6 +57,7 @@ public class publicActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 name = (String) dataSnapshot.getValue();
+                System.out.println(name);
             }
 
             @Override
@@ -139,5 +127,27 @@ public class publicActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+
+
+        name_text=(TextView) findViewById(R.id.public_name);
+        ratingBar=(RatingBar) findViewById(R.id.ratingBar);
+        pic_image=(ImageView) findViewById(R.id.Public_image);
+        review_layout=(LinearLayout) findViewById(R.id.review);
+
+        name_text.post(new Runnable(){
+            @Override
+            public void run(){
+                name_text.setText("name: "+name);
+            }
+        });
+        //name_text.setText("name: "+name);
+        ratingBar.setRating(rating);
+
+        for(int i=0;i<review.size();i++){
+            TextView review_text = new TextView(this);
+            review_text.setText(review.get(i));
+            review_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
+            ((LinearLayout) review_layout).addView(review_text);
+        }
     }
 }
