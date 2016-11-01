@@ -25,7 +25,7 @@ import java.util.Vector;
 public class publicActivity extends AppCompatActivity {
     private String name;
     private Float rating=(float)0;
-    private String profiel_pic;
+    private String profile_pic;
     private Vector<String> review;
     private TextView name_text;
     private RatingBar ratingBar;
@@ -95,10 +95,13 @@ public class publicActivity extends AppCompatActivity {
         database2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                profiel_pic = (String) dataSnapshot.getValue();
-                byte[] decodedString = Base64.decode(profiel_pic, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-                pic_image.setImageBitmap(decodedByte);
+
+                if (dataSnapshot.getValue() != null) {
+                    profile_pic = dataSnapshot.getValue().toString();
+                    byte[] decodedString = Base64.decode(profile_pic, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    pic_image.setImageBitmap(decodedByte);
+                }
 
             }
 
