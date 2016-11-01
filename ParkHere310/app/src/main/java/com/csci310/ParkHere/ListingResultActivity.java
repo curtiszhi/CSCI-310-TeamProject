@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,7 @@ public class ListingResultActivity extends AppCompatActivity {
     static MyRecyclerAdapter adapter;
     private static String start;
     private static String end;
+    private static double[] latlng;
 
 
     @Override
@@ -66,6 +68,7 @@ public class ListingResultActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         resultList = ActionActivity.searchResult;
+        latlng = ActionActivity.latlng;
         initActionBar();
     }
 
@@ -179,9 +182,11 @@ public class ListingResultActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
+            Collections.sort(resultList, new ratingComparator());
             MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), "results");
             adapter.setTime(start,end);
             recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
             return root;
         }
     }
@@ -194,9 +199,11 @@ public class ListingResultActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
+            Collections.sort(resultList, new distanceComparator());
             adapter = new MyRecyclerAdapter(getActivity(), "results");
             adapter.setTime(start,end);
             recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
             return root;
         }
     }
@@ -209,10 +216,34 @@ public class ListingResultActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
+            Collections.sort(resultList, new priceComparator());
             adapter = new MyRecyclerAdapter(getActivity(), "results");
             adapter.setTime(start,end);
             recyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
             return root;
+        }
+    }
+
+    private static class ratingComparator implements Comparator<FeedItem>
+    {
+        public int compare(FeedItem left, FeedItem right) {
+            return left.calculateRate().compareTo(right.calculateRate());
+        }
+    }
+
+    private static class priceComparator implements Comparator<FeedItem>
+    {
+        public int compare(FeedItem left, FeedItem right) {
+            return Double.compare(left.getPrice(), right.getPrice());
+        }
+    }
+
+    private static class distanceComparator implements Comparator<FeedItem>
+    {
+        public int compare(FeedItem left, FeedItem right) {
+            return Double.compare(ActionActivity.distance(left.getLatitude(), left.getLongitude(), latlng[0], latlng[1]),
+                    ActionActivity.distance(right.getLatitude(), right.getLongitude(), latlng[0], latlng[1]));
         }
     }
 
