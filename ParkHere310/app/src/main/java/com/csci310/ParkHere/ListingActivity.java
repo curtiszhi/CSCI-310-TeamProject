@@ -121,7 +121,8 @@ public class ListingActivity extends AppCompatActivity {
                             if(key.equals("endTime")){
                                 user_all.setEndTime((String)value);
                             }
-                            if(key.equals("price")){
+                            if(key.equals("price"))
+                            {
                                 user_all.setPrice(((Long)value).doubleValue());
                             }
                             if(key.equals("cancel")){
