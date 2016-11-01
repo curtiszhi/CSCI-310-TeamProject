@@ -237,6 +237,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                     if (specific_renterID.equals(mFirebaseUser_universal.getUid())) {
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
+                        mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                     }
                 }
 
