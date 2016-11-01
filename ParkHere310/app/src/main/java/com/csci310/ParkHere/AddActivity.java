@@ -259,12 +259,29 @@ public class AddActivity extends AppCompatActivity {
                         if(check(starttime,endtime,startdate,enddate)){
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("filter").setValue(filter);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("filter").setValue(filter);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("startTime").setValue(starttime);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("startTime").setValue(starttime);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("endTime").setValue(endtime);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("endTime").setValue(endtime);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("startDates").setValue(startdate);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("startDates").setValue(startdate);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("endDates").setValue(enddate);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("endDates").setValue(enddate);
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("description").setValue(description_parking);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("description").setValue(description_parking);
+
+
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("price").setValue(price_parking);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("price").setValue(price_parking);
+
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
                             Intent intent = new Intent(AddActivity.this, UserActivity.class);//change to UserActivity.class
                             startActivity(intent);
 
@@ -319,7 +336,7 @@ public class AddActivity extends AppCompatActivity {
                             fd.setDescription(description_parking);
 
 
-                            fd.setHost(ActionActivity.user_all.getUserName());
+                            fd.setHost(mFirebaseUser.getUid());
 
                             fd.setStartDates(startdate);
                             fd.setEndDates(enddate);
@@ -329,7 +346,7 @@ public class AddActivity extends AppCompatActivity {
                             fd.setFilter(filter);
                            
                             new AddressOperation(self).execute(full_address);
-                            Intent intent = new Intent(AddActivity.this, UserActivity.class);//change to UserActivity.class
+                            Intent intent = new Intent(AddActivity.this, MainActivity.class);//change to UserActivity.class
                             startActivity(intent);
 
                         } else {
@@ -381,7 +398,7 @@ public class AddActivity extends AppCompatActivity {
         }
     }
     public void write_new_spot(FeedItem Fd) {
-        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getSpotID());
+        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier());
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -394,7 +411,7 @@ public class AddActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase.child("parking-spots-hosting").child(fd.getSpotID()).setValue(Fd);
+        mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).setValue(Fd);
     }
 
     public void setFeedItem(String jsonString)

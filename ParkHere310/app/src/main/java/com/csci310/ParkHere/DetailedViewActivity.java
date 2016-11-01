@@ -315,7 +315,8 @@ public class DetailedViewActivity extends AppCompatActivity{
         filters.setText(filter_spot);
         description.setText(fd.getDescription());
         cancel.setText(fd.getCancel());
-        if(fd.getHost()!=mFirebaseAuth.getCurrentUser().getUid()){
+        if(!fd.getHost().equals((mFirebaseAuth.getCurrentUser().getUid()))){
+            System.out.println("sammmmmmmmmeeeeeee");
             confirmButton.setVisibility(Button.GONE);
             editButton.setVisibility(Button.GONE);
         }
