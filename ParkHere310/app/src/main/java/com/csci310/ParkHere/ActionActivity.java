@@ -252,7 +252,7 @@ public class ActionActivity extends AppCompatActivity {
 
     private void initUserListener(){
         DatabaseReference database = mDatabase.child("users/").child(mFirebaseUser_universal.getUid());
-        database.addValueEventListener(new ValueEventListener() {
+        database.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
