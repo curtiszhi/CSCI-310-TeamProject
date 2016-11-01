@@ -215,20 +215,20 @@ public class DetailedViewActivity extends AppCompatActivity{
         cancelButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
-                i.putExtra(Intent.EXTRA_SUBJECT, "Refund Request");
-                i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a refund. I agree with the cancellation policy of: " + fd.getCancel());
-                try {
-                    startActivity(Intent.createChooser(i, "Send mail..."));
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                }
                 if(mFirebaseUser_universal.getUid().equals(fd.getHost())) {
                     mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).setValue(null);
                     mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).setValue(null);
                     if(specific_renterID!=null) {
+                        Intent i = new Intent(Intent.ACTION_SEND);
+                        i.setType("message/rfc822");
+                        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
+                        i.putExtra(Intent.EXTRA_SUBJECT, "Refund Request");
+                        i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a refund. I agree with the cancellation policy of: " + fd.getCancel());
+                        try {
+                            startActivity(Intent.createChooser(i, "Send mail..."));
+                        } catch (android.content.ActivityNotFoundException ex) {
+                            Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                        }
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
                     }
