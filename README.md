@@ -20,8 +20,8 @@ Required Software Environment/Dependencies:
 
 Steps:
 
-1. Download and unzip the Android project zip file.
+1. Download and unzip the project zip file.
 
-2. Import the ParkHere310 project into Android Studio.
+2. Import the ParkHere310 project folder into Android Studio.
 
 3. Click the "Run app" button to run it on your device or emulator.
