@@ -87,25 +87,25 @@ public class AddressOperation extends AsyncTask<String, Void, String>
     }
 
     //Return the place_id from the JSON string:
-    public static String getIDfromJSON(String jsonString)
+    public static String getIDfromJSON(String jsonString) throws JSONException
     {
         String place_id = "";
-        try
-        {
+//        try
+//        {
             JSONObject jsonObject = new JSONObject(jsonString);
             place_id = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getString("place_id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         return place_id;
     }
 
     //Return the [latitude, longitude] coordinates from the JSON string:
-    public static double[] getCoordinatesFromJSON(String jsonString)
+    public static double[] getCoordinatesFromJSON(String jsonString) throws JSONException
     {
         double lat = 0, lng = 0;
-        try
-        {
+//        try
+//        {
             JSONObject jsonObject = new JSONObject(jsonString);
 
             lng = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
@@ -116,24 +116,24 @@ public class AddressOperation extends AsyncTask<String, Void, String>
                     .getJSONObject("geometry").getJSONObject("location")
                     .getDouble("lat");
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-
-        }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//
+//        }
         return new double[]{lat, lng};
     }
 
     //Return the formatted address from the JSON string:
-    public static String getFormattedAddressFromJSON(String jsonString)
+    public static String getFormattedAddressFromJSON(String jsonString) throws JSONException
     {
         String formattedAddress = "";
-        try
-        {
+//        try
+//        {
             JSONObject jsonObject = new JSONObject(jsonString);
             formattedAddress = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getString("formatted_address");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         return formattedAddress;
     }
 

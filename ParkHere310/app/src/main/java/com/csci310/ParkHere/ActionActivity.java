@@ -31,6 +31,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONException;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -154,28 +156,32 @@ public class ActionActivity extends AppCompatActivity {
 
     public void search(String jsonString)
     {
-        double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
-        if (!tempSpots.isEmpty())
+        try
         {
-            for (Map.Entry<FeedItem, double[]> entry : tempSpots.entrySet())
-            {
-                double[] tmplatlng = entry.getValue();
-                if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0)
-                {
-                    searchResult.add(entry.getKey());
-                    System.out.println(entry.getKey().getAddress());
+            double[] latlng = AddressOperation.getCoordinatesFromJSON(jsonString);
 
+            if (!tempSpots.isEmpty()) {
+                for (Map.Entry<FeedItem, double[]> entry : tempSpots.entrySet()) {
+                    double[] tmplatlng = entry.getValue();
+                    if (distance(latlng[0], latlng[1], tmplatlng[0], tmplatlng[1]) < 3.0) {
+                        searchResult.add(entry.getKey());
+                        System.out.println(entry.getKey().getAddress());
+
+                    }
                 }
+                //go to resultview
+                Intent intent = new Intent(ActionActivity.this, ListingResultActivity.class);
+                startActivity(intent);
+            } else {
+                System.out.println("Empty tempSpots!");
+                Toast.makeText(ActionActivity.this, "No results found",
+                        Toast.LENGTH_SHORT).show();
             }
-            //go to resultview
-            Intent intent = new Intent(ActionActivity.this, ListingResultActivity.class);
-            startActivity(intent);
         }
-        else
+        catch (JSONException e)
         {
-            System.out.println("Empty tempSpots!");
-            Toast.makeText(ActionActivity.this, "No results found",
-                    Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+            AddressOperation.showAddressFaultDialog(self);
         }
     }
 
