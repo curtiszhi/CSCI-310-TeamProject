@@ -228,13 +228,17 @@ public class DetailedViewActivity extends AppCompatActivity{
                 if(mFirebaseUser_universal.getUid().equals(fd.getHost())) {
                     mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).setValue(null);
                     mDatabase.child("users").child(fd.getHost()).child(fd.getIdentifier()).setValue(null);
-
-                    mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-                    mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
+                    if(specific_renterID!=null) {
+                        mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
+                        mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
+                    }
                 }
-                else if(specific_renterID.equals(mFirebaseUser_universal.getUid())){
-                    mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-                    mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
+                else if(specific_renterID!=null) {
+                    if (specific_renterID.equals(mFirebaseUser_universal.getUid())) {
+                        mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
+                        mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
+                        mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("activity").setValue(true);
+                    }
                 }
 
 
@@ -258,7 +262,7 @@ public class DetailedViewActivity extends AppCompatActivity{
         }}
 
         if((specific_renterID!=null)&&(specific_renterID.equals(mFirebaseUser_universal.getUid()))){
-            DatabaseReference database = mDatabase.child("users").child(specific_renterID);
+            DatabaseReference database = mDatabase.child("users").child(specific_renterID).child("userName");
             database.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -279,7 +283,7 @@ public class DetailedViewActivity extends AppCompatActivity{
             }
         else{
             if(specific_renterID!=null) {
-                DatabaseReference database = mDatabase.child("users").child(specific_renterID);
+                DatabaseReference database = mDatabase.child("users").child(specific_renterID).child("userName");
                 database.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
