@@ -45,7 +45,7 @@ public class RentActivity extends AppCompatActivity {
 
     private FeedItem fd;
     private Vector<String> spotPhoto;
-
+    private String name;
 
     private Button hostPublic;
     private Button rent;
@@ -167,6 +167,14 @@ public class RentActivity extends AppCompatActivity {
                 getPayment();
             }
         });
+        hostPublic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RentActivity.this, publicActivity.class);
+                intent.putExtra("ID", fd.getHost());
+                startActivity(intent);
+            }
+        });
     }
     @Override
     public void onDestroy() {
@@ -235,7 +243,20 @@ public class RentActivity extends AppCompatActivity {
 
     private void setUp(){
 
-        hostPublic.setText(fd.getHost());
+        DatabaseReference database = mDatabase.child("users/").child(fd.getHost()).child("userName");
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                name = (String) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        hostPublic.setText(name);
        // ratingBar.setRating(fd.getRating());
         address.setText(fd.getAddress());
         price.setText("$" + Double.toString(fd.getPrice()));

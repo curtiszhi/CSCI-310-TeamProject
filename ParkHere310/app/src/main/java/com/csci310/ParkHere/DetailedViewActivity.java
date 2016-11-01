@@ -177,12 +177,7 @@ public class DetailedViewActivity extends AppCompatActivity{
             }
         });
 
-        viewButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //public profile!!!!!
-            }
-        });
+
         editButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
