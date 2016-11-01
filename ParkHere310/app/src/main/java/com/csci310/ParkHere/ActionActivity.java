@@ -41,6 +41,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.Semaphore;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -119,14 +120,15 @@ public class ActionActivity extends AppCompatActivity {
 
                 tempSpots.clear();
                 searchResult.clear();
-                getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped);
-                new AddressOperation(self).execute(address);}
+                getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped, address);
+
+                }
             }
         });
     }
 
     private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate,
-                                    final boolean requestCompact, final boolean requestCover, final boolean handicapped)
+                                    final boolean requestCompact, final boolean requestCover, final boolean handicapped, final String address)
     {
         spotsDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -142,9 +144,10 @@ public class ActionActivity extends AppCompatActivity {
                         tempSpots.put(child.getValue(FeedItem.class), new double[]
                                 {Double.parseDouble(child.child("latitude").getValue().toString()),
                                 Double.parseDouble(child.child("longitude").getValue().toString())});
-                        System.out.println("Empty? " + tempSpots.size());
+                        System.out.println("Spot: " + child.child("address").getValue().toString());
                     }
                 }
+                new AddressOperation(self).execute(address);
             }
 
             @Override
