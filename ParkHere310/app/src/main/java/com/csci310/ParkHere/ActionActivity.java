@@ -135,16 +135,14 @@ public class ActionActivity extends AppCompatActivity {
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
                     if (child.child("activity").getValue().toString().equals("true") &&
-                        /*isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
-                                starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString())*/
-                            isValidDT(
-                                    starttime, endtime,startdate, enddate)&&
+                        isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
+                                starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
                         isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))
                     {
-                        //Vector v = new Vector(child.getValue(ArrayList.class));
                         tempSpots.put(child.getValue(FeedItem.class), new double[]
                                 {Double.parseDouble(child.child("latitude").getValue().toString()),
                                 Double.parseDouble(child.child("longitude").getValue().toString())});
+                        System.out.println("Empty? " + tempSpots.size());
                     }
                 }
             }
@@ -206,37 +204,7 @@ public class ActionActivity extends AppCompatActivity {
         return (rad * 180.0 / Math.PI);
     }
 
-    private boolean isValidDT(String starttime,String endtime,String startdate,String enddate){
-        boolean checkdate=true;
-        try{
-
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
-            Date time1 = df.parse(startdate+" "+starttime);
-            Date time2 = df.parse(enddate+" "+endtime);
-            long diff = time2.getTime() - time1.getTime();
-            long diffHours = diff / (60 * 60 * 1000) % 24;
-            if(diffHours>=1){
-                checkdate=true;
-            }else{
-                checkdate=false;
-            }
-
-            String today=getToday(df);
-            Date d = df.parse(today);
-            if(time1.getTime() > d.getTime()){
-                checkdate=true;
-            }else{
-                checkdate=false;
-            }
-
-
-        }catch(ParseException ex){
-            ex.printStackTrace();
-        }
-
-        return checkdate;
-    }
-   /* private boolean isValidDT (String sDate1str, String eDate1str, String sDate2str, String eDate2str,
+    private boolean isValidDT (String sDate1str, String eDate1str, String sDate2str, String eDate2str,
                                String sTime1str, String eTime1str, String sTime2str, String eTime2str)
     {
         try
@@ -251,7 +219,7 @@ public class ActionActivity extends AppCompatActivity {
         }
         catch (ParseException parseException) {parseException.printStackTrace();}
         return false;
-    }*/
+    }
 
     private String tryConvertTimeFormat(String time)
     {

@@ -90,13 +90,8 @@ public class AddressOperation extends AsyncTask<String, Void, String>
     public static String getIDfromJSON(String jsonString) throws JSONException
     {
         String place_id = "";
-//        try
-//        {
-            JSONObject jsonObject = new JSONObject(jsonString);
-            place_id = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getString("place_id");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        JSONObject jsonObject = new JSONObject(jsonString);
+        place_id = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getString("place_id");
         return place_id;
     }
 
@@ -104,22 +99,15 @@ public class AddressOperation extends AsyncTask<String, Void, String>
     public static double[] getCoordinatesFromJSON(String jsonString) throws JSONException
     {
         double lat = 0, lng = 0;
-//        try
-//        {
-            JSONObject jsonObject = new JSONObject(jsonString);
+        JSONObject jsonObject = new JSONObject(jsonString);
 
-            lng = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lng");
+        lng = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
+                .getJSONObject("geometry").getJSONObject("location")
+                .getDouble("lng");
 
-            lat = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
-                    .getJSONObject("geometry").getJSONObject("location")
-                    .getDouble("lat");
-
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//
-//        }
+        lat = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
+                .getJSONObject("geometry").getJSONObject("location")
+                .getDouble("lat");
         return new double[]{lat, lng};
     }
 
@@ -127,13 +115,8 @@ public class AddressOperation extends AsyncTask<String, Void, String>
     public static String getFormattedAddressFromJSON(String jsonString) throws JSONException
     {
         String formattedAddress = "";
-//        try
-//        {
-            JSONObject jsonObject = new JSONObject(jsonString);
-            formattedAddress = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getString("formatted_address");
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        JSONObject jsonObject = new JSONObject(jsonString);
+        formattedAddress = ((JSONArray) jsonObject.get("results")).getJSONObject(0).getString("formatted_address");
         return formattedAddress;
     }
 
