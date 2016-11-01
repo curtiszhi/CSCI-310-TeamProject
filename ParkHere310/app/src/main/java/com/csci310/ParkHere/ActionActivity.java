@@ -140,7 +140,8 @@ public class ActionActivity extends AppCompatActivity {
                     if (child.child("activity").getValue().toString().equals("true") &&
                         isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
                                 starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
-                        isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))
+                        isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")) &&
+                        child.child("rentedTime").getValue() == null)
                     {
                         tempSpots.put(child.getValue(FeedItem.class), new double[]
                                 {Double.parseDouble(child.child("latitude").getValue().toString()),
