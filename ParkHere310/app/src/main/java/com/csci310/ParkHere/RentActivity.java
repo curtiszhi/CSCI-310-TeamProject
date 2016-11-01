@@ -283,7 +283,7 @@ public class RentActivity extends AppCompatActivity {
                         }
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-                            System.out.println("The read failed: " + databaseError.getCode());
+                            System.out.println("The read  failed: " + databaseError.getCode());
                         }
                     });
                     ref1.setValue(rentList);
