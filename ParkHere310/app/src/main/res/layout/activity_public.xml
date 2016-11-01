@@ -55,6 +55,7 @@
                 android:numStars="5"
                 android:stepSize="1.0"
                 android:rating="2.0"
+                android:isIndicator="true"
                 android:progressTint="#FFCC00" />
         </LinearLayout>
 

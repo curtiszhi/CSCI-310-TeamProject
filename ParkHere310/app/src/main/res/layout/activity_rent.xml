@@ -53,6 +53,8 @@
                 android:layout_height="wrap_content"
                 android:numStars="5"
                 android:stepSize="1.0"
+                android:isIndicator="true"
+                android:dropDownWidth="150dp"
                 android:layout_gravity="center_horizontal"
                 android:rating="2.0"
                 android:progressTint="#FFCC00"/>
