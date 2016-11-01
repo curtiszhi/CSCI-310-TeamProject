@@ -227,7 +227,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                 }
                 if(mFirebaseUser_universal.getUid().equals(fd.getHost())) {
                     mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).setValue(null);
-                    mDatabase.child("users").child(fd.getHost()).child(fd.getIdentifier()).setValue(null);
+                    mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).setValue(null);
                     if(specific_renterID!=null) {
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
