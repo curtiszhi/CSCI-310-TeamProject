@@ -90,6 +90,8 @@ public class RentActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
+
         Bundle bundle = getIntent().getExtras();
         value = bundle.getString("ItemPosition");
         position = Integer.parseInt(value);
@@ -112,7 +114,6 @@ public class RentActivity extends AppCompatActivity {
         cancel= (TextView) findViewById(R.id.cancel);
         review_layout=(LinearLayout) findViewById(R.id.review);
         hostPublic = (Button) findViewById(R.id.host_public_button);
-        //address = (TextView) findViewById(R.id.address);
 
         count=0;
 
@@ -187,9 +188,10 @@ public class RentActivity extends AppCompatActivity {
     private void getPayment() {
         //Getting the amount from editText
         total_price = price.getText().toString();
+        double price_real=2.0;//Double.parseDouble(total_price);
 
         //Creating a paypalpayment
-        PayPalPayment payment = new PayPalPayment(new BigDecimal(String.valueOf(total_price)), "USD", "Parking fee",
+        PayPalPayment payment = new PayPalPayment(new BigDecimal(String.valueOf(price_real)), "USD", "Parking fee",
                 PayPalPayment.PAYMENT_INTENT_SALE);
 
         //Creating Paypal Payment activity intent
@@ -212,7 +214,7 @@ public class RentActivity extends AppCompatActivity {
             if (confirm != null) {
                 try {
                     Log.i("paymentExample", confirm.toJSONObject().toString(4));
-                    ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting/" + fd.getSpotID());
+                   /* ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting/" + fd.get());
                     ref.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -227,7 +229,7 @@ public class RentActivity extends AppCompatActivity {
 
                     mDatabase.child("parking-spots-renting").child(fd.getSpotID()).setValue(fd);
                     Intent intent = new Intent(RentActivity.this, MainActivity.class);//change to UserActivity.class
-                    startActivity(intent);
+                    startActivity(intent);*/
 
                 } catch (JSONException e) {
                     Log.e("paymentExample", "an extremely unlikely failure occurred: ", e);
