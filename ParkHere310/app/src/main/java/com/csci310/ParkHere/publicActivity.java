@@ -140,8 +140,13 @@ public class publicActivity extends AppCompatActivity {
                 name_text.setText("name: "+name);
             }
         });
-        //name_text.setText("name: "+name);
-        ratingBar.setRating(rating);
+        ratingBar.post(new Runnable(){
+            @Override
+            public void run(){
+                ratingBar.setRating(rating);
+            }
+        });
+        
 
         for(int i=0;i<review.size();i++){
             TextView review_text = new TextView(this);
