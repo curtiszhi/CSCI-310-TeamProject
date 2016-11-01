@@ -262,7 +262,7 @@ public class DetailedViewActivity extends AppCompatActivity{
         }}
 
         if((specific_renterID!=null)&&(specific_renterID.equals(mFirebaseUser_universal.getUid()))){
-            DatabaseReference database = mDatabase.child("users").child(specific_renterID);
+            DatabaseReference database = mDatabase.child("users").child(specific_renterID).child("userName");
             database.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -283,7 +283,7 @@ public class DetailedViewActivity extends AppCompatActivity{
             }
         else{
             if(specific_renterID!=null) {
-                DatabaseReference database = mDatabase.child("users").child(specific_renterID);
+                DatabaseReference database = mDatabase.child("users").child(specific_renterID).child("userName");
                 database.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
