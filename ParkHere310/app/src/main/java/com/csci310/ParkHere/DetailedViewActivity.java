@@ -257,7 +257,7 @@ public class DetailedViewActivity extends AppCompatActivity{
             specific_renterID=key;
         }}
 
-        if(specific_renterID.equals(mFirebaseUser_universal.getUid())){
+        /*if(specific_renterID.equals(mFirebaseUser_universal.getUid())){
             viewButton.post(new Runnable(){
                     @Override
                     public void run(){
@@ -284,7 +284,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                         viewButton.setText("Renter:"+name);
                     }
                 });
-            }
+            }*/
 
         if (renterTime.size() != 0) {
             String endTime = renterTime.get(1);
