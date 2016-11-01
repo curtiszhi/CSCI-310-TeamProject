@@ -161,6 +161,7 @@
                 android:layout_height="wrap_content"
                 android:isIndicator="true"
                 android:numStars="5"
+                android:progressTint="#FFCC00"
                 android:stepSize="1.0"
                 android:rating="2.0" />
         </LinearLayout>

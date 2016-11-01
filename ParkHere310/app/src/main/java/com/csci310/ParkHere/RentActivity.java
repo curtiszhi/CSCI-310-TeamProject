@@ -199,7 +199,7 @@ public class RentActivity extends AppCompatActivity {
     private void getPayment() {
         //Getting the amount from editText
         total_price = price.getText().toString();
-        double price_real=Double.parseDouble(total_price);
+        double price_real=Double.parseDouble(total_price.replace("$", ""));
 
         //Creating a paypalpayment
         PayPalPayment payment = new PayPalPayment(new BigDecimal(String.valueOf(price_real)), "USD", "Parking fee",
@@ -238,9 +238,9 @@ public class RentActivity extends AppCompatActivity {
                             System.out.println("The read failed: " + databaseError.getCode());
                         }
                     });
-
+                    mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(false);
                     mDatabase.child("parking-spots-renting").child(fd.getIdentifier()).setValue(fd);
-
+                    mDatabase.child("users").child(fd.getHost()).child("hosting/" + fd.getIdentifier()).child("activity").setValue(false);
                     rateList=new Vector<String>();
                     rateList.add(fd.getIdentifier());
 
