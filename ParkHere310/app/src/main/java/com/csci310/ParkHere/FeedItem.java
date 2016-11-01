@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -82,6 +83,22 @@ public class FeedItem {
     public Map<String,Vector<String>> getRentedTime() {
         return rentedTime;
     }
+
+    public Map<String,ArrayList<String>> getRentedTimeArray() {
+        Map<String,Vector<String >> map = rentedTime;
+        Map<String,ArrayList<String>> temp = new HashMap<String, ArrayList<String>>();
+        Iterator it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            String key = (String) pair.getKey();
+            ArrayList<String> thing =  (ArrayList<String>) pair.getValue();
+            ArrayList<String> list = new ArrayList<String>(thing);
+            it.remove();
+            temp.put(key, list);
+        }
+        return temp;
+    }
+
     public void setRentedTime(Map<String,Vector<String>>rentedTime) {
         this.rentedTime = rentedTime;
     }

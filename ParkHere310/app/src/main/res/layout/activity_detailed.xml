@@ -34,6 +34,15 @@
                 android:textSize="20dp"
                 android:paddingBottom="4dp" />
         </RelativeLayout>
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="1.0"
+            android:isIndicator="true"
+            android:rating="2.0"
+            android:progressTint="#FFCC00"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -48,21 +57,13 @@
                 android:id="@+id/viewButton" />
 
 
-            <RatingBar
-                android:id="@+id/ratingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:stepSize="1.0"
-                android:isIndicator="true"
-                android:rating="2.0"
-                android:progressTint="#FFCC00"/>
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
 
             <TextView
                 android:layout_width="wrap_content"
