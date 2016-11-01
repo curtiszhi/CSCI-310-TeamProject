@@ -199,7 +199,7 @@ public class RentActivity extends AppCompatActivity {
     private void getPayment() {
         //Getting the amount from editText
         total_price = price.getText().toString();
-        double price_real=2.0;//Double.parseDouble(total_price);
+        double price_real=Double.parseDouble(total_price);
 
         //Creating a paypalpayment
         PayPalPayment payment = new PayPalPayment(new BigDecimal(String.valueOf(price_real)), "USD", "Parking fee",

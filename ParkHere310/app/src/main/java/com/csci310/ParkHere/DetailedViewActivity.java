@@ -249,6 +249,14 @@ public class DetailedViewActivity extends AppCompatActivity{
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                 }
+                mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).setValue(null);
+                mDatabase.child("users").child(fd.getHost()).child(fd.getIdentifier()).setValue(null);
+                for(int index=0;index<renterID.size();index++){
+                    mDatabase.child("users").child(renterID.get(index)).child("renting").child(fd.getIdentifier()).setValue(null);
+                    mDatabase.child("users").child(renterID.get(index)).child("rateList").child(fd.getIdentifier()).setValue(null);
+                }
+
+                //cancel under renting
                 Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
                 startActivity(intent);
             }
