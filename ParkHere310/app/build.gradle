@@ -32,6 +32,10 @@ dependencies {
     compile 'com.android.support:cardview-v7:24.2.1'
     compile 'com.paypal.sdk:paypal-android-sdk:2.14.2'
 
+    //Espresso
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+
+
 }
 
 apply plugin: 'com.google.gms.google-services'

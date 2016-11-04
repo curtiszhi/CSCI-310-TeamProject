@@ -19,18 +19,12 @@ import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 import static com.csci310.ParkHere.ActionActivity.user_all;
@@ -65,7 +59,6 @@ public class UserActivity extends AppCompatActivity {
         //viewRentHistoryButton = (Button) findViewById(R.id.viewRentHistoryButton);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
 
-        // Edit Profile Pic (Not Tested Yet)
 
         profilePicImageView.setOnClickListener(new View.OnClickListener() {
 
@@ -93,11 +86,16 @@ public class UserActivity extends AppCompatActivity {
 
 
 
-
         //Set User Info
-        nameEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
-        emailEditText.setText(email.trim(),TextView.BufferType.EDITABLE);
-        phoneEditText.setText(phone.trim(),TextView.BufferType.EDITABLE);
+        if (nameEditText != null){
+            nameEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
+        }
+        if (emailEditText != null){
+            emailEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
+        }
+        if (phoneEditText != null){
+            phoneEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
+        }
 
         if(rating_host.size()==0){
         ratingBar.setRating(0);}
