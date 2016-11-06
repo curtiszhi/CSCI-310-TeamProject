@@ -31,7 +31,7 @@ import static com.csci310.ParkHere.ActionActivity.user_all;
 
 public class UserActivity extends AppCompatActivity {
 
-    private Button viewHostHistoryButton, viewRentHistoryButton, returnHomeScreenButton;
+    private Button viewHostHistoryButton;
     private ToggleButton editToggleButton;
     private EditText nameEditText, emailEditText, phoneEditText;
     private ImageView profilePicImageView;
@@ -82,7 +82,6 @@ public class UserActivity extends AppCompatActivity {
         String email = ActionActivity.user_all.getEmail();
         String phone = ActionActivity.user_all.getPhone();
         String name = ActionActivity.user_all.getUserName();
-        Vector<Integer> rating_host= ActionActivity.user_all.getRating();
 
 
 
@@ -97,16 +96,7 @@ public class UserActivity extends AppCompatActivity {
             phoneEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
         }
 
-        if(rating_host.size()==0){
-        ratingBar.setRating(0);}
-        else{
-            int total=0;
-            for(int i=0;i<rating_host.size();i++){
-                total+=rating_host.get(i);
-            }
-            Float rate=(float)total/(float)rating_host.size();
-            ratingBar.setRating(rate);
-        }
+        ratingBar.setRating(user_all.getRating());
 
         if(ActionActivity.user_all.getPhoto()!=null) {
             byte[] decodedString = Base64.decode(ActionActivity.user_all.getPhoto(), Base64.DEFAULT);

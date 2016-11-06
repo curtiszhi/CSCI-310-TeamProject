@@ -16,10 +16,10 @@ public class User {
     private String userName;
     private String email;
     private String phone;
+    private Boolean isHost;
     private Vector<String> review;
     private Vector<String> rateList;
     private Vector<Integer> rating;
-    private Boolean isHost;
     private List<String> renting;
     private List<String> hosting;
     private String photo=null;
@@ -46,8 +46,20 @@ public class User {
         this.rating = rating;
     }
 
-    public Vector<Integer> getRating(){
-        return rating;
+    public Float getRating(){
+        Float rate;
+        if(rating.size()==0){
+            rate = (float)0;
+            return rate;
+        }
+        else{
+            int total=0;
+            for(int i=0;i<rating.size();i++){
+                total+=rating.get(i);
+            }
+            rate=(float)total/(float)rating.size();
+        }
+        return rate;
     }
 
 
