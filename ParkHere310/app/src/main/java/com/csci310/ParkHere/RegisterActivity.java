@@ -73,7 +73,8 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString().trim();
                 String name = nameEditText.getText().toString().trim();
                 String phone = phoneEditText.getText().toString().trim();
-                validateFields(email, name, pass, phone);
+                Boolean valid = validateFields(email, name, pass, phone);
+                if(valid){
                 if(pass.equals(conf)) {
                     if(validatePassword(pass)){
                         progressDiag.setMessage("Registering User...");
@@ -103,6 +104,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 else{
                     passwordAlert("match");
+                }
                 }
             }
         });
@@ -156,26 +158,32 @@ public class RegisterActivity extends AppCompatActivity {
         });
         alertDialog.show();
     }
-    public void validateFields(String email, String name,  String pass, String phone){
-        if(TextUtils.isEmpty(email)){
-            Toast.makeText(RegisterActivity.this, "Please enter email",
-                    Toast.LENGTH_SHORT).show();
-            return;
+    public Boolean validateFields(String email, String name,  String pass, String phone){
+        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(name) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(phone)){
+            AlertDialog alertDialog = new AlertDialog.Builder(RegisterActivity.this).create();
+            alertDialog.setTitle("Wait!");
+            alertDialog.setMessage("Please fill all fields");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alertDialog.show();
+            return false;
         }
-        if(TextUtils.isEmpty(name)){
-            Toast.makeText(RegisterActivity.this, "Please enter name",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(pass)){
-            Toast.makeText(RegisterActivity.this, "Please enter password",
-                    Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if(TextUtils.isEmpty(phone)){
-            Toast.makeText(RegisterActivity.this, "Please enter phone number",
-                    Toast.LENGTH_SHORT).show();
-            return;
+        if(!email.contains("@")){
+            AlertDialog alertDialog = new AlertDialog.Builder(RegisterActivity.this).create();
+            alertDialog.setTitle("Wait!");
+            alertDialog.setMessage("Please enter valid email");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alertDialog.show();
+            return false;
+        }else{
+            return true;
         }
     }
 }

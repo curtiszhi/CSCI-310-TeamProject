@@ -53,6 +53,6 @@ public class TimePicker implements View.OnClickListener, TimePickerDialog.OnTime
             AM_PM = "PM";
         }
         timeEditText.setText(new StringBuilder()
-                .append(hour).append(":").append(minute).append(AM_PM));
+                .append(hour).append(":").append(minute)/*.append(AM_PM)*/);
     }
 }

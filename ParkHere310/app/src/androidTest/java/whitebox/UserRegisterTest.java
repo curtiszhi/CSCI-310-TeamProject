@@ -28,7 +28,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @LargeTest
 public class UserRegisterTest {
 
-    private String mStringToBetyped;
+    private String testname;
+    private String invalidPasswordError;
 
     @Rule
     public ActivityTestRule<RegisterActivity> mActivityRule = new ActivityTestRule<>(
@@ -36,17 +37,95 @@ public class UserRegisterTest {
 
     @Before
     public void initValidString() {
-        mStringToBetyped = "Espresso";
+        testname = "Blah";
+        invalidPasswordError = "Passwords must be at least 6 characters long and contain at least: 1-number 1-uppercase letter";
     }
 
     @Test
-    public void changeText_sameActivity() {
+    public void insufficientFields() {
         onView(withId(R.id.nameEditText))
-                .perform(typeText(mStringToBetyped), closeSoftKeyboard());
+                .perform(typeText(testname), closeSoftKeyboard());
         onView(withId(R.id.registerButton)).perform(click());
-
-        onView(withText("Wait!")).check(matches(isDisplayed()));
-
+        onView(withText("Please fill all fields")).check(matches(isDisplayed()));
+    }
+    @Test
+    public void invalidEmail() {
+        onView(withId(R.id.nameEditText))
+                .perform(typeText(testname), closeSoftKeyboard());
+        onView(withId(R.id.emailEditText))
+                .perform(typeText(testname), closeSoftKeyboard());
+        onView(withId(R.id.passwordEditText))
+                .perform(typeText("Testing1"), closeSoftKeyboard());
+        onView(withId(R.id.confirmPasswordEditText))
+                .perform(typeText("Testing1"), closeSoftKeyboard());
+        onView(withId(R.id.phoneEditText))
+                .perform(typeText("2222222222"), closeSoftKeyboard());
+        onView(withId(R.id.registerButton)).perform(click());
+        onView(withText("Please enter valid email")).check(matches(isDisplayed()));
+    }
+    @Test
+    public void invalidPasswordOne() {
+        onView(withId(R.id.nameEditText))
+                .perform(typeText(testname), closeSoftKeyboard());
+        onView(withId(R.id.emailEditText))
+                .perform(typeText("test@test.com"), closeSoftKeyboard());
+        onView(withId(R.id.passwordEditText))
+                .perform(typeText("Hi"), closeSoftKeyboard());
+        onView(withId(R.id.confirmPasswordEditText))
+                .perform(typeText("Hi"), closeSoftKeyboard());
+        onView(withId(R.id.phoneEditText))
+                .perform(typeText("2222222222"), closeSoftKeyboard());
+        onView(withId(R.id.registerButton)).perform(click());
+        onView(withText(invalidPasswordError)).check(matches(isDisplayed()));
+        //onView(withText(invalidPasswordError)).perform(click());
+    }
+    @Test
+    public void invalidPasswordTwo() {
+        onView(withId(R.id.nameEditText))
+                .perform(typeText(testname), closeSoftKeyboard());
+        onView(withId(R.id.emailEditText))
+                .perform(typeText("test@test.com"), closeSoftKeyboard());
+        onView(withId(R.id.passwordEditText))
+                .perform(typeText("hihihihi"), closeSoftKeyboard());
+        onView(withId(R.id.confirmPasswordEditText))
+                .perform(typeText("hihihihi"), closeSoftKeyboard());
+        onView(withId(R.id.phoneEditText))
+                .perform(typeText("2222222222"), closeSoftKeyboard());
+        onView(withId(R.id.registerButton)).perform(click());
+        onView(withText(invalidPasswordError)).check(matches(isDisplayed()));
+        //onView(withText(invalidPasswordError)).perform(click());
+    }
+    @Test
+    public void invalidPasswordThree() {
+        onView(withId(R.id.nameEditText))
+                .perform(typeText(testname), closeSoftKeyboard());
+        onView(withId(R.id.emailEditText))
+                .perform(typeText("test@test.com"), closeSoftKeyboard());
+        onView(withId(R.id.phoneEditText))
+                .perform(typeText("2222222222"), closeSoftKeyboard());
+        onView(withId(R.id.passwordEditText))
+                .perform(typeText("Hihihihi"), closeSoftKeyboard());
+        onView(withId(R.id.confirmPasswordEditText))
+                .perform(typeText("Hihihihi"), closeSoftKeyboard());
+        onView(withId(R.id.registerButton)).perform(click());
+        onView(withText(invalidPasswordError)).check(matches(isDisplayed()));
+        //onView(withText(invalidPasswordError)).perform(click());
+    }
+    @Test
+    public void invalidPasswordFour() {
+        onView(withId(R.id.nameEditText))
+                .perform(typeText(testname), closeSoftKeyboard());
+        onView(withId(R.id.emailEditText))
+                .perform(typeText("test@test.com"), closeSoftKeyboard());
+        onView(withId(R.id.passwordEditText))
+                .perform(typeText("7hihihihi"), closeSoftKeyboard());
+        onView(withId(R.id.confirmPasswordEditText))
+                .perform(typeText("7hihihihi"), closeSoftKeyboard());
+        onView(withId(R.id.phoneEditText))
+                .perform(typeText("2222222222"), closeSoftKeyboard());
+        onView(withId(R.id.registerButton)).perform(click());
+        onView(withText(invalidPasswordError)).check(matches(isDisplayed()));
+        //onView(withText(invalidPasswordError)).perform(click());
     }
 }
 

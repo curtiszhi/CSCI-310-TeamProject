@@ -339,7 +339,7 @@ public class RentActivity extends AppCompatActivity {
         //hostPublic.setText(name);
         ratingBar.setRating(fd.calculateRate());
         address.setText(fd.getAddress());
-        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
+        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mm");
         Date time1 = null;
         Date time2=null;
         try {
@@ -350,6 +350,7 @@ public class RentActivity extends AppCompatActivity {
         }
         long diff = time2.getTime() - time1.getTime();
         long diffHours = diff / (60 * 60 * 1000) % 24;
+        System.out.println(fd.getPrice() + " " + diffHours);
         price.setText("$" + Double.toString(fd.getPrice()*diffHours));
         String time_frame=start+" to "+end;
         time.setText(time_frame);
