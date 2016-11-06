@@ -1,4 +1,4 @@
-package RegisterTest;
+package whitebox;
 
 /**
  * Created by seanyuan on 11/6/16.
