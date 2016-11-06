@@ -36,7 +36,7 @@ public class FeedItem {
     private Vector<String> review;
     private String currentRenter;
 
-    FeedItem(){
+    public FeedItem(){
         photos=new Vector<String>();
         rentedTime= new HashMap<String,Vector<String>>();
         rating=new Vector<Integer>();
@@ -46,28 +46,7 @@ public class FeedItem {
 
 
 
-   /* public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<String> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
-        this.spotID = spotID;
-        this.address = address;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.startdates = startdates;
-        this.enddates = enddates;
-        this.starttime = starttime;
-        this.endtime = endtime;
-        this.price = price;
-        this.cancelpolicy = cancelpolicy;
-        this.description = description;
-        this.rating = rating;
-        this.activity = activity;
-        this.filters = filters;
-        Host = host;
-        this.photos = photos;
-        this.rentedTime = rentedTime;
-        this.identifier = identifier;
-        this.review = review;
-        this.currentRenter = currentRenter;
-    }*/
+
 
     public Vector<String> getPhotos() {
         return photos;
@@ -258,4 +237,28 @@ public class FeedItem {
     public void setFilter(List<String> filters) {
         this.filters = filters;
     }
+
+
+      /* public FeedItem(String spotID, String address, double latitude, double longitude, String startdates, String enddates, String starttime, String endtime, double price, String cancelpolicy, String description, Vector<Integer> rating, Boolean activity, List<String> filters, String host, Vector<String> photos, Map<String, Vector<String>> rentedTime, String identifier, Vector<String> review, String currentRenter) {
+        this.spotID = spotID;
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.startdates = startdates;
+        this.enddates = enddates;
+        this.starttime = starttime;
+        this.endtime = endtime;
+        this.price = price;
+        this.cancelpolicy = cancelpolicy;
+        this.description = description;
+        this.rating = rating;
+        this.activity = activity;
+        this.filters = filters;
+        Host = host;
+        this.photos = photos;
+        this.rentedTime = rentedTime;
+        this.identifier = identifier;
+        this.review = review;
+        this.currentRenter = currentRenter;
+    }*/
 }
