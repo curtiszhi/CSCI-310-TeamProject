@@ -312,7 +312,9 @@ public class AddActivity extends AppCompatActivity {
                     String enddate = endDate.getText().toString().trim();
                     String address = location.getText().toString().trim();
                     String description_parking = description.getText().toString().trim();
-                    double price_parking = Double.parseDouble(price.getText().toString().trim());
+                    double price_parking=0;
+                    if(price.getText().toString().length()!=0){
+                    price_parking = Double.parseDouble(price.getText().toString().trim());}
                     String city_input = city.getText().toString().trim();
                     String postcode_input = postcode.getText().toString().trim();
 
@@ -476,7 +478,7 @@ public class AddActivity extends AppCompatActivity {
         boolean checkdate=true;
         try{
 
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mm");
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
             Date time1 = df.parse(startdate+" "+starttime);
             Date time2 = df.parse(enddate+" "+endtime);
             long diff = time2.getTime() - time1.getTime();
