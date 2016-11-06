@@ -1,11 +1,7 @@
 package com.csci310.ParkHere;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Vector;
 
 /**
@@ -46,7 +42,11 @@ public class User {
         this.rating = rating;
     }
 
-    public Float getRating(){
+    public Vector<Integer> getRating(){
+        return rating;
+    }
+
+    public Float get_Rating(){
         Float rate;
         if(rating.size()==0){
             rate = (float)0;

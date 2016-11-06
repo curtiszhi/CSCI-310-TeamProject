@@ -7,8 +7,6 @@ package com.csci310.ParkHere;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -24,7 +22,6 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,11 +34,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-import java.util.concurrent.Semaphore;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -257,7 +251,8 @@ public class ActionActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
-
+                if(user_map !=null){
+                    System.out.println("got the user");
                 for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
                     String key = entry.getKey();
                     if(key.equals("email")){
@@ -326,6 +321,7 @@ public class ActionActivity extends AppCompatActivity {
                     }
 
                 }
+}
 
             }
 
