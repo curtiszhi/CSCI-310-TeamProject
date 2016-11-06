@@ -1,4 +1,3 @@
-/*
 package blackbox;
 
 import android.support.test.espresso.NoMatchingViewException;
@@ -28,9 +27,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
  * Created by Peter on 11/3/16.
  */
 
-/*
+
 @RunWith(JUnit4.class)
-public class CreateUsers {
+public class RegisterTest {
     private String email, pass;
 
     @Rule
@@ -53,18 +52,18 @@ public class CreateUsers {
             onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
             onView(withId(R.id.passwordEditText)).perform(typeText(pass), closeSoftKeyboard());
             onView(withId(R.id.loginButton)).perform(click());
+            intended(hasComponent(ActionActivity.class.getName()));
         }
         catch (NoMatchingViewException e)
         {
-
+            onView(withId(R.id.locationEditText)).perform(typeText(email), closeSoftKeyboard());
+            onView((withId(R.id.locationEditText))).check(matches(withText(email)));
         }
 
-        intended(hasComponent(ActionActivity.class.getName()));
 
-        onView(withId(R.id.locationEditText)).perform(typeText(email), closeSoftKeyboard());
-        onView((withId(R.id.locationEditText))).check(matches(withText(email)));
+
+
     }
 
 
 }
-*/

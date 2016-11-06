@@ -23,15 +23,14 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-@LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SignInTest2 {
+public class SignInTest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void signInTest2() {
+    public void signInTest() {
 
         ViewInteraction appCompatEditText2 = onView(
                 allOf(ViewMatchers.withId(R.id.emailEditText), isDisplayed()));
