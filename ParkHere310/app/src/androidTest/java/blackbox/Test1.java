@@ -44,7 +44,7 @@ public class Test1 {
 //        intended(hasComponent(ActionActivity.class.getName()));
 //        onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
 //        onView(withId(R.id.emailEditText)).check(m
-        onView(withId)
+        //onView(withId);
     }
 
 }
