@@ -46,7 +46,7 @@ public class User {
         return rating;
     }
 
-    public Float get_Rating(){
+    public Float calculate_Rating(){
         Float rate;
         if(rating.size()==0){
             rate = (float)0;

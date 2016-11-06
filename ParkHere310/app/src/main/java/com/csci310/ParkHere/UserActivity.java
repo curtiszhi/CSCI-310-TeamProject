@@ -95,7 +95,7 @@ public class UserActivity extends AppCompatActivity {
             phoneEditText.setText(phone.trim(),TextView.BufferType.EDITABLE);
         }
 
-        ratingBar.setRating(user_all.get_Rating());
+        ratingBar.setRating(user_all.calculate_Rating());
 
         if(ActionActivity.user_all.getPhoto()!=null) {
             byte[] decodedString = Base64.decode(ActionActivity.user_all.getPhoto(), Base64.DEFAULT);
