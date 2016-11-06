@@ -25,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Vector;
 
 import static com.csci310.ParkHere.ActionActivity.user_all;
 
@@ -90,10 +89,10 @@ public class UserActivity extends AppCompatActivity {
             nameEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
         }
         if (emailEditText != null){
-            emailEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
+            emailEditText.setText(email.trim(),TextView.BufferType.EDITABLE);
         }
         if (phoneEditText != null){
-            phoneEditText.setText(name.trim(),TextView.BufferType.EDITABLE);
+            phoneEditText.setText(phone.trim(),TextView.BufferType.EDITABLE);
         }
 
         ratingBar.setRating(user_all.getRating());

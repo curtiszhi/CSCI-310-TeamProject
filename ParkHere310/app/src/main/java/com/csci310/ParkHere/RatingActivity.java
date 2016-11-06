@@ -34,7 +34,7 @@ public class RatingActivity extends AppCompatActivity {
     private static FirebaseUser mFirebaseUser;
     FeedItem fd;
     private Vector<Float> originalSpot;
-    private Vector<Float> originalHost;
+    private Integer originalHost;
     private Vector<String> originalSpotComment;
     private Vector<String> originalHostComment;
     private Vector<String> rateList;
@@ -112,8 +112,7 @@ public class RatingActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                originalHost= dataSnapshot.getValue(Vector.class);
-                originalHost.add(rateSpot);
+                originalHost= dataSnapshot.getValue(Integer.class);
             }
 
             @Override
