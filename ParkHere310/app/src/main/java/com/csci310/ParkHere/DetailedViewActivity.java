@@ -171,7 +171,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                 Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
                 intent.putExtra("ID", specific_renterID);
                 startActivity(intent);}
-                else if(mFirebaseUser_universal.getUid().equals(specific_renterID)){
+                else if((specific_renterID!=null)&&(mFirebaseUser_universal.getUid().equals(specific_renterID))){
                     Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
                     intent.putExtra("ID", fd.getHost());
                     startActivity(intent);
@@ -239,6 +239,9 @@ public class DetailedViewActivity extends AppCompatActivity{
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("activity").setValue(true);
+                        mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
+                        mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
+
                     }
                 }
 
@@ -254,20 +257,24 @@ public class DetailedViewActivity extends AppCompatActivity{
     }
     private void setUp(){
         renterTime=new ArrayList<String>();
+        System.out.println("11111111111 "+fd.getRentedTime().size());
         if(fd.getRentedTime().size()!=0){
-        for (HashMap.Entry<String, ArrayList<String>> innerEntry : fd.getRentedTimeArray().entrySet()) {
+        for (HashMap.Entry<String, ArrayList<String>> innerEntry : fd.getRentedTime().entrySet()) {
             String key = innerEntry.getKey();
             ArrayList<String> value = innerEntry.getValue();
             renterTime=value;
             specific_renterID=key;
+            System.out.println(key+"11111111111");
         }}
 
         if((specific_renterID!=null)&&(specific_renterID.equals(mFirebaseUser_universal.getUid()))){
-            DatabaseReference database = mDatabase.child("users").child(specific_renterID).child("userName");
+            System.out.println(specific_renterID+"222222");
+            DatabaseReference database = mDatabase.child("users").child(fd.getHost()).child("userName");
             database.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     name = (String) dataSnapshot.getValue();
+                    System.out.println(name+"3333333");
                 }
 
                 @Override
@@ -282,13 +289,15 @@ public class DetailedViewActivity extends AppCompatActivity{
                     }
                 });
             }
-        else{
+        else if(fd.getHost().equals(mFirebaseUser_universal.getUid())){
             if(specific_renterID!=null) {
+                System.out.println(specific_renterID+"4444444");
                 DatabaseReference database = mDatabase.child("users").child(specific_renterID).child("userName");
                 database.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         name = (String) dataSnapshot.getValue();
+                        System.out.println(name+"5555555");
                     }
 
                     @Override
@@ -307,13 +316,13 @@ public class DetailedViewActivity extends AppCompatActivity{
 
         if (renterTime.size() != 0) {
             String endTime = renterTime.get(1);
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
             String today = getToday(df);
             Date end;
             Date d = null;
             try {
                 d = df.parse(today);
-                end = df.parse(endTime);
+                end = df.parse(endTime.substring(0,endTime.length()-2)+":00");
                 if (d.getTime() < end.getTime()) {
                     confirmButton.setEnabled(false);
                 }

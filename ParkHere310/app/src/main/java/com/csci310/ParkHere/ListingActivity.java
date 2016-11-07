@@ -147,7 +147,7 @@ public class ListingActivity extends AppCompatActivity {
                                 user_all.setPhotos((ArrayList<String>)value);
                             }
                             if(key.equals("rentedTime")){
-                                user_all.setRentedTime((Map<String,Vector<String>>)value);
+                                user_all.setRentedTime((Map<String,ArrayList<String>>)value);
                             }
                             if(key.equals("identifier")){
                                 user_all.setIdentifier((String)value);
@@ -238,7 +238,7 @@ public class ListingActivity extends AppCompatActivity {
                         user_all.setPhotos((ArrayList<String>)value);
                     }
                     if(key.equals("rentedTime")){
-                        user_all.setRentedTime((Map<String,Vector<String>>)value);
+                        user_all.setRentedTime((Map<String,ArrayList<String>>)value);
                     }
                     if(key.equals("identifier")){
                         user_all.setIdentifier((String)value);
