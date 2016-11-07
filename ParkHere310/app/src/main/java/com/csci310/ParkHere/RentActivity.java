@@ -80,6 +80,8 @@ public class RentActivity extends AppCompatActivity {
     int position;
     private Vector<String> rateList;
     private Map<String,ArrayList<String>> rentList;
+    private Map<String,ArrayList<String>> renter_rentedlist;
+    private Map<String,ArrayList<String>> host_rentedlist;
 
     //Paypal Configuration Object
     private static PayPalConfiguration config = new PayPalConfiguration()
@@ -226,20 +228,8 @@ public class RentActivity extends AppCompatActivity {
                 try {
                     Log.i("paymentExample", confirm.toJSONObject().toString(4));
 
-                    ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(fd.getIdentifier());
-                    ref.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            ref.setValue(fd);
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            System.out.println("The read failed: " + databaseError.getCode());
-                        }
-                    });
                     mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(false);
-                    mDatabase.child("parking-spots-renting").child(fd.getIdentifier()).setValue(fd);
                     mDatabase.child("users").child(fd.getHost()).child("hosting/" + fd.getIdentifier()).child("activity").setValue(false);
                     rateList=new Vector<String>();
                     rateList.add(fd.getIdentifier());
@@ -268,6 +258,12 @@ public class RentActivity extends AppCompatActivity {
                     startend.add(start);
                     startend.add(end);
                     rentList.put(mFirebaseUser.getUid(),startend);
+
+                    renter_rentedlist=new HashMap<String,ArrayList<String>>();
+                    renter_rentedlist=rentList;
+                    host_rentedlist=new HashMap<String,ArrayList<String>>();
+                    host_rentedlist=rentList;
+
                     DatabaseReference ref1=mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime");
                     ref1.addValueEventListener(new ValueEventListener() {
                         @Override
@@ -288,6 +284,45 @@ public class RentActivity extends AppCompatActivity {
                     });
                     ref1.setValue(rentList);
 
+                    DatabaseReference ref2=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(fd.getIdentifier()).child("rentedTime");
+                    ref2.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                HashMap<String,ArrayList<String>> tempList = (HashMap) dataSnapshot.getValue();
+                                for (HashMap.Entry<String,ArrayList<String>> entry : tempList.entrySet()) {
+                                    String key = entry.getKey();
+                                    ArrayList<String> value = entry.getValue();
+                                    renter_rentedlist.put(key,value);
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read  failed: " + databaseError.getCode());
+                        }
+                    });
+                    ref2.setValue(renter_rentedlist);
+
+                    DatabaseReference ref3=mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime");
+                    ref3.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                HashMap<String,ArrayList<String>> tempList = (HashMap) dataSnapshot.getValue();
+                                for (HashMap.Entry<String,ArrayList<String>> entry : tempList.entrySet()) {
+                                    String key = entry.getKey();
+                                    ArrayList<String> value = entry.getValue();
+                                    renter_rentedlist.put(key,value);
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read  failed: " + databaseError.getCode());
+                        }
+                    });
+                    ref3.setValue(renter_rentedlist);
 
 
 

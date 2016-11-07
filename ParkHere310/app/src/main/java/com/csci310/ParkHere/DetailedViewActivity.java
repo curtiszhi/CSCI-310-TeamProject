@@ -74,7 +74,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     public DatabaseReference mDatabase;
     private Vector<String> rateList;
     private String specific_renterID=null;
-    private ArrayList<String> renterTime;
+    private Vector<String> renterTime;
     private String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +171,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                 Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
                 intent.putExtra("ID", specific_renterID);
                 startActivity(intent);}
-                else if(mFirebaseUser_universal.getUid().equals(specific_renterID)){
+                else if((specific_renterID!=null)&&(mFirebaseUser_universal.getUid().equals(specific_renterID))){
                     Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
                     intent.putExtra("ID", fd.getHost());
                     startActivity(intent);
@@ -253,21 +253,25 @@ public class DetailedViewActivity extends AppCompatActivity{
         return dformat.format(date);
     }
     private void setUp(){
-        renterTime=new ArrayList<String>();
+        renterTime=new Vector<String>();
+        System.out.println("11111111111 "+fd.getRentedTime().size());
         if(fd.getRentedTime().size()!=0){
-        for (HashMap.Entry<String, ArrayList<String>> innerEntry : fd.getRentedTimeArray().entrySet()) {
+        for (HashMap.Entry<String, Vector<String>> innerEntry : fd.getRentedTime().entrySet()) {
             String key = innerEntry.getKey();
-            ArrayList<String> value = innerEntry.getValue();
+            Vector<String> value = innerEntry.getValue();
             renterTime=value;
             specific_renterID=key;
+            System.out.println(key+"11111111111");
         }}
 
         if((specific_renterID!=null)&&(specific_renterID.equals(mFirebaseUser_universal.getUid()))){
-            DatabaseReference database = mDatabase.child("users").child(specific_renterID).child("userName");
+            System.out.println(specific_renterID+"222222");
+            DatabaseReference database = mDatabase.child("users").child(fd.getHost()).child("userName");
             database.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     name = (String) dataSnapshot.getValue();
+                    System.out.println(name+"3333333");
                 }
 
                 @Override
@@ -282,13 +286,15 @@ public class DetailedViewActivity extends AppCompatActivity{
                     }
                 });
             }
-        else{
+        else if(fd.getHost().equals(mFirebaseUser_universal.getUid())){
             if(specific_renterID!=null) {
+                System.out.println(specific_renterID+"4444444");
                 DatabaseReference database = mDatabase.child("users").child(specific_renterID).child("userName");
                 database.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         name = (String) dataSnapshot.getValue();
+                        System.out.println(name+"5555555");
                     }
 
                     @Override

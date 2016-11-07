@@ -41,12 +41,12 @@ import static org.hamcrest.core.IsNot.not;
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class HostButtonTest {
+public class ListingTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void HostTest() {
+    public void ListTest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.emailEditText), isDisplayed()));
         appCompatEditText.perform(replaceText("seanyuan@usc.edu"), closeSoftKeyboard());
