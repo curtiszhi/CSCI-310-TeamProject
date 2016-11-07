@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private  Button loginButton,registerButton, forgotButton;
     private EditText emailEditText,passEditText;
     private FirebaseAuth mFirebaseAuth;
-    private ProgressDialog progressDiag;
+    private ProgressBar progressDiag;
     private FirebaseAuth.AuthStateListener mAuthListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton=(Button)findViewById(R.id.loginButton);
         registerButton=(Button)findViewById(R.id.registerButton);
         forgotButton = (Button) findViewById(R.id.forgotButton);
+        progressDiag = (ProgressBar) findViewById(R.id.signInProgress);
         mFirebaseAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -75,9 +77,9 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         String email = emailEditText.getText().toString();
         String password = passEditText.getText().toString();
-        progressDiag = new ProgressDialog(this);
-        progressDiag.setMessage("Signing In...");
-        progressDiag.show();
+        progressDiag.setVisibility(View.VISIBLE);
+        //progressDiag.setMessage("Signing In...");
+        //progressDiag.show();
         mFirebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                             alertDialog.setMessage("Invalid Email/Password");
                             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
+                                    progressDiag.setVisibility(View.GONE);
                                 }
                             });
                             alertDialog.show();
