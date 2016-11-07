@@ -13,7 +13,9 @@ import com.csci310.ParkHere.R;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
@@ -22,6 +24,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static com.csci310.ParkHere.R.id.locationEditText;
 import static org.hamcrest.Matchers.allOf;
 
 /**
@@ -40,6 +43,20 @@ public class ProgressBarTest {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        try{
+            //not logged in
+            onView(withId(R.id.emailEditText)).perform(replaceText("hi"), closeSoftKeyboard());
+        }
+
+        catch (Exception e){
+            //logged in, log out
+            openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
+
+            ViewInteraction appCompatTextView3 = onView(
+                    allOf(withId(R.id.title), withText("Sign-out"), isDisplayed()));
+            appCompatTextView3.perform(click());
         }
 
         ViewInteraction appCompatEditText = onView(allOf(withId(R.id.emailEditText), isDisplayed()));
