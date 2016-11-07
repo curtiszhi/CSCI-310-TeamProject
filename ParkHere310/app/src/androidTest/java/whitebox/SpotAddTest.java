@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.LargeTest;
@@ -42,6 +43,7 @@ import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -49,6 +51,7 @@ import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
+import static android.support.test.espresso.matcher.RootMatchers.isDialog;
 import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -77,6 +80,7 @@ public class SpotAddTest {
     private String endTime_text;
     private String wrong_end;
     private String description_text;
+    private String error;
 
 
     @Rule
@@ -93,12 +97,12 @@ public class SpotAddTest {
         price_text="3.2";
         ealier_current_date="11-1-2016";
         startDate_text="11-10-2016";
-        startTime_text="13:10";
+        startTime_text="13:10PM";
         endDate_text="11-20-2016";
         wrong_end="11-10-2016";
-        endTime_text="10:30";
+        endTime_text="10:30AM";
         description_text="test description";
-
+        error="Please make sure time difference is larger than 1 hour or the starting time is before the current time ";
 
 
     }
@@ -122,8 +126,8 @@ public class SpotAddTest {
         onView(withId(R.id.city))
                 .perform(typeText(city_text), closeSoftKeyboard());
 
-        onView(withId(R.id.state)).perform(scrollTo(),click());
-        onData(allOf(is(instanceOf(String.class)), is(state_text))).perform(click());
+       // onView(withId(R.id.state)).perform(click());
+      //  onData(allOf(is(instanceOf(String.class)), is(state_text))).perform(click());
 
         onView(withId(R.id.postcode))
                 .perform(typeText(zip_text), closeSoftKeyboard());
@@ -132,48 +136,29 @@ public class SpotAddTest {
                 .perform(typeText(price_text), closeSoftKeyboard());
 
         onView(withId(R.id.startDateEditText))
-                .perform(typeText(ealier_current_date), closeSoftKeyboard());
+                .perform(replaceText(ealier_current_date), closeSoftKeyboard());
 
         onView(withId(R.id.endDateEditText))
-                .perform(typeText(endDate_text), closeSoftKeyboard());
+                .perform(replaceText(endDate_text), closeSoftKeyboard());
 
         onView(withId(R.id.startTimeEditText))
-                .perform(typeText(startTime_text), closeSoftKeyboard());
+                .perform(replaceText(startTime_text), closeSoftKeyboard());
 
         onView(withId(R.id.endTimeEditText))
-                .perform(typeText(endTime_text), closeSoftKeyboard());
-
-        onView(withId(R.id.mySpinner1))
-                .perform(scrollTo(),click());
-
-        onData(allOf(is(instanceOf(String.class)), is("handicap"))).perform(click());
-
-        onData(allOf(is(instanceOf(String.class)), is("compact"))).perform(click());
+                .perform(replaceText(endTime_text), closeSoftKeyboard());
 
 
-        onView(withId(R.id.radio_norefund))
-                .perform(click());
 
         onView(withId(R.id.description))
                 .perform(typeText(description_text), closeSoftKeyboard());
 
-        onView(withId(R.id.state)).check(matches(withSpinnerText(containsString(state_text))));
+        //onView(withId(R.id.state)).check(matches(withSpinnerText(containsString(state_text))));
 
 
-        onView(withId(R.id.radio_norefund))
-                .check(matches(isChecked()));
-        onView(withId(R.id.radio_80refund))
-                .check(matches(not(isChecked())));
-
-        onView(withId(R.id.radio_full_50))
-                .check(matches(not(isChecked())));
-
-        onView(withId(R.id.radio_full_0))
-                .check(matches(not(isChecked())));
 
         onView(withId(R.id.postButton)).perform(scrollTo(), click());
 
-        onView(withText("Please make sure time difference is larger than 1 hour or the starting time is before the current time ")).check(matches(isDisplayed()));
+        onView(withText(error)).check(matches(isDisplayed()));
 
     }
 
@@ -186,8 +171,8 @@ public class SpotAddTest {
         onView(withId(R.id.city))
                 .perform(typeText(city_text), closeSoftKeyboard());
 
-        onView(withId(R.id.state)).perform(scrollTo(),click());
-        onData(allOf(is(instanceOf(String.class)), is(state_text))).perform(click());
+        //onView(withId(R.id.state)).perform(scrollTo(),click());
+        //onData(allOf(is(instanceOf(String.class)), is(state_text))).perform(click());
 
         onView(withId(R.id.postcode))
                 .perform(typeText(zip_text), closeSoftKeyboard());
@@ -196,48 +181,37 @@ public class SpotAddTest {
                 .perform(typeText(price_text), closeSoftKeyboard());
 
         onView(withId(R.id.startDateEditText))
-                .perform(typeText(ealier_current_date), closeSoftKeyboard());
+                .perform(replaceText(ealier_current_date), closeSoftKeyboard());
 
         onView(withId(R.id.endDateEditText))
-                .perform(typeText(wrong_end), closeSoftKeyboard());
+                .perform(replaceText(wrong_end), closeSoftKeyboard());
 
         onView(withId(R.id.startTimeEditText))
-                .perform(typeText(startTime_text), closeSoftKeyboard());
+                .perform(replaceText(startTime_text), closeSoftKeyboard());
 
         onView(withId(R.id.endTimeEditText))
-                .perform(typeText(endTime_text), closeSoftKeyboard());
+                .perform(replaceText(endTime_text), closeSoftKeyboard());
 
-        onView(withId(R.id.mySpinner1))
+      /*  onView(withId(R.id.mySpinner1))
                 .perform(scrollTo(),click());
 
         onData(allOf(is(instanceOf(String.class)), is("handicap"))).perform(click());
 
         onData(allOf(is(instanceOf(String.class)), is("compact"))).perform(click());
+*/
 
 
-        onView(withId(R.id.radio_norefund))
-                .perform(click());
 
         onView(withId(R.id.description))
                 .perform(typeText(description_text), closeSoftKeyboard());
 
-        onView(withId(R.id.state)).check(matches(withSpinnerText(containsString(state_text))));
+       // onView(withId(R.id.state)).check(matches(withSpinnerText(containsString(state_text))));
 
 
-        onView(withId(R.id.radio_norefund))
-                .check(matches(isChecked()));
-        onView(withId(R.id.radio_80refund))
-                .check(matches(not(isChecked())));
-
-        onView(withId(R.id.radio_full_50))
-                .check(matches(not(isChecked())));
-
-        onView(withId(R.id.radio_full_0))
-                .check(matches(not(isChecked())));
 
         onView(withId(R.id.postButton)).perform(scrollTo(), click());
 
-        onView(withText("Please make sure time difference is larger than 1 hour or the starting time is before the current time ")).check(matches(isDisplayed()));
+        onView(withText("Please make sure time difference is larger than 1 hour or the starting time is before the current time ")).inRoot(isDialog()).check(matches(isDisplayed()));
 
     }
 

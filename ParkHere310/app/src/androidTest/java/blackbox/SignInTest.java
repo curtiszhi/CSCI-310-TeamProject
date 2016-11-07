@@ -17,11 +17,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.intent.Intents.intended;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static android.support.test.espresso.assertion.ViewAssertions.*;
 
 /**
  * Created by Peter on 11/3/16.
@@ -46,18 +43,16 @@ public class SignInTest {
     @Test
     public void signIn()
     {
-        // Enter Sign In Info
-
         try {
             onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
             onView(withId(R.id.passwordEditText)).perform(typeText(pass), closeSoftKeyboard());
             onView(withId(R.id.loginButton)).perform(click());
-            intended(hasComponent(ActionActivity.class.getName()));
+            onView(withId(R.id.loginButton)).check(doesNotExist());
         }
         catch (NoMatchingViewException e)
         {
-            onView(withId(R.id.locationEditText)).perform(typeText(email), closeSoftKeyboard());
-            onView((withId(R.id.locationEditText))).check(matches(withText(email)));
+            e.printStackTrace();
+            System.out.println("Already signed in! Please sign out first to initiate this test!");
         }
     }
 
