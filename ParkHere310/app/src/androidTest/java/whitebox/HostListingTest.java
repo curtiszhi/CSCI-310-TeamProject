@@ -76,56 +76,61 @@ public class HostListingTest {
 
 
 
-        assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
 
-        ViewInteraction recyclerView1 = onView(
-                allOf(withId(R.id.myList),
-                        withParent(allOf(withId(R.id.main_content),
-                                withParent(withId(android.R.id.content)))),
-                        isDisplayed()));
-        recyclerView1.perform(actionOnItemAtPosition(0, click()));
 
-        FeedItem spot1= MyRecyclerAdapter.feedItemList.get(0);
 
-        assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
 
-        onView(withId(R.id.address))
-                .check(matches(withText(spot1.getAddress())));
-        onView(withId(R.id.price))
-                .check(matches(withText("$"+spot1.getPrice())));
+        if(MyRecyclerAdapter.feedItemList.size()!=0) {
+            ViewInteraction recyclerView1 = onView(
+                    allOf(withId(R.id.myList),
+                            withParent(allOf(withId(R.id.main_content),
+                                    withParent(withId(android.R.id.content)))),
+                            isDisplayed()));
 
-        String filt1="";
-        if(spot1.getFilter()!=null){
-            for(int i=0;i<spot1.getFilter().size();i++){
-                if(i!=spot1.getFilter().size()-1){
-                    filt1=filt1+spot1.getFilter().get(i)+", ";}
-                else{
-                    filt1=filt1+spot1.getFilter().get(i);
+            assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
+            recyclerView1.perform(actionOnItemAtPosition(0, click()));
+
+            FeedItem spot1 = MyRecyclerAdapter.feedItemList.get(0);
+
+            assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
+
+            onView(withId(R.id.address))
+                    .check(matches(withText(spot1.getAddress())));
+            onView(withId(R.id.price))
+                    .check(matches(withText("$" + spot1.getPrice())));
+
+            String filt1 = "";
+            if (spot1.getFilter() != null) {
+                for (int i = 0; i < spot1.getFilter().size(); i++) {
+                    if (i != spot1.getFilter().size() - 1) {
+                        filt1 = filt1 + spot1.getFilter().get(i) + ", ";
+                    } else {
+                        filt1 = filt1 + spot1.getFilter().get(i);
+                    }
                 }
-            }}
-        onView(withId(R.id.filters))
-                .check(matches(withText(filt1)));
-        onView(withId(R.id.description))
-                .check(matches(withText(spot1.getDescription())));
+            }
+            onView(withId(R.id.filters))
+                    .check(matches(withText(filt1)));
+            onView(withId(R.id.description))
+                    .check(matches(withText(spot1.getDescription())));
 
-        if(spot1.getRentedTime().size()!=0) {
-            String time_frame = spot1.getRentedTime().get(0) + " to " + spot1.getRentedTime().get(1);
-            onView(withId(R.id.time))
-                    .check(matches(withText(time_frame)));
+            if (spot1.getRentedTime().size() != 0) {
+                String time_frame = spot1.getRentedTime().get(0) + " to " + spot1.getRentedTime().get(1);
+                onView(withId(R.id.time))
+                        .check(matches(withText(time_frame)));
+            }
+
+            onView(withId(R.id.cancel))
+                    .check(matches(withText(spot1.getCancel())));
+
+
+            onView(withId(R.id.confirmButton))
+                    .check(matches(not(isEnabled())));
+            onView(withId(R.id.cancelButton))
+                    .check(matches(isClickable()));
+            onView(withId(R.id.editButton))
+                    .check(matches(isEnabled()));
+
         }
-
-        onView(withId(R.id.cancel))
-                .check(matches(withText(spot1.getCancel())));
-
-
-        onView(withId(R.id.confirmButton))
-                .check(matches(not(isEnabled())));
-        onView(withId(R.id.cancelButton))
-                .check(matches(isClickable()));
-        onView(withId(R.id.editButton))
-                .check(matches(isEnabled())) ;
-
-
-
     }
 }

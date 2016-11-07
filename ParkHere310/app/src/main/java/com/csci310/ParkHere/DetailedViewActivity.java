@@ -313,13 +313,13 @@ public class DetailedViewActivity extends AppCompatActivity{
 
         if (renterTime.size() != 0) {
             String endTime = renterTime.get(1);
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
             String today = getToday(df);
             Date end;
             Date d = null;
             try {
                 d = df.parse(today);
-                end = df.parse(endTime);
+                end = df.parse(endTime.substring(0,endTime.length()-2)+":00");
                 if (d.getTime() < end.getTime()) {
                     confirmButton.setEnabled(false);
                 }
