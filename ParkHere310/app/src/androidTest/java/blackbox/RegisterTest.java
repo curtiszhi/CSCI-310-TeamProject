@@ -1,6 +1,5 @@
 package blackbox;
 
-import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.rule.ActivityTestRule;
 
 import com.csci310.ParkHere.R;
@@ -48,9 +47,7 @@ public class RegisterTest {
 
 
     @Test
-    public void registerUser()
-    {
-        try {
+    public void registerUser(){
             onView(withId(R.id.nameEditText)).perform(typeText(name), closeSoftKeyboard());
             onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
             onView(withId(R.id.passwordEditText)).perform(typeText(pass), closeSoftKeyboard());
@@ -59,17 +56,12 @@ public class RegisterTest {
             onView(withId(R.id.registerButton)).perform(click());
 
             onView(withId(R.id.locationEditText)).perform(typeText(email), closeSoftKeyboard());
-            onView((withId(R.id.locationEditText))).check(matches(withText(email)));
-        }
-        catch (NoMatchingViewException e)
-        {
-
-        }
+              onView((withId(R.id.locationEditText))).check(matches(withText(email)));
     }
+
 
     @Test
     public void registerUserFail(){
-        try {
             onView(withId(R.id.nameEditText)).perform(typeText(name), closeSoftKeyboard());
             onView(withId(R.id.emailEditText)).perform(typeText(existingEmail), closeSoftKeyboard());
             onView(withId(R.id.passwordEditText)).perform(typeText(pass), closeSoftKeyboard());
@@ -77,13 +69,8 @@ public class RegisterTest {
             onView(withId(R.id.phoneEditText)).perform(typeText(phone), closeSoftKeyboard());
             onView(withId(R.id.registerButton)).perform(click());
 
-            //onView(withId(R.id.locationEditText)).perform(typeText(email), closeSoftKeyboard());
             onView((withId(R.id.locationEditText))).check(doesNotExist());
-        }
-        catch (NoMatchingViewException e)
-        {
 
-        }
     }
 
 }
