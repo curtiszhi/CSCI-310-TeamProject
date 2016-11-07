@@ -1,11 +1,9 @@
 package blackbox;
 
-import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.csci310.ParkHere.ActionActivity;
-import com.csci310.ParkHere.MainActivity;
+import com.csci310.ParkHere.AddActivity;
 import com.csci310.ParkHere.R;
 
 import org.junit.Before;
@@ -13,7 +11,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.typeText;
@@ -31,8 +31,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class NewPostTest
 {
     @Rule
-    public ActivityTestRule<MainActivity> myActivityRule = new ActivityTestRule<>(
-            MainActivity.class);
+    public ActivityTestRule<AddActivity> myActivityRule = new ActivityTestRule<>(AddActivity.class);
 
     @Before
     public void initString() {
@@ -42,21 +41,9 @@ public class NewPostTest
 
 
     @Test
-    public void signIn()
+    public void NewPost()
     {
-        // Enter Sign In Info
-
-        try {
-           // onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
-            //onView(withId(R.id.passwordEditText)).perform(typeText(pass), closeSoftKeyboard());
-            //onView(withId(R.id.loginButton)).perform(click());
-            //intended(hasComponent(ActionActivity.class.getName()));
-        }
-        catch (NoMatchingViewException e)
-        {
-            //onView(withId(R.id.locationEditText)).perform(typeText(email), closeSoftKeyboard());
-            //onView((withId(R.id.locationEditText))).check(matches(withText(email)));
-        }
+        onView(withId(R.id.Address)).perform(typeText("Test address"));
 
 
 
