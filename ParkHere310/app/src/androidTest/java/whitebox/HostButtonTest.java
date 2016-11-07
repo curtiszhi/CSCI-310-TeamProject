@@ -25,7 +25,9 @@ import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -59,7 +61,7 @@ public class HostButtonTest {
         appCompatButton.perform(click());
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -72,13 +74,11 @@ public class HostButtonTest {
                 allOf(withId(R.id.viewHostHistoryButton), /*withParent(allOf(withId(R.id.toolbar)))*/isDisplayed()));
         appCompatButton2.perform(click());
 
+
+
+
+
         assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
-
-
-       /* ViewInteraction TabView = onView(
-                allOf(withText("HOSTING"), isDisplayed()));
-        TabView.perform(click());
-        */
 
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.myList),
@@ -124,6 +124,64 @@ public class HostButtonTest {
                 .check(matches(isDisplayed()));
         onView(withId(R.id.editButton))
                 .check(matches(not(isDisplayed()))) ;
+
+        pressBack();
+
+        ViewInteraction AppCompatTextView = onView(
+                allOf(withText("Hosting"), isDisplayed()));
+        AppCompatTextView.perform(click());
+
+
+
+        assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
+
+        ViewInteraction recyclerView1 = onView(
+                allOf(withId(R.id.myList),
+                        withParent(allOf(withId(R.id.main_content),
+                                withParent(withId(android.R.id.content)))),
+                        isDisplayed()));
+        recyclerView1.perform(actionOnItemAtPosition(0, click()));
+
+        FeedItem spot1= MyRecyclerAdapter.feedItemList.get(0);
+
+        assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
+
+        onView(withId(R.id.address))
+                .check(matches(withText(spot1.getAddress())));
+        onView(withId(R.id.price))
+                .check(matches(withText("$"+spot1.getPrice())));
+        String filt1="";
+        if(spot1.getFilter()!=null){
+            for(int i=0;i<spot1.getFilter().size();i++){
+                if(i!=spot1.getFilter().size()-1){
+                    filt1=filt1+spot.getFilter().get(i)+", ";}
+                else{
+                    filt1=filt1+spot.getFilter().get(i);
+                }
+            }}
+        onView(withId(R.id.filters))
+                .check(matches(withText(filt1)));
+        onView(withId(R.id.description))
+                .check(matches(withText(spot1.getDescription())));
+
+        if(spot1.getRentedTime().size()!=0) {
+            String time_frame = spot1.getRentedTime().get(0) + " to " + spot1.getRentedTime().get(1);
+            onView(withId(R.id.time))
+                    .check(matches(withText(time_frame)));
+        }
+
+        onView(withId(R.id.cancel))
+                .check(matches(withText(spot1.getCancel())));
+
+
+        onView(withId(R.id.confirmButton))
+                .check(matches(not(isEnabled())));
+        onView(withId(R.id.cancelButton))
+                .check(matches(isClickable()));
+        onView(withId(R.id.editButton))
+                .check(matches(isEnabled())) ;
+
+
 
     }
 
