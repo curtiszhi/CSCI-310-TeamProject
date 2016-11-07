@@ -94,8 +94,8 @@ public class SpotCreationTest {
         spot.setRating(testRatings);
         assertThat(spot.calculateRate(), is((float)2.75));
 
-        Map<String,Vector<String>> testRented=new HashMap<String,Vector<String>>();
-        Vector<String> rented = new Vector<String>();
+        Map<String,ArrayList<String>> testRented=new HashMap<String,ArrayList<String>>();
+        ArrayList<String> rented = new ArrayList<>();
         rented.add("11-10-2016 13:10PM");
         rented.add("11-20-2016 10:30AM");
         testRented.put("234567",rented);
