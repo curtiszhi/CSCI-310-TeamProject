@@ -123,7 +123,7 @@ public class HostButtonTest {
         onView(withId(R.id.cancelButton))
                 .check(matches(isDisplayed()));
         onView(withId(R.id.editButton))
-                .check(matches(not(isDisplayed())));
+                .check(matches(not(isDisplayed()))) ;
 
     }
 
