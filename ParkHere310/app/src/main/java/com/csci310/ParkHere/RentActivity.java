@@ -80,7 +80,7 @@ public class RentActivity extends AppCompatActivity {
     int position;
     private Vector<String> rateList;
     private Map<String,ArrayList<String>> rentList;
-    private Map<String,ArrayList<String>> renter_rentedlist;
+    private Map<String,Vector<String>> renter_rentedlist;
     private Map<String,ArrayList<String>> host_rentedlist;
 
     //Paypal Configuration Object
@@ -259,8 +259,12 @@ public class RentActivity extends AppCompatActivity {
                     startend.add(end);
                     rentList.put(mFirebaseUser.getUid(),startend);
 
-                    renter_rentedlist=new HashMap<String,ArrayList<String>>();
-                    renter_rentedlist=rentList;
+                    renter_rentedlist=new HashMap<String,Vector<String>>();
+                    Vector<String> startend1=new Vector<String>();
+                    startend1.add(start);
+                    startend1.add(end);
+                    renter_rentedlist.put(mFirebaseUser.getUid(),startend1);
+
                     host_rentedlist=new HashMap<String,ArrayList<String>>();
                     host_rentedlist=rentList;
 
@@ -284,25 +288,10 @@ public class RentActivity extends AppCompatActivity {
                     });
                     ref1.setValue(rentList);
 
-                    DatabaseReference ref2=mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(fd.getIdentifier()).child("rentedTime");
-                    ref2.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                HashMap<String,ArrayList<String>> tempList = (HashMap) dataSnapshot.getValue();
-                                for (HashMap.Entry<String,ArrayList<String>> entry : tempList.entrySet()) {
-                                    String key = entry.getKey();
-                                    ArrayList<String> value = entry.getValue();
-                                    renter_rentedlist.put(key,value);
-                                }
-                            }
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            System.out.println("The read  failed: " + databaseError.getCode());
-                        }
-                    });
-                    ref2.setValue(renter_rentedlist);
+                    fd.setRentedTime(renter_rentedlist);
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(fd.getIdentifier()).setValue(fd);
+
+
 
                     DatabaseReference ref3=mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime");
                     ref3.addValueEventListener(new ValueEventListener() {
@@ -313,7 +302,7 @@ public class RentActivity extends AppCompatActivity {
                                 for (HashMap.Entry<String,ArrayList<String>> entry : tempList.entrySet()) {
                                     String key = entry.getKey();
                                     ArrayList<String> value = entry.getValue();
-                                    renter_rentedlist.put(key,value);
+                                    host_rentedlist.put(key,value);
                                 }
                             }
                         }
@@ -322,7 +311,7 @@ public class RentActivity extends AppCompatActivity {
                             System.out.println("The read  failed: " + databaseError.getCode());
                         }
                     });
-                    ref3.setValue(renter_rentedlist);
+                    ref3.setValue(host_rentedlist);
 
 
 
