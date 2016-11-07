@@ -5,8 +5,6 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.csci310.ParkHere.ActionActivity;
-import com.csci310.ParkHere.AddActivity;
 import com.csci310.ParkHere.FeedItem;
 import com.csci310.ParkHere.MainActivity;
 import com.csci310.ParkHere.MyRecyclerAdapter;
@@ -17,12 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
@@ -37,16 +32,16 @@ import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.core.IsNot.not;
 
 /**
- * Created by yingchen on 11/6/2016.
+ * Created by yingchen on 11/7/2016.
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class ListingTest {
-    @Rule
+public class HostListingTest {
+
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void ListTest() {
+    public void HostListTest() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.emailEditText), isDisplayed()));
         appCompatEditText.perform(replaceText("seanyuan@usc.edu"), closeSoftKeyboard());
@@ -66,6 +61,7 @@ public class ListingTest {
             e.printStackTrace();
         }
 
+
         ViewInteraction appCompatButton1 = onView(
                 allOf(withId(R.id.action_user), /*withParent(allOf(withId(R.id.toolbar)))*/isDisplayed()));
         appCompatButton1.perform(click());
@@ -73,59 +69,6 @@ public class ListingTest {
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.viewHostHistoryButton), /*withParent(allOf(withId(R.id.toolbar)))*/isDisplayed()));
         appCompatButton2.perform(click());
-
-
-
-
-
-        assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
-
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.myList),
-                        withParent(allOf(withId(R.id.main_content),
-                                withParent(withId(android.R.id.content)))),
-                        isDisplayed()));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-
-        FeedItem spot= MyRecyclerAdapter.feedItemList.get(0);
-
-        assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
-
-        onView(withId(R.id.address))
-                .check(matches(withText(spot.getAddress())));
-        onView(withId(R.id.price))
-                .check(matches(withText("$"+spot.getPrice())));
-        String filt="";
-        if(spot.getFilter()!=null){
-        for(int i=0;i<spot.getFilter().size();i++){
-            if(i!=spot.getFilter().size()-1){
-                filt=filt+spot.getFilter().get(i)+", ";}
-            else{
-                filt=filt+spot.getFilter().get(i);
-            }
-        }}
-        onView(withId(R.id.filters))
-                .check(matches(withText(filt)));
-        onView(withId(R.id.description))
-                .check(matches(withText(spot.getDescription())));
-
-        if(spot.getRentedTime().size()!=0) {
-            String time_frame = spot.getRentedTime().get(0) + " to " + spot.getRentedTime().get(1);
-            onView(withId(R.id.time))
-                    .check(matches(withText(time_frame)));
-        }
-
-        onView(withId(R.id.cancel))
-                .check(matches(withText(spot.getCancel())));
-
-        onView(withId(R.id.confirmButton))
-                .check(matches(not(isDisplayed())));
-        onView(withId(R.id.cancelButton))
-                .check(matches(isDisplayed()));
-        onView(withId(R.id.editButton))
-                .check(matches(not(isDisplayed()))) ;
-
-        pressBack();
 
         ViewInteraction AppCompatTextView = onView(
                 allOf(withText("Hosting"), isDisplayed()));
@@ -150,13 +93,14 @@ public class ListingTest {
                 .check(matches(withText(spot1.getAddress())));
         onView(withId(R.id.price))
                 .check(matches(withText("$"+spot1.getPrice())));
+
         String filt1="";
         if(spot1.getFilter()!=null){
             for(int i=0;i<spot1.getFilter().size();i++){
                 if(i!=spot1.getFilter().size()-1){
-                    filt1=filt1+spot.getFilter().get(i)+", ";}
+                    filt1=filt1+spot1.getFilter().get(i)+", ";}
                 else{
-                    filt1=filt1+spot.getFilter().get(i);
+                    filt1=filt1+spot1.getFilter().get(i);
                 }
             }}
         onView(withId(R.id.filters))
@@ -184,5 +128,4 @@ public class ListingTest {
 
 
     }
-
 }
