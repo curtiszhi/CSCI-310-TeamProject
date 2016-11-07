@@ -30,6 +30,7 @@
         android:textSize="15dp" />
 
     <EditText
+        android:title="Email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/emailEditText"
@@ -47,6 +48,7 @@
         android:background="@android:drawable/editbox_dropdown_light_frame" />
 
     <EditText
+        android:title="Password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
@@ -65,6 +67,7 @@
 
 
     <Button
+        android:title="Login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="login"
@@ -75,6 +78,7 @@
 
 
     <Button
+        android:title="Register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Register"
