@@ -109,8 +109,15 @@ public class ActionActivity extends AppCompatActivity {
                 boolean requestCover = cover.isChecked();
                 boolean handicapped = handy.isChecked();
                 if(!validateFields(starttime, endtime, startdate,enddate, address)){
-                    Toast.makeText(ActionActivity.this, "please make sure the address is not empty or the time difference is bigger than an hour",
-                            Toast.LENGTH_SHORT).show();
+                    AlertDialog alertDialog = new AlertDialog.Builder(ActionActivity.this).create();
+                    alertDialog.setTitle("Wait!");
+                    alertDialog.setMessage("Please make sure the address is not empty or your date/time is not earlier than the current date/time");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 }else{
 
                 tempSpots.clear();
