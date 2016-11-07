@@ -43,7 +43,6 @@ public class SignInTest {
     @Test
     public void signIn()
     {
-        // Enter Sign In Info
         try {
             onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
             onView(withId(R.id.passwordEditText)).perform(typeText(pass), closeSoftKeyboard());
