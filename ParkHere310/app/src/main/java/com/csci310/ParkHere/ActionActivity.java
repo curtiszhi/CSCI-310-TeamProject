@@ -342,7 +342,7 @@ public class ActionActivity extends AppCompatActivity {
 
         try{
 
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mm");
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
             Date time1 = df.parse(startdate+" "+starttime);
             Date time2 = df.parse(enddate+" "+endtime);
             long diff = time2.getTime() - time1.getTime();
