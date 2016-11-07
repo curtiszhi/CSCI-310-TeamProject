@@ -1,17 +1,21 @@
 package whitebox;
 
+import android.content.Intent;
 import android.support.test.espresso.ViewInteraction;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.widget.Toast;
 
 import com.csci310.ParkHere.ActionActivity;
 import com.csci310.ParkHere.AddActivity;
+import com.csci310.ParkHere.DetailedViewActivity;
 import com.csci310.ParkHere.FeedItem;
 import com.csci310.ParkHere.MainActivity;
 import com.csci310.ParkHere.MyRecyclerAdapter;
 import com.csci310.ParkHere.R;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -136,5 +140,29 @@ public class RentListingTest {
 
         }
     }
+   /* @Before
+    public void stubContactIntent() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822");
+        intent.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Refund Request");
+        intent.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a refund. I agree with the cancellation policy of: " + fd.getCancel());
+
+        intending(allOf(
+                hasData(ContactsContract.CommonDataKinds.Phone.CONTENT_URI),
+                hasAction(Intent.ACTION_PICK))
+        ).respondWith(result);
+    }
+
+    @Test public void pickContact_viewIsSet() {
+        //Check to make sure the Uri field is empty
+        onView(withId(R.id.phone_number)).check(matches(withText("")));
+
+        //Start contact picker
+        onView(withId(R.id.pick_contact)).perform(click());
+
+        //Verify that Uri was set properly.
+        onView(withId(R.id.phone_number)).check(matches(withText(TEST_URI)));
+    }*/
 
 }
