@@ -63,7 +63,7 @@ public class RegisterTest {
         }
         catch (NoMatchingViewException e)
         {
-
+            e.printStackTrace();
         }
     }
 
@@ -82,7 +82,7 @@ public class RegisterTest {
         }
         catch (NoMatchingViewException e)
         {
-
+            e.printStackTrace();
         }
     }
 
