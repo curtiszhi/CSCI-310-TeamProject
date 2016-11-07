@@ -47,15 +47,15 @@ public class NewPostTest
         // Enter Sign In Info
 
         try {
-            onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
-            onView(withId(R.id.passwordEditText)).perform(typeText(pass), closeSoftKeyboard());
-            onView(withId(R.id.loginButton)).perform(click());
-            intended(hasComponent(ActionActivity.class.getName()));
+           // onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
+            //onView(withId(R.id.passwordEditText)).perform(typeText(pass), closeSoftKeyboard());
+            //onView(withId(R.id.loginButton)).perform(click());
+            //intended(hasComponent(ActionActivity.class.getName()));
         }
         catch (NoMatchingViewException e)
         {
-            onView(withId(R.id.locationEditText)).perform(typeText(email), closeSoftKeyboard());
-            onView((withId(R.id.locationEditText))).check(matches(withText(email)));
+            //onView(withId(R.id.locationEditText)).perform(typeText(email), closeSoftKeyboard());
+            //onView((withId(R.id.locationEditText))).check(matches(withText(email)));
         }
 
 
