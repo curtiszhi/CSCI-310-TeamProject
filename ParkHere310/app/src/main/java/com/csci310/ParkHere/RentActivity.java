@@ -339,7 +339,7 @@ public class RentActivity extends AppCompatActivity {
         //hostPublic.setText(name);
         ratingBar.setRating(fd.calculateRate());
         address.setText(fd.getAddress());
-        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mm");
+        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
         Date time1 = null;
         Date time2=null;
         try {
