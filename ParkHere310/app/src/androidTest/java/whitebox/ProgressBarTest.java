@@ -35,6 +35,13 @@ public class ProgressBarTest {
 
     @Test
     public void detailedViewTest() {
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ViewInteraction appCompatEditText = onView(allOf(withId(R.id.emailEditText), isDisplayed()));
         appCompatEditText.perform(replaceText("seanyuan@usc.edu"), closeSoftKeyboard());
 

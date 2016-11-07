@@ -49,11 +49,15 @@ allOf(withId(R.id.emailEditText), isDisplayed()));
 allOf(withId(R.id.passwordEditText), isDisplayed()));
         appCompatEditText2.perform(replaceText("Testing1"), closeSoftKeyboard());
 
-        pressBack();
 
         ViewInteraction appCompatButton = onView(
 allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
         appCompatButton.perform(click());*/
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         ViewInteraction appCompatEditText3 = onView(
 allOf(withId(R.id.locationEditText),
