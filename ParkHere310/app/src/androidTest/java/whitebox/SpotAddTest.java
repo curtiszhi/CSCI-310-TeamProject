@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
+import android.support.test.espresso.action.ViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.filters.LargeTest;
@@ -122,7 +123,7 @@ public class SpotAddTest {
         onView(withId(R.id.city))
                 .perform(typeText(city_text), closeSoftKeyboard());
 
-        onView(withId(R.id.state)).perform(scrollTo(),click());
+        onView(withId(R.id.state)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is(state_text))).perform(click());
 
         onView(withId(R.id.postcode))
