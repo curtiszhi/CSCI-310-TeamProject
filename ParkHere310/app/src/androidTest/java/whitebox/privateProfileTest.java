@@ -14,9 +14,13 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withChild;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.IsNot.not;
 
 /**
  * Created by yingchen on 11/7/2016.
@@ -38,5 +42,26 @@ public class privateProfileTest {
         ViewInteraction appCompatButton1 = onView(
                 allOf(withId(R.id.action_user), /*withParent(allOf(withId(R.id.toolbar)))*/isDisplayed()));
         appCompatButton1.perform(click());
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        onView(withId(R.id.nameEditText))
+                .check(matches(not(withText(""))));
+
+        onView(withId(R.id.emailEditText))
+                .check(matches(not(withText(""))));
+
+        onView(withId(R.id.phoneEditText))
+                .check(matches(not(withText(""))));
+
+        onView(withId(R.id.ratingBar))
+                .check(matches(isDisplayed()));
+
+
     }
 }
