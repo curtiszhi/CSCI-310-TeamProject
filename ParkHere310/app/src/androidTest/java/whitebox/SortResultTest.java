@@ -1,14 +1,22 @@
 package whitebox;
 
-/**
- * Created by seanyuan on 11/6/16.
- */
 
 import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.pressBack;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static android.support.test.espresso.action.ViewActions.*;
+import static android.support.test.espresso.assertion.ViewAssertions.*;
+import static android.support.test.espresso.matcher.ViewMatchers.*;
 
 import com.csci310.ParkHere.MainActivity;
 import com.csci310.ParkHere.R;
@@ -21,46 +29,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.Matchers.allOf;
-
-
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.espresso.matcher.ViewMatchers;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
-import com.csci310.ParkHere.MainActivity;
-import com.csci310.ParkHere.R;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.replaceText;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
@@ -72,77 +40,139 @@ public class SortResultTest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void searchAddressTest() {
-        /*ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.emailEditText), isDisplayed()));
+    public void detailedViewTest() {
+       /* ViewInteraction appCompatEditText = onView(
+allOf(withId(R.id.emailEditText), isDisplayed()));
         appCompatEditText.perform(replaceText("seanyuan@usc.edu"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.passwordEditText), isDisplayed()));
+allOf(withId(R.id.passwordEditText), isDisplayed()));
         appCompatEditText2.perform(replaceText("Testing1"), closeSoftKeyboard());
 
+        pressBack();
+
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
+allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
         appCompatButton.perform(click());*/
 
         ViewInteraction appCompatEditText3 = onView(
-                allOf(ViewMatchers.withId(R.id.startTimeText),
+                allOf(withId(R.id.locationEditText),
                         withParent(allOf(withId(R.id.basics),
                                 withParent(withId(android.R.id.tabcontent)))),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("22:56"));
+        appCompatEditText3.perform(replaceText("1306 W. 29th Street Los Angeles CA 90007"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.endTimeText),
-                        withParent(allOf(withId(R.id.basics),
-                                withParent(withId(android.R.id.tabcontent)))),
-                        isDisplayed()));
-        appCompatEditText4.perform(replaceText("22:56"));
-
-        ViewInteraction appCompatEditText5 = onView(
                 allOf(withId(R.id.startDateEditText),
                         withParent(allOf(withId(R.id.basics),
                                 withParent(withId(android.R.id.tabcontent)))),
                         isDisplayed()));
-        appCompatEditText5.perform(replaceText("12-8-16"));
+        appCompatEditText4.perform(click());
 
+        ViewInteraction appCompatButton2 = onView(
+                allOf(withId(android.R.id.button1), withText("OK"),
+                        withParent(allOf(withClassName(is("com.android.internal.widget.ButtonBarLayout")),
+                                withParent(withClassName(is("android.widget.LinearLayout"))))),
+                        isDisplayed()));
+        appCompatButton2.perform(click());
 
-        ViewInteraction appCompatEditText6 = onView(
+        ViewInteraction appCompatEditText5 = onView(
                 allOf(withId(R.id.endDateEditText),
                         withParent(allOf(withId(R.id.basics),
                                 withParent(withId(android.R.id.tabcontent)))),
                         isDisplayed()));
-        appCompatEditText6.perform(replaceText("12-9-16"));
+        appCompatEditText5.perform(click());
 
+        ViewInteraction appCompatButton3 = onView(
+                allOf(withId(android.R.id.button1), withText("OK"),
+                        withParent(allOf(withClassName(is("com.android.internal.widget.ButtonBarLayout")),
+                                withParent(withClassName(is("android.widget.LinearLayout"))))),
+                        isDisplayed()));
+        appCompatButton3.perform(click());
+
+        ViewInteraction appCompatEditText6 = onView(
+                allOf(withId(R.id.startTimeText),
+                        withParent(allOf(withId(R.id.basics),
+                                withParent(withId(android.R.id.tabcontent)))),
+                        isDisplayed()));
+        appCompatEditText6.perform(click());
+
+        ViewInteraction appCompatButton4 = onView(
+                allOf(withId(android.R.id.button1), withText("OK"),
+                        withParent(allOf(withClassName(is("com.android.internal.widget.ButtonBarLayout")),
+                                withParent(withClassName(is("android.widget.LinearLayout"))))),
+                        isDisplayed()));
+        appCompatButton4.perform(click());
 
         ViewInteraction appCompatEditText7 = onView(
-                allOf(withId(R.id.locationEditText),
+                allOf(withId(R.id.endTimeText),
                         withParent(allOf(withId(R.id.basics),
                                 withParent(withId(android.R.id.tabcontent)))),
                         isDisplayed()));
         appCompatEditText7.perform(click());
 
-        ViewInteraction appCompatEditText8 = onView(
-                allOf(withId(R.id.locationEditText),
-                        withParent(allOf(withId(R.id.basics),
-                                withParent(withId(android.R.id.tabcontent)))),
+        ViewInteraction appCompatButton5 = onView(
+                allOf(withId(android.R.id.button1), withText("OK"),
+                        withParent(allOf(withClassName(is("com.android.internal.widget.ButtonBarLayout")),
+                                withParent(withClassName(is("android.widget.LinearLayout"))))),
                         isDisplayed()));
-        appCompatEditText8.perform(replaceText("1306 W. 29th Street, Los Angeles, CA 90007"), closeSoftKeyboard());
-
-        ViewInteraction appCompatTextViewqq = onView(
-                allOf(withId(android.R.id.title), withText("Filters"), isDisplayed()));
-        appCompatTextViewqq.perform(click());
-
-        ViewInteraction appCompatCheckBox = onView(
-                allOf(withId(R.id.coverBox), withText("Covered Parking"),
-                        withParent(allOf(withId(R.id.stepFourLayout),
-                                withParent(withId(R.id.filters)))),
-                        isDisplayed()));
-        appCompatCheckBox.perform(click());
+        appCompatButton5.perform(click());
 
         ViewInteraction appCompatButton6 = onView(
                 allOf(withId(R.id.searchButton), withText("Search!"), isDisplayed()));
         appCompatButton6.perform(click());
+
+        pressBack();
+
+        /*ViewInteraction appCompatEditText8 = onView(
+allOf(withId(R.id.startDateEditText), withText("11-14-2016 "),
+withParent(allOf(withId(R.id.basics),
+withParent(withId(android.R.id.tabcontent)))),
+isDisplayed()));
+        appCompatEditText8.perform(click());*/
+
+        /*ViewInteraction appCompatImageButton = onView(
+allOf(withClassName(is("android.support.v7.widget.AppCompatImageButton")), withContentDescription("Next month"),
+withParent(allOf(withClassName(is("android.widget.DayPickerView")),
+withParent(withClassName(is("com.android.internal.widget.DialogViewAnimator"))))),
+isDisplayed()));
+        appCompatImageButton.perform(click());
+
+        ViewInteraction appCompatButton7 = onView(
+allOf(withId(android.R.id.button1), withText("OK"),
+withParent(allOf(withClassName(is("com.android.internal.widget.ButtonBarLayout")),
+withParent(withClassName(is("android.widget.LinearLayout"))))),
+isDisplayed()));
+        appCompatButton7.perform(click());
+
+        ViewInteraction appCompatEditText9 = onView(
+allOf(withId(R.id.endDateEditText), withText("11-16-2016 "),
+withParent(allOf(withId(R.id.basics),
+withParent(withId(android.R.id.tabcontent)))),
+isDisplayed()));
+        appCompatEditText9.perform(click());
+
+        ViewInteraction appCompatImageButton2 = onView(
+allOf(withClassName(is("android.support.v7.widget.AppCompatImageButton")), withContentDescription("Next month"),
+withParent(allOf(withClassName(is("android.widget.DayPickerView")),
+withParent(withClassName(is("com.android.internal.widget.DialogViewAnimator"))))),
+isDisplayed()));
+        appCompatImageButton2.perform(click());
+
+        ViewInteraction appCompatButton8 = onView(
+allOf(withId(android.R.id.button1), withText("OK"),
+withParent(allOf(withClassName(is("com.android.internal.widget.ButtonBarLayout")),
+withParent(withClassName(is("android.widget.LinearLayout"))))),
+isDisplayed()));
+        appCompatButton8.perform(click());*/
+
+        /*ViewInteraction appCompatButton9 = onView(
+allOf(withId(R.id.searchButton), withText("Search!"), isDisplayed()));
+        appCompatButton9.perform(click());*/
+
+        ViewInteraction appCompatTextView = onView(
+                allOf(withText("Distance"), isDisplayed()));
+        appCompatTextView.perform(click());
 
         ViewInteraction appCompatTextView2 = onView(
                 allOf(withText("Price"), isDisplayed()));
@@ -186,8 +216,6 @@ public class SortResultTest {
                         isDisplayed()));
         textView3.check(matches(withText("1306 W 29th St, Los Angeles, CA 90007, USA")));
 
-
-
     }
 
     private static Matcher<View> childAtPosition(
@@ -204,7 +232,7 @@ public class SortResultTest {
             public boolean matchesSafely(View view) {
                 ViewParent parent = view.getParent();
                 return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
+                        && view.equals(((ViewGroup)parent).getChildAt(position));
             }
         };
     }
