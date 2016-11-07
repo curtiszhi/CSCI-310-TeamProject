@@ -74,7 +74,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     public DatabaseReference mDatabase;
     private Vector<String> rateList;
     private String specific_renterID=null;
-    private Vector<String> renterTime;
+    private ArrayList<String> renterTime;
     private String name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,12 +253,12 @@ public class DetailedViewActivity extends AppCompatActivity{
         return dformat.format(date);
     }
     private void setUp(){
-        renterTime=new Vector<String>();
+        renterTime=new ArrayList<String>();
         System.out.println("11111111111 "+fd.getRentedTime().size());
         if(fd.getRentedTime().size()!=0){
-        for (HashMap.Entry<String, Vector<String>> innerEntry : fd.getRentedTime().entrySet()) {
+        for (HashMap.Entry<String, ArrayList<String>> innerEntry : fd.getRentedTime().entrySet()) {
             String key = innerEntry.getKey();
-            Vector<String> value = innerEntry.getValue();
+            ArrayList<String> value = innerEntry.getValue();
             renterTime=value;
             specific_renterID=key;
             System.out.println(key+"11111111111");

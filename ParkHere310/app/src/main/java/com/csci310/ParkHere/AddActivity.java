@@ -478,9 +478,11 @@ public class AddActivity extends AppCompatActivity {
         boolean checkdate=true;
         try{
 
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
-            Date time1 = df.parse(startdate+" "+starttime);
-            Date time2 = df.parse(enddate+" "+endtime);
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+            String start_s=startdate+" "+starttime;
+            String end_s=enddate+" "+endtime;
+            Date time1 = df.parse(start_s.substring(0,start_s.length()-2)+":00");
+            Date time2 = df.parse(end_s.substring(0,end_s.length()-2)+":00");
             long diff = time2.getTime() - time1.getTime();
             long diffHours = diff / (60 * 60 * 1000) % 24;
             if(diffHours>=1){

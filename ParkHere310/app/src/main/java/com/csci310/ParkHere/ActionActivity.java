@@ -214,11 +214,11 @@ public class ActionActivity extends AppCompatActivity {
     {
         try
         {
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
-            long userStartTime = sdf.parse(sDate1str + " " + tryConvertTimeFormat(sTime1str)).getTime();
-            long userEndTime = sdf.parse(eDate1str + " " + tryConvertTimeFormat(eTime1str)).getTime();
-            long spotStartTime = sdf.parse(sDate2str + " " + tryConvertTimeFormat(sTime2str)).getTime();
-            long spotEndTime = sdf.parse(eDate2str + " " + tryConvertTimeFormat(eTime2str)).getTime();
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+            long userStartTime = sdf.parse(sDate1str + " " + sTime1str.substring(0,sTime1str.length()-2)+":00").getTime();
+            long userEndTime = sdf.parse(eDate1str + " " + eTime1str.substring(0,sTime1str.length()-2)+":00").getTime();
+            long spotStartTime = sdf.parse(sDate2str + " " + sTime2str.substring(0,sTime1str.length()-2)+":00").getTime();
+            long spotEndTime = sdf.parse(eDate2str + " " + eTime2str.substring(0,sTime1str.length()-2)+":00").getTime();
             if (userStartTime >= spotStartTime && userEndTime <= spotEndTime)
                 return true;
         }
@@ -349,9 +349,11 @@ public class ActionActivity extends AppCompatActivity {
 
         try{
 
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mma");
-            Date time1 = df.parse(startdate+" "+starttime);
-            Date time2 = df.parse(enddate+" "+endtime);
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+            String start_s=startdate+" "+starttime;
+            String end_s=enddate+" "+endtime;
+            Date time1 = df.parse(start_s.substring(0,start_s.length()-2)+":00");
+            Date time2 = df.parse(end_s.substring(0,end_s.length()-2)+":00");
             long diff = time2.getTime() - time1.getTime();
             long diffHours = diff / (60 * 60 * 1000) % 24;
             if(diffHours>=1){

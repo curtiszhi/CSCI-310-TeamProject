@@ -22,6 +22,8 @@ public class TimePicker implements View.OnClickListener, TimePickerDialog.OnTime
     EditText timeEditText;
     private int hour;
     private int minute;
+    private String hour_s;
+    private String minute_s;
     private Context _context;
 
     public TimePicker(Context context, int editTextViewID) {
@@ -52,7 +54,17 @@ public class TimePicker implements View.OnClickListener, TimePickerDialog.OnTime
         } else {
             AM_PM = "PM";
         }
+        if(hour<10){
+            hour_s="0"+hour;
+        }else{
+            hour_s=""+hour;
+        }
+        if(minute<10){
+            minute_s="0"+minute;
+        }else{
+            minute_s=""+minute;
+        }
         timeEditText.setText(new StringBuilder()
-                .append(hour).append(":").append(minute).append(AM_PM));
+                .append(hour_s).append(":").append(minute_s).append(AM_PM));
     }
 }

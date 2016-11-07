@@ -31,14 +31,14 @@ public class FeedItem {
     private List<String> filters;
     private String Host;
     public Vector<String> photos;
-    public Map<String,Vector<String>> rentedTime;
+    public Map<String,ArrayList<String>> rentedTime;
     private String identifier;
     private Vector<String> review;
     private String currentRenter;
 
     public FeedItem(){
         photos=new Vector<String>();
-        rentedTime= new HashMap<String,Vector<String>>();
+        rentedTime= new HashMap<String,ArrayList<String>>();
         rating=new Vector<Integer>();
         review = new Vector<String>();
         filters=null;
@@ -59,26 +59,29 @@ public class FeedItem {
     }
 
 
-    public Map<String,Vector<String>> getRentedTime() {
+    public Map<String,ArrayList<String>> getRentedTime() {
         return rentedTime;
     }
 
-    public Map<String,ArrayList<String>> getRentedTimeArray() {
+    /*public Map<String,ArrayList<String>> getRentedTimeArray() {
         Map<String,Vector<String >> map = rentedTime;
         Map<String,ArrayList<String>> temp = new HashMap<String, ArrayList<String>>();
         Iterator it = map.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             String key = (String) pair.getKey();
-            ArrayList<String> thing =  (ArrayList<String>) pair.getValue();
-            ArrayList<String> list = new ArrayList<String>(thing);
+            ArrayList<String> thing =  new ArrayList<String>();
+            for(int i=0;i<map.get(key).size();i++){
+                thing.add(map.get(key).get(i));
+            }
+
             it.remove();
-            temp.put(key, list);
+            temp.put(key, thing);
         }
         return temp;
-    }
+    }*/
 
-    public void setRentedTime(Map<String,Vector<String>>rentedTime) {
+    public void setRentedTime(Map<String,ArrayList<String>>rentedTime) {
         this.rentedTime = rentedTime;
     }
 
