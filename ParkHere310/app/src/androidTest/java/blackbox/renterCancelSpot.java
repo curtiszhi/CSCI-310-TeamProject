@@ -17,24 +17,28 @@ import org.junit.runner.RunWith;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.core.IsNot.not;
 
 /**
  * Created by yingchen on 11/7/2016.
  */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class cancelSpot {
+public class renterCancelSpot {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void HostCancelTest() {
+    public void RenterCancelTest() {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
@@ -55,25 +59,50 @@ public class cancelSpot {
                 allOf(withId(R.id.viewHostHistoryButton), /*withParent(allOf(withId(R.id.toolbar)))*/isDisplayed()));
         appCompatButton2.perform(click());
 
-        ViewInteraction AppCompatTextView = onView(
-                allOf(withText("Hosting"), isDisplayed()));
-        AppCompatTextView.perform(click());
+        if(MyRecyclerAdapter.feedItemList.size()!=0) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
-
-        if (MyRecyclerAdapter.feedItemList.size() != 0) {
-            ViewInteraction recyclerView1 = onView(
+            ViewInteraction recyclerView = onView(
                     allOf(withId(R.id.myList),
                             withParent(allOf(withId(R.id.main_content),
                                     withParent(withId(android.R.id.content)))),
                             isDisplayed()));
-            recyclerView1.perform(actionOnItemAtPosition(0, click()));
+            recyclerView.perform(actionOnItemAtPosition(0, click()));
 
-            FeedItem spot1 = MyRecyclerAdapter.feedItemList.get(0);
+            FeedItem spot = MyRecyclerAdapter.feedItemList.get(0);
 
             onView(withId(R.id.cancelButton))
                     .perform(scrollTo(), click());
 
 
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            ViewInteraction appCompatButton3 = onView(
+                    allOf(withId(R.id.viewHostHistoryButton), /*withParent(allOf(withId(R.id.toolbar)))*/isDisplayed()));
+            appCompatButton3.perform(click());
+
+            if (MyRecyclerAdapter.feedItemList.size() != 0) {
+                ViewInteraction recyclerView2 = onView(
+                        allOf(withId(R.id.myList),
+                                withParent(allOf(withId(R.id.main_content),
+                                        withParent(withId(android.R.id.content)))),
+                                isDisplayed()));
+                recyclerView2.perform(actionOnItemAtPosition(0, click()));
+
+                FeedItem spot2 = MyRecyclerAdapter.feedItemList.get(0);
+
+                assertThat(spot2.getIdentifier(), not((spot.getIdentifier())));
+            }
+
         }
     }
+
 }

@@ -224,9 +224,9 @@ public class DetailedViewActivity extends AppCompatActivity{
                         mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
                     }
                 }
-                else if(specific_renterID!=null) {
+                if(specific_renterID!=null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))) {
                     if (specific_renterID.equals(mFirebaseUser_universal.getUid())) {
-                        Intent i = new Intent(Intent.ACTION_SEND);
+                       /* Intent i = new Intent(Intent.ACTION_SEND);
                         i.setType("message/rfc822");
                         i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
                         i.putExtra(Intent.EXTRA_SUBJECT, "Refund Request");
@@ -235,11 +235,12 @@ public class DetailedViewActivity extends AppCompatActivity{
                             startActivity(Intent.createChooser(i, "Send mail..."));
                         } catch (android.content.ActivityNotFoundException ex) {
                             Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                        }
+                        }*/
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                         mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
+                        mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
 
                     }
