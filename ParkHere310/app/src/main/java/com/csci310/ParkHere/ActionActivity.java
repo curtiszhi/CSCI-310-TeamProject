@@ -355,8 +355,8 @@ public class ActionActivity extends AppCompatActivity {
             Date time1 = df.parse(start_s.substring(0,start_s.length()-2)+":00");
             Date time2 = df.parse(end_s.substring(0,end_s.length()-2)+":00");
             long diff = time2.getTime() - time1.getTime();
-            long diffHours = diff / (60 * 60 * 1000) % 24;
-            if(diffHours>=1){
+
+            if(diff>=3600000){
                 checkdate=true;
             }else{
                 checkdate=false;
