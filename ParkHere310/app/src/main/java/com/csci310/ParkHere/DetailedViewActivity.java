@@ -235,7 +235,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                             startActivity(Intent.createChooser(i, "Send mail..."));
                         } catch (android.content.ActivityNotFoundException ex) {
                             Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                        }*/
+                        } */
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("activity").setValue(true);
