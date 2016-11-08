@@ -11,10 +11,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 
 /**
  * Created by Peter on 11/6/16.
@@ -34,11 +38,13 @@ public class UpdateSpotInfo {
     }
 
     @Test
-    public void updateUser(){
+    public void updateSpotInfo()
+    {
+        //Open a spot detail page:
         onView(withId(R.id.action_user)).perform(click());
         onView(withId(R.id.viewHostHistoryButton)).perform(click());
         onView(withText("Hosting")).perform(click());
-        
+        onData(anything()).inAdapterView(allOf(withId(R.id.list))
 
 
     }

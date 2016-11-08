@@ -69,7 +69,7 @@ public class NewPostTest
 
 
     @Test
-    public void NewPostWithValidEntries()
+    public void newPostWithValidEntries()
     {
         //Enter the address:
         onView(withId(R.id.Address)).perform(typeText("1209 W 27TH ST"), closeSoftKeyboard());
@@ -134,7 +134,7 @@ public class NewPostTest
     }
 
     @Test
-    public void NewPostWithEmptyEntries()
+    public void newPostWithEmptyEntries()
     {
         onView(withId(R.id.Address)).perform(typeText("1209 W 27TH ST"), closeSoftKeyboard());
         onView(withId(R.id.postButton)).perform(scrollTo(), click());
@@ -142,7 +142,7 @@ public class NewPostTest
     }
 
     @Test
-    public void NewPostWithInvalidTimes()
+    public void newPostWithInvalidTimes()
     {
         //Enter the address:
         onView(withId(R.id.Address)).perform(typeText("1209 W 27TH ST"), closeSoftKeyboard());
