@@ -62,31 +62,11 @@ public class SignInTest {
     @Test
     public void incorrectSignIn()
     {
-//            //Incorrect signin:
-//            onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
-//            onView(withId(R.id.passwordEditText)).perform(typeText(incorrectPassword), closeSoftKeyboard());
-//            onView(withId(R.id.loginButton)).perform(click());
-//            System.out.println("Here1234");
-//            long waitingTime = 5000L;
-//            IdlingPolicies.setMasterPolicyTimeout(
-//                    waitingTime * 2, TimeUnit.MILLISECONDS);
-//            IdlingPolicies.setIdlingResourceTimeout(
-//                    waitingTime * 2, TimeUnit.MILLISECONDS);
-//
-//            // Now we wait
-//            IdlingResource idlingResource = new ElapsedTimeIdlingResource(waitingTime);
-//            Espresso.registerIdlingResources(idlingResource);
-//
-//            onView(withId(R.id.searchButton)).check(doesNotExist());
-//
-//
-//
-//
-//
-//            //Click on back button:
-//            onView(withText("Sign-In Error")).perform(pressBack());
-
-            //Correct signin:
+        onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
+        onView(withId(R.id.passwordEditText)).perform(typeText(incorrectPassword), closeSoftKeyboard());
+        onView(withId(R.id.loginButton)).perform(click());
+        try{ Thread.sleep(3000); }catch (Exception _){}
+        onView(withText("Sign-In Error")).check(matches(isDisplayed()));
 
     }
 
@@ -96,6 +76,7 @@ public class SignInTest {
         onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
         onView(withId(R.id.passwordEditText)).perform(typeText(correctPassword), closeSoftKeyboard());
         onView(withId(R.id.loginButton)).perform(click());
+        try{ Thread.sleep(3000); }catch (Exception _){}
         onView(withId(R.id.loginButton)).check(doesNotExist());
     }
 
