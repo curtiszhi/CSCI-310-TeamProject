@@ -200,6 +200,27 @@ public class AddActivity extends AppCompatActivity {
             startDate.setText(fd.getStartDates());
             endDate.setText(fd.getEndDates());
             spinner.setSelection(fd.getFilter());
+            if(fd.getCancel().equals("No refund")) {
+                RadioButton no=(RadioButton)findViewById(R.id.radio_norefund);
+                cancel_policy="No refund";
+                no.setChecked(true);
+            }
+            if(fd.getCancel().equals("80% refund rate at any time")) {
+                RadioButton no=(RadioButton)findViewById(R.id.radio_80refund);
+                cancel_policy="80% refund rate at any time";
+                no.setChecked(true);
+            }
+            if(fd.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")) {
+                RadioButton no=(RadioButton)findViewById(R.id.radio_full_50);
+                cancel_policy="Full refund if cancel before 7 days, 50% refund if cancel less than 7 days";
+                no.setChecked(true);
+            }
+            if(fd.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")) {
+                RadioButton no=(RadioButton)findViewById(R.id.radio_full_0);
+                cancel_policy="Full refund if cancel before 7 days, no refund if cancel less than 7 days";
+                no.setChecked(true);
+            }
+
         } else{
             isEdit = false;
             fd = new FeedItem();

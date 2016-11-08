@@ -7,6 +7,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.csci310.ParkHere.FeedItem;
@@ -25,13 +26,16 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
 import static android.support.test.espresso.matcher.ViewMatchers.isFocusable;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -153,7 +157,57 @@ public class UpdateTest {
             }
 
 
-            //check info
+            onView(withId(R.id.Address))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.city))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.state))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.postcode))
+                    .check(matches(not(isDisplayed())));
+
+            onView(withId(R.id.price))
+                    .check(matches(withText(spot1.getPrice()+"")));
+
+            onView(withId(R.id.startDateEditText))
+                    .check(matches(withText(spot1.getStartDates()+"")));
+
+            onView(withId(R.id.endDateEditText))
+                    .check(matches(withText(spot1.getEndDates()+"")));
+
+            onView(withId(R.id.startTimeEditText))
+                    .check(matches(withText(spot1.getStartTime()+"")));
+
+            onView(withId(R.id.endTimeEditText))
+                    .check(matches(withText(spot1.getEndTime()+"")));
+
+            onView(withId(R.id.description))
+                    .check(matches(withText(spot1.getDescription()+"")));
+
+            String filters="";
+            for(int i=0;i<spot1.getFilter().size();i++){
+                filters+=spot1.getFilter().get(i);
+            }
+            onView(withId(R.id.mySpinner1))
+                    .check(matches(withSpinnerText(containsString(filters))));
+
+            if(spot1.getCancel().equals("No refund")) {
+                onView(withId(R.id.radio_norefund))
+                        .check(matches(isChecked()));
+
+            }
+            if(spot1.getCancel().equals("80% refund rate at any time")) {
+                onView(withId(R.id.radio_80refund))
+                        .check(matches(isChecked()));
+            }
+            if(spot1.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")) {
+                onView(withId(R.id.radio_full_50))
+                        .check(matches(isChecked()));
+            }
+            if(spot1.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")) {
+                onView(withId(R.id.radio_full_0))
+                        .check(matches(isChecked()));
+            }
 
         }
 
