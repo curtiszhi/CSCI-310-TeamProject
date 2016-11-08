@@ -153,7 +153,14 @@ public class UpdateTest {
             }
 
 
-            //check info
+            onView(withId(R.id.Address))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.city))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.state))
+                    .check(matches(not(isDisplayed())));
+            onView(withId(R.id.postcode))
+                    .check(matches(not(isDisplayed())));
 
         }
 
