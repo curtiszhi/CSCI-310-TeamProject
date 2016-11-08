@@ -36,8 +36,8 @@ public class RegisterTest {
 
     @Before
     public void initString() {
-        name = "Test";
-        email = "test@test.com";
+        name = "Test123";
+        email = "test123@test.com";
         pass = "Password1";
         phone = "1231231234";
 
@@ -56,7 +56,7 @@ public class RegisterTest {
             onView(withId(R.id.registerButton)).perform(click());
 
             onView(withId(R.id.locationEditText)).perform(typeText(email), closeSoftKeyboard());
-              onView((withId(R.id.locationEditText))).check(matches(withText(email)));
+            onView((withId(R.id.locationEditText))).check(matches(withText(email)));
     }
 
 

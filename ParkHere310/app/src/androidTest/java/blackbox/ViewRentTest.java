@@ -37,7 +37,7 @@ import static org.hamcrest.Matchers.allOf;
  */
 
 @RunWith(JUnit4.class)
-public class ViewRentHostTest {
+public class ViewRentTest {
     private String location;
 
     @Rule

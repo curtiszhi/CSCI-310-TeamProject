@@ -40,7 +40,7 @@ public class UpdateUserInfoTest {
     public void initString() {
         name = "Testing Name";
         phone = "1112223333";
-        email = "shouldntchange@test.com";
+        email = "";
     }
 
     @Test
@@ -55,14 +55,14 @@ public class UpdateUserInfoTest {
         try{
             onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
         } catch (PerformException e){
-
+            //Shouldn't work
         }
 
         onView(withId(R.id.editUserDetailsToggleButton)).perform(click());
 
         onView((withId(R.id.nameEditText))).check(matches(withText(name)));
         onView((withId(R.id.phoneEditText))).check(matches(withText(phone)));
-        onView(withId(R.id.emailEditText)).check(matches(withText("peter@gmail.com")));
+        onView(withId(R.id.emailEditText)).check(matches(withText("test@test.com")));
 
         //Check if updated info is saved
         Espresso.pressBack();
