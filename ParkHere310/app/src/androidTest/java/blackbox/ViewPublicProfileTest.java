@@ -19,6 +19,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static android.support.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -53,5 +54,6 @@ public class ViewPublicProfileTest {
         onView(withId(R.id.ratingTextView)).check(matches(isDisplayed()));
         onView(withId(R.id.reviewText)).check(matches(isDisplayed()));
         onView(withId(R.id.public_name)).check(matches(isDisplayed()));
+        onView(withId(R.id.editButton)).check(doesNotExist());
     }
 }
