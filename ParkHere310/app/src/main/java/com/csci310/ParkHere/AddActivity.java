@@ -536,6 +536,7 @@ public class AddActivity extends AppCompatActivity {
                 checkdate=true;
             }else{
                 checkdate=false;
+                return checkdate;
             }
 
             String today=getToday(df);
@@ -544,6 +545,7 @@ public class AddActivity extends AppCompatActivity {
                 checkdate=true;
             }else{
                 checkdate=false;
+                return checkdate;
             }
 
 

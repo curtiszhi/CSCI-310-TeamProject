@@ -358,8 +358,10 @@ public class ActionActivity extends AppCompatActivity {
 
             if(diff>=3600000){
                 checkdate=true;
+
             }else{
                 checkdate=false;
+                return checkdate;
             }
 
             String today=getToday(df);
@@ -368,6 +370,7 @@ public class ActionActivity extends AppCompatActivity {
                 checkdate=true;
             }else{
                 checkdate=false;
+                return checkdate;
             }
 
 

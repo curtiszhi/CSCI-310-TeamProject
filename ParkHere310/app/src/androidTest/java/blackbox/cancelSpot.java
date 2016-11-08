@@ -16,6 +16,7 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
@@ -68,6 +69,10 @@ public class cancelSpot {
             recyclerView1.perform(actionOnItemAtPosition(0, click()));
 
             FeedItem spot1 = MyRecyclerAdapter.feedItemList.get(0);
+
+            onView(withId(R.id.cancelButton))
+                    .perform(scrollTo(), click());
+
 
         }
     }
