@@ -14,6 +14,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -38,11 +41,13 @@ import static org.hamcrest.core.IsNot.not;
 @LargeTest
 public class HostListingTest {
 
+    @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+
 
     @Test
     public void HostListTest() {
-        ViewInteraction appCompatEditText = onView(
+        /*ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.emailEditText), isDisplayed()));
         appCompatEditText.perform(replaceText("seanyuan@usc.edu"), closeSoftKeyboard());
 
@@ -53,7 +58,7 @@ public class HostListingTest {
 
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
-        appCompatButton.perform(click());
+        appCompatButton.perform(click());*/
 
         try {
             Thread.sleep(3000);
@@ -74,8 +79,11 @@ public class HostListingTest {
                 allOf(withText("Hosting"), isDisplayed()));
         AppCompatTextView.perform(click());
 
-
-
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -115,7 +123,11 @@ public class HostListingTest {
                     .check(matches(withText(spot1.getDescription())));
 
             if (spot1.getRentedTime().size() != 0) {
-                String time_frame = spot1.getRentedTime().get(0) + " to " + spot1.getRentedTime().get(1);
+                String time_frame="";
+                for (HashMap.Entry<String, ArrayList<String>> innerEntry : spot1.getRentedTime().entrySet()) {
+                    String key = innerEntry.getKey();
+                    ArrayList<String> value = innerEntry.getValue();
+                    time_frame = value.get(0) + " to " + value.get(1);}
                 onView(withId(R.id.time))
                         .check(matches(withText(time_frame)));
             }
