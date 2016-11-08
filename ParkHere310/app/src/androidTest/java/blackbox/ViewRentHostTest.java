@@ -21,7 +21,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
-import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -38,7 +37,7 @@ import static org.hamcrest.Matchers.allOf;
  */
 
 @RunWith(JUnit4.class)
-public class RentTest {
+public class ViewRentHostTest {
     private String location;
 
     @Rule
@@ -49,138 +48,16 @@ public class RentTest {
     public void initString() {
         location = "3131 McClintock Ave, Los Angeles, CA 90007, USA";
     }
-
-    @Test
-    public void rentCreditCardTest(){
-        //Search
-        onView(withId(locationEditText)).perform(replaceText(location), closeSoftKeyboard());
-
-        onView(withId(R.id.startDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,24));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.endDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,24));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.startTimeText)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(15,0));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.endTimeText)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(16,0));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        ViewInteraction appCompatButton6 = onView(
-                allOf(withId(R.id.searchButton), withText("Search!"), isDisplayed()));
-        appCompatButton6.perform(click());
-
-        int y = 0;
-        while (y == 0){
-            try{
-                ViewInteraction appCompatTextView = onView(
-                        allOf(withText("Distance"), isDisplayed()));
-                appCompatTextView.perform(click());
-                y = 1;
-            } catch(Exception e){
-                y = 0;
-            }
-        }
-
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.myList),
-                        withParent(allOf(withId(R.id.main_content),
-                                withParent(withId(android.R.id.content)))),
-                        isDisplayed()));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-
-        ViewInteraction appCompatButton7 = onView(
-                allOf(withId(R.id.rentButton), withText("Rent!")));
-        appCompatButton7.perform(scrollTo(), click());
-
-        int x = 0;
-        while (x == 0){
-            try{
-                ViewInteraction textView = onView(
-                        withText("Pay with Card"));
-                textView.perform(scrollTo(), click());
-                x = 1;
-            } catch(Exception e){
-                x = 0;
-            }
-        }
-
-        try{
-            onView(withText("Deny")).perform(click());
-        }
-        catch(Exception e){
-
-        }
-        onView(withHint("1234 5678 1234 5678")).perform(typeText("4264 5101 8909 8545 0217 666"));
-
-        ViewInteraction button = onView(
-                allOf(withText("Done"), isDisplayed()));
-        button.perform(click());
-
-        x = 0;
-        while(x == 0){
-            try{
-                ViewInteraction textView2 = onView(
-                        withText("Charge Card"));
-                textView2.perform(scrollTo(), click());
-                x = 1;
-            }
-            catch (Exception e){
-                x = 0;
-            }
-
-
-        }
-
-        //Check if Spot shows in Rent History
-
-        x = 0;
-        while (x == 0){
-            try {
-                ViewInteraction actionMenuItemView = onView(
-                        allOf(withId(R.id.action_user), withContentDescription("User"), isDisplayed()));
-                actionMenuItemView.perform(click());
-                x = 1;
-            } catch(Exception e){
-                x = 0;
-            }
-        }
-
-        ViewInteraction appCompatButton8 = onView(
-                allOf(withId(R.id.viewHostHistoryButton), withText("View History")));
-        appCompatButton8.perform(scrollTo(), click());
-
-        try{
-            ViewInteraction recyclerView2 = onView(
-                    allOf(withId(R.id.myList),
-                            withParent(allOf(withId(R.id.main_content),
-                                    withParent(withId(android.R.id.content)))),
-                            isDisplayed()));
-            recyclerView2.perform(actionOnItemAtPosition(0, click()));
-
-        }
-        catch(Exception e) {
-            //Test passes
-        }
-
-    }
-
-
     @Test
     public void payPalTest(){
         onView(withId(locationEditText)).perform(replaceText(location), closeSoftKeyboard());
 
         onView(withId(R.id.startDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,25));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,26));
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withId(R.id.endDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,25));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,26));
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withId(R.id.startTimeText)).perform(click());
@@ -254,6 +131,35 @@ public class RentTest {
             catch (Exception e){
                 z = 0;
             }
+        }
+
+        x = 0;
+        while (x == 0){
+            try {
+                ViewInteraction actionMenuItemView = onView(
+                        allOf(withId(R.id.action_user), withContentDescription("User"), isDisplayed()));
+                actionMenuItemView.perform(click());
+                x = 1;
+            } catch(Exception e){
+                x = 0;
+            }
+        }
+
+        ViewInteraction appCompatButton8 = onView(
+                allOf(withId(R.id.viewHostHistoryButton), withText("View History")));
+        appCompatButton8.perform(scrollTo(), click());
+
+        try{
+            ViewInteraction recyclerView2 = onView(
+                    allOf(withId(R.id.myList),
+                            withParent(allOf(withId(R.id.main_content),
+                                    withParent(withId(android.R.id.content)))),
+                            isDisplayed()));
+            recyclerView2.perform(actionOnItemAtPosition(0, click()));
+
+        }
+        catch(Exception e) {
+            //Test passes
         }
     }
 }
