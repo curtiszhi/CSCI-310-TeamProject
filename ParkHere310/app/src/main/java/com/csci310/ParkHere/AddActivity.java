@@ -245,6 +245,12 @@ public class AddActivity extends AppCompatActivity {
                     String enddate = endDate.getText().toString().trim();
                     String description_parking = description.getText().toString().trim();
                     double price_parking=Double.parseDouble(price.getText().toString().trim());
+                    String renter=null;
+                    if(fd.getRentedTime().size()!=0){
+                        for (HashMap.Entry<String, ArrayList<String>> innerEntry : fd.getRentedTime().entrySet()) {
+                            renter = innerEntry.getKey();
+                        }
+                    }
                     if(isEmpty(description)||isEmpty(price)||isEmpty(startTime)||isEmpty(startDate)||isEmpty(endTime)||isEmpty(endDate)){
                         AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
                         alertDialog.setTitle("Alert");
@@ -285,6 +291,25 @@ public class AddActivity extends AppCompatActivity {
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
                             mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
+
+                            mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("photos").setValue(photos);
+                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("photos").setValue(photos);
+
+                            if(renter!=null){
+                                mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("filter").setValue(filter);
+                                mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("startTime").setValue(starttime);
+                                mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("endTime").setValue(endtime);
+                                mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("startDates").setValue(startdate);
+                                mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("endDates").setValue(enddate);
+                                mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("description").setValue(description_parking);
+                                mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
+                                mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("photos").setValue(photos);
+                                mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("price").setValue(price_parking);
+                            }
+
+
+
+
                             Intent intent = new Intent(AddActivity.this, UserActivity.class);//change to UserActivity.class
                             startActivity(intent);
 
@@ -458,6 +483,7 @@ public class AddActivity extends AppCompatActivity {
                         byte[] byteArray = bYtE.toByteArray();
                         String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
                         fd.photos.add(imageFile);
+                        photos.add(imageFile);
                         LinearLayout linearLayout = (LinearLayout)findViewById(R.id.photoLayout);
                         TextView valueTV = new TextView(this);
                         valueTV.setText("image"+fd.photos.size());

@@ -55,6 +55,6 @@ public class DateTimePickTest {
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withId(R.id.startTimeEditText))
-                .check(matches(withText("5:00")));
+                .check(matches(withText("05:00")));
     }
 }

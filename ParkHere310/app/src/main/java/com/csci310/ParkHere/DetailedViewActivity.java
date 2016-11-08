@@ -363,6 +363,9 @@ public class DetailedViewActivity extends AppCompatActivity{
             public void run(){
                 if(renterTime.size()!=0){
                 time.setText(renterTime.get(0)+" to "+renterTime.get(1));}
+                else{
+                    time.setText(fd.getStartDates()+" "+fd.getStartTime()+" to "+fd.getEndDates()+" "+fd.getEndTime());
+                }
             }
         });
 
