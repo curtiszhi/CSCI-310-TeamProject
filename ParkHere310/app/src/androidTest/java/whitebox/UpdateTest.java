@@ -7,6 +7,7 @@ import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.csci310.ParkHere.FeedItem;
@@ -25,6 +26,7 @@ import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
+import static android.support.test.espresso.matcher.ViewMatchers.isChecked;
 import static android.support.test.espresso.matcher.ViewMatchers.isClickable;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.isEnabled;
@@ -188,6 +190,24 @@ public class UpdateTest {
             }
             onView(withId(R.id.mySpinner1))
                     .check(matches(withSpinnerText(containsString(filters))));
+
+            if(spot1.getCancel().equals("No refund")) {
+                onView(withId(R.id.radio_norefund))
+                        .check(matches(isChecked()));
+
+            }
+            if(spot1.getCancel().equals("80% refund rate at any time")) {
+                onView(withId(R.id.radio_80refund))
+                        .check(matches(isChecked()));
+            }
+            if(spot1.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")) {
+                onView(withId(R.id.radio_full_50))
+                        .check(matches(isChecked()));
+            }
+            if(spot1.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")) {
+                onView(withId(R.id.radio_full_0))
+                        .check(matches(isChecked()));
+            }
 
         }
 
