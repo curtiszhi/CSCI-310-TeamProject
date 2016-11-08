@@ -85,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                             alertDialog.setTitle("Sign-In Error");
                             alertDialog.setMessage("Invalid Email/Password");
                             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    progressDiag.setVisibility(View.GONE);
+                                    dialog.dismiss();
                                 }
                             });
                             alertDialog.show();
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+        progressDiag.setVisibility(View.GONE);
     }
     @Override
     public void onStart() {
