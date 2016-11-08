@@ -54,18 +54,26 @@ public class RentListingTest {
 
     @Test
     public void RentListTest() {
-       /* ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.emailEditText), isDisplayed()));
-        appCompatEditText.perform(replaceText("seanyuan@usc.edu"), closeSoftKeyboard());
+        try{
+            //logged in
+            onView(withId(R.id.locationEditText)).perform(replaceText("hi"), closeSoftKeyboard());
+        }
 
-        ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.passwordEditText), isDisplayed()));
-        appCompatEditText2.perform(replaceText("Testing1"), closeSoftKeyboard());
+        catch (Exception e){
+            //not logged in, then log in
+            ViewInteraction appCompatEditText = onView(
+                    allOf(withId(R.id.emailEditText), isDisplayed()));
+            appCompatEditText.perform(replaceText("seanyuan@usc.edu"), closeSoftKeyboard());
+
+            ViewInteraction appCompatEditText2 = onView(
+                    allOf(withId(R.id.passwordEditText), isDisplayed()));
+            appCompatEditText2.perform(replaceText("Testing1"), closeSoftKeyboard());
 
 
-        ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
-        appCompatButton.perform(click());*/
+            ViewInteraction appCompatButton = onView(
+                    allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
+            appCompatButton.perform(click());
+        }
 
         try {
             Thread.sleep(3000);
