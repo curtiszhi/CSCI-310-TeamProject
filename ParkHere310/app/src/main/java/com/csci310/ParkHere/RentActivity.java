@@ -381,7 +381,7 @@ public class RentActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         long diff = time2.getTime() - time1.getTime();
-        long diffHours = diff / (60 * 60 * 1000) % 24;
+        long diffHours = diff / (60 * 60 * 1000);
         System.out.println(fd.getPrice() + " " + diffHours);
         price.setText("$" + Double.toString(fd.getPrice() * diffHours));
         String time_frame = start + " to " + end;

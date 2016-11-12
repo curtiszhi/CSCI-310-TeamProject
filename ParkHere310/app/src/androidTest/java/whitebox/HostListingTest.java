@@ -110,12 +110,12 @@ public class HostListingTest {
                                     withParent(withId(android.R.id.content)))),
                             isDisplayed()));
 
-            assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
+
             recyclerView1.perform(actionOnItemAtPosition(0, click()));
 
             FeedItem spot1 = MyRecyclerAdapter.feedItemList.get(0);
 
-            assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
+
 
             onView(withId(R.id.address))
                     .check(matches(withText(spot1.getAddress())));
