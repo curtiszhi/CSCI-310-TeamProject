@@ -64,6 +64,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     private TextView image_label;
 
     private int count;
+    private int index1=0;
     FeedItem fd;
     private Vector<String> spotPhoto;
     private Button editButton,confirmButton,cancelButton;
@@ -221,7 +222,27 @@ public class DetailedViewActivity extends AppCompatActivity{
                     if(specific_renterID!=null) {
 
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-                        mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
+
+                        DatabaseReference ref10 = mDatabase.child("users").child(specific_renterID).child("rateList");
+                        ref10.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
+                                    for (int i = 0; i < tempList.size(); i++) {
+                                        if(tempList.get(i).equals(fd.getIdentifier())){
+                                            index1=i;
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                System.out.println("The read failed: " + databaseError.getCode());
+                            }
+                        });
+                        mDatabase.child("users").child(specific_renterID).child("rateList").child(String.valueOf(index1)).setValue(null);
                     }
                 }
                 if(specific_renterID!=null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))) {
@@ -237,11 +258,30 @@ public class DetailedViewActivity extends AppCompatActivity{
                             Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                         } */
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-                        mDatabase.child("users").child(specific_renterID).child("rateList").child(fd.getIdentifier()).setValue(null);
                         mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                         mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
+                        DatabaseReference ref11 = mDatabase.child("users").child(specific_renterID).child("rateList");
+                        ref11.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
+                                    for (int i = 0; i < tempList.size(); i++) {
+                                        if(tempList.get(i).equals(fd.getIdentifier())){
+                                            index1=i;
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                System.out.println("The read failed: " + databaseError.getCode());
+                            }
+                        });
+                        mDatabase.child("users").child(specific_renterID).child("rateList").child(String.valueOf(index1)).setValue(null);
 
                     }
                 }

@@ -49,11 +49,11 @@ public class hostCancelSpot {
             //not logged in, then log in
             ViewInteraction appCompatEditText = onView(
                     allOf(withId(R.id.emailEditText), isDisplayed()));
-            appCompatEditText.perform(replaceText("seanyuan@usc.edu"), closeSoftKeyboard());
+            appCompatEditText.perform(replaceText("test1234@test.com"), closeSoftKeyboard());
 
             ViewInteraction appCompatEditText2 = onView(
                     allOf(withId(R.id.passwordEditText), isDisplayed()));
-            appCompatEditText2.perform(replaceText("Testing1"), closeSoftKeyboard());
+            appCompatEditText2.perform(replaceText("Password2"), closeSoftKeyboard());
 
 
             ViewInteraction appCompatButton = onView(
@@ -110,6 +110,16 @@ public class hostCancelSpot {
             ViewInteraction appCompatButton3 = onView(
                     allOf(withId(R.id.viewHostHistoryButton), /*withParent(allOf(withId(R.id.toolbar)))*/isDisplayed()));
             appCompatButton3.perform(click());
+
+            ViewInteraction AppCompatTextView1 = onView(
+                    allOf(withText("Hosting"), isDisplayed()));
+            AppCompatTextView1.perform(click());
+
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             if (MyRecyclerAdapter.feedItemList.size() != 0) {
                 ViewInteraction recyclerView2 = onView(

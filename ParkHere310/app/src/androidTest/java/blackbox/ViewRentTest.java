@@ -7,6 +7,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import com.csci310.ParkHere.ActionActivity;
+import com.csci310.ParkHere.MainActivity;
 import com.csci310.ParkHere.R;
 
 import org.hamcrest.Matchers;
@@ -21,6 +22,7 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
@@ -41,109 +43,44 @@ public class ViewRentTest {
     private String location;
 
     @Rule
-    public ActivityTestRule<ActionActivity> myActivityRule = new ActivityTestRule<>(
-            ActionActivity.class);
+    public ActivityTestRule<MainActivity> myActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
 
     @Before
     public void initString() {
-        location = "3131 McClintock Ave, Los Angeles, CA 90007, USA";
+        location = "1171 W 30th St, Los Angeles, CA 90007, USA";
     }
     @Test
     public void payPalTest(){
-        onView(withId(locationEditText)).perform(replaceText(location), closeSoftKeyboard());
-
-        onView(withId(R.id.startDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,26));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.endDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,26));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.startTimeText)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(15,0));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.endTimeText)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(16,0));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        ViewInteraction appCompatButton6 = onView(
-                allOf(withId(R.id.searchButton), withText("Search!"), isDisplayed()));
-        appCompatButton6.perform(click());
-
-        int y = 0;
-        while (y == 0){
-            try{
-                ViewInteraction appCompatTextView = onView(
-                        allOf(withText("Distance"), isDisplayed()));
-                appCompatTextView.perform(click());
-                y = 1;
-            } catch(Exception e){
-                y = 0;
-            }
+        try{
+            //not logged in
+            onView(withId(R.id.locationEditText)).perform(replaceText(""), closeSoftKeyboard());
         }
 
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.myList),
-                        withParent(allOf(withId(R.id.main_content),
-                                withParent(withId(android.R.id.content)))),
-                        isDisplayed()));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
+        catch (Exception e){
+            //logged in, log out
 
-        ViewInteraction appCompatButton7 = onView(
-                allOf(withId(R.id.rentButton), withText("Rent!")));
-        appCompatButton7.perform(scrollTo(), click());
 
-        //Paypal
-        int x = 0;
-        while (x == 0){
-            try{
-                ViewInteraction textView = onView(
-                        withText("Pay with"));
-                textView.perform(scrollTo(), click());
-                x = 1;
-            } catch(Exception e){
-                x = 0;
-            }
+            ViewInteraction appCompatEditText = onView(
+                    allOf(withId(R.id.emailEditText), isDisplayed()));
+            appCompatEditText.perform(replaceText("test1234@test.com"), closeSoftKeyboard());
+
+            ViewInteraction appCompatEditText2 = onView(
+                    allOf(withId(R.id.passwordEditText), isDisplayed()));
+            appCompatEditText2.perform(replaceText("Password2"), closeSoftKeyboard());
+
+
+            ViewInteraction appCompatButton = onView(
+                    allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
+            appCompatButton.perform(click());
         }
 
-        ViewInteraction editText = onView(
-                withContentDescription("Email"));
-        editText.perform(scrollTo(), replaceText("parkHere310Test@test.com"), closeSoftKeyboard());
 
-        ViewInteraction editText2 = onView(
-                withContentDescription("Password"));
-        editText2.perform(scrollTo(), replaceText("parkHere310"), closeSoftKeyboard());
+        try{ Thread.sleep(3000); }catch (Exception _){}
+        ViewInteraction actionMenuItemView = onView(
+                allOf(withId(R.id.action_user), isDisplayed()));
+        actionMenuItemView.perform(click());
 
-        ViewInteraction textView2 = onView(
-                withHint("Log In"));
-        textView2.perform(scrollTo(), click());
-
-        int z = 0;
-        while (z == 0){
-            try{
-                ViewInteraction textView3 = onView(
-                        withText("Pay"));
-                textView3.perform(scrollTo(), click());
-                z = 1;
-            }
-            catch (Exception e){
-                z = 0;
-            }
-        }
-
-        x = 0;
-        while (x == 0){
-            try {
-                ViewInteraction actionMenuItemView = onView(
-                        allOf(withId(R.id.action_user), withContentDescription("User"), isDisplayed()));
-                actionMenuItemView.perform(click());
-                x = 1;
-            } catch(Exception e){
-                x = 0;
-            }
-        }
 
         ViewInteraction appCompatButton8 = onView(
                 allOf(withId(R.id.viewHostHistoryButton), withText("View History")));
@@ -156,6 +93,8 @@ public class ViewRentTest {
                                     withParent(withId(android.R.id.content)))),
                             isDisplayed()));
             recyclerView2.perform(actionOnItemAtPosition(0, click()));
+            try{ Thread.sleep(2000); }catch (Exception _){}
+            onView(withId(R.id.address)).check(matches(withText(location)));
 
         }
         catch(Exception e) {

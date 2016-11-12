@@ -51,11 +51,11 @@ public class renterCancelSpot {
             //not logged in, then log in
             ViewInteraction appCompatEditText = onView(
                     allOf(withId(R.id.emailEditText), isDisplayed()));
-            appCompatEditText.perform(replaceText("seanyuan@usc.edu"), closeSoftKeyboard());
+            appCompatEditText.perform(replaceText("test1234@test.com"), closeSoftKeyboard());
 
             ViewInteraction appCompatEditText2 = onView(
                     allOf(withId(R.id.passwordEditText), isDisplayed()));
-            appCompatEditText2.perform(replaceText("Testing1"), closeSoftKeyboard());
+            appCompatEditText2.perform(replaceText("Password2"), closeSoftKeyboard());
 
 
             ViewInteraction appCompatButton = onView(

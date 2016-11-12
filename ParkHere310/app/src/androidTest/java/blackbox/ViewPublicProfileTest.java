@@ -1,9 +1,11 @@
 package blackbox;
 
+import android.support.test.espresso.ViewInteraction;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.rule.ActivityTestRule;
 
 import com.csci310.ParkHere.ActionActivity;
+import com.csci310.ParkHere.MainActivity;
 import com.csci310.ParkHere.R;
 
 import org.junit.Before;
@@ -17,6 +19,7 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.clearText;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -26,18 +29,41 @@ import static android.support.test.espresso.matcher.ViewMatchers.withContentDesc
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static org.hamcrest.Matchers.allOf;
 
 
 @RunWith(JUnit4.class)
 public class ViewPublicProfileTest {
 
     @Rule
-    public ActivityTestRule<ActionActivity> myActivityRule = new ActivityTestRule<>(
-            ActionActivity.class);
+    public ActivityTestRule<MainActivity> myActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
 
     @Test
     public void viewPublicProfile()
     {
+        try{
+            //not logged in
+            onView(withId(R.id.locationEditText)).perform(replaceText(""), closeSoftKeyboard());
+        }
+
+        catch (Exception e){
+            //logged in, log out
+
+
+            ViewInteraction appCompatEditText = onView(
+                    allOf(withId(R.id.emailEditText), isDisplayed()));
+            appCompatEditText.perform(replaceText("test1234@test.com"), closeSoftKeyboard());
+
+            ViewInteraction appCompatEditText2 = onView(
+                    allOf(withId(R.id.passwordEditText), isDisplayed()));
+            appCompatEditText2.perform(replaceText("Password2"), closeSoftKeyboard());
+
+
+            ViewInteraction appCompatButton = onView(
+                    allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
+            appCompatButton.perform(click());
+        }
         //Open and click the renting tab:
         try{ Thread.sleep(1000); }catch (Exception _){}
         onView(withId(R.id.action_user)).perform(click());

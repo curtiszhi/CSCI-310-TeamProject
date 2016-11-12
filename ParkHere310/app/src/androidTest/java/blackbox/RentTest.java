@@ -185,7 +185,7 @@ public class RentTest {
             }
         }
 
-
+/*
         //Check if Spot shows in Rent History
         try{ Thread.sleep(3000); }catch (Exception _){}
         x = 0;
@@ -216,7 +216,7 @@ public class RentTest {
         catch(Exception e) {
             //Test passes
         }
-
+*/
     }
 
 /*
