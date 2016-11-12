@@ -124,7 +124,7 @@ public class UserRegisterTest {
         onView(withId(R.id.phoneEditText))
                 .perform(typeText("2222222222"), closeSoftKeyboard());
         onView(withId(R.id.registerButton)).perform(click());
-        onView(withText("please make sure the address is not empty or the time difference is bigger than an hour")).check(matches(isDisplayed()));
+        onView(withText("Passwords must be at least 6 characters long and contain at least: 1-number 1-uppercase letter")).check(matches(isDisplayed()));
         //onView(withText(invalidPasswordError)).perform(click());
     }
 }

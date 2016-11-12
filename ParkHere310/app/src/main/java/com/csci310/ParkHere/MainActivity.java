@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private ProgressBar progressDiag;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +74,12 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
+    private boolean check_empty(){
+        if(emailEditText.getText().toString().trim().length()==0 || passEditText.getText().toString().trim().length()==0){
+            return true;
+        }
+        return false;
+    }
     private void signIn() {
         mFirebaseAuth = FirebaseAuth.getInstance();
         String email = emailEditText.getText().toString();
@@ -80,29 +87,43 @@ public class MainActivity extends AppCompatActivity {
         progressDiag.setVisibility(View.VISIBLE);
         //progressDiag.setMessage("Signing In...");
         //progressDiag.show();
-        mFirebaseAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (!task.isSuccessful()) {
-                            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-                            alertDialog.setTitle("Sign-In Error");
-                            alertDialog.setMessage("Invalid Email/Password");
-                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            alertDialog.show();
+        if(!check_empty()) {
+            mFirebaseAuth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (!task.isSuccessful()) {
+                                progressDiag.setVisibility(View.GONE);
+                                final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                                alertDialog.setTitle("Sign-In Error");
+                                alertDialog.setMessage("Invalid Email/Password");
+                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                alertDialog.show();
+                            } else {
+
+                                Log.d(TAG, "signinUserWithEmail:onComplete:" + task.isSuccessful());
+                                Intent intent = new Intent(MainActivity.this, ActionActivity.class);
+                                startActivity(intent);
+                            }
                         }
-                        else{
-                            Log.d(TAG, "signinUserWithEmail:onComplete:" + task.isSuccessful());
-                            Intent intent = new Intent(MainActivity.this, ActionActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-        progressDiag.setVisibility(View.GONE);
+                    });
+            //progressDiag.setVisibility(View.GONE);
+        }else{
+            progressDiag.setVisibility(View.GONE);
+            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setTitle("Empty");
+            alertDialog.setMessage("please fill all textfield");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alertDialog.show();
+        }
     }
     @Override
     public void onStart() {

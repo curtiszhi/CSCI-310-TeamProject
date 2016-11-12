@@ -95,8 +95,8 @@ public class SpotAddTest {
         state_text="CA";
         zip_text="90007";
         price_text="3.2";
-        ealier_current_date="11-1-2016";
-        startDate_text="11-10-2016";
+        ealier_current_date="11-01-2016";
+        startDate_text="11-13-2016";
         startTime_text="13:10PM";
         endDate_text="11-20-2016";
         wrong_end="11-10-2016";

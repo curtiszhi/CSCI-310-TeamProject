@@ -40,7 +40,7 @@ public class ProgressBarTest {
     public void detailedViewTest() {
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -66,12 +66,11 @@ public class ProgressBarTest {
         appCompatEditText2.perform(replaceText("Testing1"), closeSoftKeyboard());
 
         ViewInteraction appCompatButton = onView(allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
+        //onView(withId(R.id.signInProgress)).check(matches(isDisplayed()));
         appCompatButton.perform(click());
+        //Drawable notAnimatedDrawable = ContextCompat.getDrawable(mActivityTestRule.getActivity(), R.drawable.login);
+        //((ProgressBar) mActivityTestRule.getActivity().findViewById(R.id.signInProgress)).setIndeterminateDrawable(notAnimatedDrawable);;
 
-        Drawable notAnimatedDrawable = ContextCompat.getDrawable(mActivityTestRule.getActivity(), R.drawable.login);
-        ((ProgressBar) mActivityTestRule.getActivity().findViewById(R.id.signInProgress)).setIndeterminateDrawable(notAnimatedDrawable);
-
-        onView(withId(R.id.signInProgress)).check(matches(isDisplayed()));
 
         ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.locationEditText),

@@ -227,9 +227,10 @@ public class UpdateTest {
                     .check(matches(withText(spot1.getDescription()+"")));
 
             String filters="";
+            if(spot1.getFilter()!=null){
             for(int i=0;i<spot1.getFilter().size();i++){
                 filters+=spot1.getFilter().get(i);
-            }
+            }}
             onView(withId(R.id.mySpinner1))
                     .check(matches(withSpinnerText(containsString(filters))));
 

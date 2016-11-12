@@ -161,6 +161,11 @@ public class NewPostTest
                 view.performClick();
             }
         });
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onData(allOf(is(instanceOf(String.class)), is("CA"))).perform(click());
 
         //Enter zip code:

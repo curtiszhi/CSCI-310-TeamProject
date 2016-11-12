@@ -78,7 +78,7 @@ public class HostListingTest {
         ViewInteraction appCompatButton1 = onView(
                 allOf(withId(R.id.action_user), /*withParent(allOf(withId(R.id.toolbar)))*/isDisplayed()));
         appCompatButton1.perform(click());
-        try {
+        try  {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();

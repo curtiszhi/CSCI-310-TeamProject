@@ -67,11 +67,7 @@ public class UpdateSpotInfo {
 
         catch (Exception e){
             //logged in, log out
-            /*openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
-            ViewInteraction appCompatTextView3 = onView(
-                    allOf(withId(R.id.title), withText("Sign-out"), isDisplayed()));
-            appCompatTextView3.perform(click());*/
 
             ViewInteraction appCompatEditText = onView(
                     allOf(withId(R.id.emailEditText), isDisplayed()));

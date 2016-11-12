@@ -93,7 +93,6 @@ public class RentListingTest {
 
         if(MyRecyclerAdapter.feedItemList.size()!=0) {
 
-            assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
 
             ViewInteraction recyclerView = onView(
                     allOf(withId(R.id.myList),
@@ -104,7 +103,6 @@ public class RentListingTest {
 
             FeedItem spot = MyRecyclerAdapter.feedItemList.get(0);
 
-            assertThat(MyRecyclerAdapter.feedItemList.size(), is(1));
 
 
             onView(withId(R.id.address))

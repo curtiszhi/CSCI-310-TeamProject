@@ -24,7 +24,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-@LargeTest
+
 @RunWith(AndroidJUnit4.class)
 public class SignInTest {
 
@@ -55,6 +55,11 @@ public class SignInTest {
 
         ViewInteraction appCompatButton = onView(allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
         appCompatButton.perform(click());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withText("Sign-In Error")).check(matches(isDisplayed()));
     }
 
@@ -82,6 +87,11 @@ public class SignInTest {
 
         ViewInteraction appCompatButton = onView(allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
         appCompatButton.perform(click());
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withText("Sign-In Error")).check(matches(isDisplayed()));
     }
 
@@ -101,7 +111,7 @@ public class SignInTest {
             appCompatTextView3.perform(click());
         }
         ViewInteraction appCompatEditText = onView(allOf(withId(R.id.emailEditText), isDisplayed()));
-        appCompatEditText.perform(replaceText(""), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("hh"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(allOf(withId(R.id.passwordEditText), isDisplayed()));
         appCompatEditText2.perform(replaceText(""), closeSoftKeyboard());
@@ -109,6 +119,6 @@ public class SignInTest {
 
         ViewInteraction appCompatButton = onView(allOf(withId(R.id.loginButton), isDisplayed()));
         appCompatButton.perform(click());
-        onView(withText("Sign-In Error")).check(matches(isDisplayed()));
+        onView(withText("please fill all textfield")).check(matches(isDisplayed()));
     }
 }

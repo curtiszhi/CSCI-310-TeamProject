@@ -60,21 +60,21 @@ public class SearchFieldTest {
                         withParent(allOf(withId(R.id.basics),
                                 withParent(withId(android.R.id.tabcontent)))),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("22:56"));
+        appCompatEditText3.perform(replaceText("22:56PM"));
 
         ViewInteraction appCompatEditText4 = onView(
                 allOf(withId(R.id.endTimeText),
                         withParent(allOf(withId(R.id.basics),
                                 withParent(withId(android.R.id.tabcontent)))),
                         isDisplayed()));
-        appCompatEditText4.perform(replaceText("22:56"));
+        appCompatEditText4.perform(replaceText("22:56PM"));
 
         ViewInteraction appCompatEditText5 = onView(
                 allOf(withId(R.id.startDateEditText),
                         withParent(allOf(withId(R.id.basics),
                                 withParent(withId(android.R.id.tabcontent)))),
                         isDisplayed()));
-        appCompatEditText5.perform(replaceText("10-4-16"));
+        appCompatEditText5.perform(replaceText("10-04-16"));
 
 
         ViewInteraction appCompatEditText6 = onView(
@@ -82,7 +82,7 @@ public class SearchFieldTest {
                         withParent(allOf(withId(R.id.basics),
                                 withParent(withId(android.R.id.tabcontent)))),
                         isDisplayed()));
-        appCompatEditText6.perform(replaceText("10-6-16"));
+        appCompatEditText6.perform(replaceText("10-06-16"));
 
 
         ViewInteraction appCompatEditText7 = onView(
@@ -113,6 +113,11 @@ public class SearchFieldTest {
         ViewInteraction appCompatButton6 = onView(
                 allOf(withId(R.id.searchButton), withText("Search!"), isDisplayed()));
         appCompatButton6.perform(click());
+        /*try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
         onView(withText("Wait!")).check(matches(isDisplayed()));
 
 

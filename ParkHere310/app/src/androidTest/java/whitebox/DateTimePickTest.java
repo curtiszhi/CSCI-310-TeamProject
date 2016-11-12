@@ -64,7 +64,7 @@ public class DateTimePickTest {
     }
 
     @Test
-    public void timePickerTest(){
+    public void timePickerTest() {
         pressBack();
         try {
             Thread.sleep(3000);

@@ -50,7 +50,6 @@ public class RentTest {
     @Before
     public void initString() {
         location = "1171 W 30th St, Los Angeles, CA 90007, USA";
-        location1="3115 S Orchard Ave, Los Angeles, CA 90007, USA";
     }
 
     @Test

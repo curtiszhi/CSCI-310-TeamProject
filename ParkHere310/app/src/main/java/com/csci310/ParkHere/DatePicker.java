@@ -57,7 +57,7 @@ public class DatePicker  implements View.OnClickListener, DatePickerDialog.OnDat
         }else{
             day_s=_day+"";
         }
-        if(_month<10){
+        if(_month<9){
             int realmonth=_month+1;
             month_s="0"+realmonth;
         }else{

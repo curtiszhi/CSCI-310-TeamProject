@@ -6,6 +6,7 @@ import android.support.test.espresso.ViewInteraction;
 import android.support.test.rule.ActivityTestRule;
 
 import com.csci310.ParkHere.ActionActivity;
+import com.csci310.ParkHere.MainActivity;
 import com.csci310.ParkHere.R;
 
 import org.junit.Before;
@@ -14,7 +15,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -37,8 +40,8 @@ public class UpdateUserInfoTest {
     private String name, phone, email;
 
     @Rule
-    public ActivityTestRule<ActionActivity> myActivityRule = new ActivityTestRule<>(
-            ActionActivity.class);
+    public ActivityTestRule<MainActivity> myActivityRule = new ActivityTestRule<>(
+            MainActivity.class);
 
     @Before
     public void initString() {
@@ -56,11 +59,7 @@ public class UpdateUserInfoTest {
 
         catch (Exception e){
             //logged in, log out
-            /*openActionBarOverflowOrOptionsMenu(getInstrumentation().getTargetContext());
 
-            ViewInteraction appCompatTextView3 = onView(
-                    allOf(withId(R.id.title), withText("Sign-out"), isDisplayed()));
-            appCompatTextView3.perform(click());*/
 
             ViewInteraction appCompatEditText = onView(
                     allOf(withId(R.id.emailEditText), isDisplayed()));
