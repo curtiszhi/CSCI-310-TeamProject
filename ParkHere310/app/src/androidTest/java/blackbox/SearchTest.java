@@ -44,69 +44,18 @@ public class SearchTest {
 
     @Before
     public void initString() {
-        location = "3131 McClintock Ave. Los Angeles CA 90007";
+        location = "1209 W 27TH ST Los Angeles CA 90007";
     }
-
-    @Test
-    public void searchSameTimeTest(){
-        onView(withId(locationEditText)).perform(replaceText(location), closeSoftKeyboard());
-
-        onView(withId(R.id.startDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,27));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.endDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,27));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.startTimeText)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(13,0));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.endTimeText)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(13,0));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.searchButton)).perform(click());
-
-        onView(withText("Distance")).check(doesNotExist());
-    }
-
-    @Test
-    public void noAddressTest(){
-        onView(withId(locationEditText)).perform(replaceText(""), closeSoftKeyboard());
-
-        onView(withId(R.id.startDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,27));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.endDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,27));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.startTimeText)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(13,0));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.endTimeText)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(15,0));
-        onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.searchButton)).perform(click());
-
-        onView(withText("Distance")).check(doesNotExist());
-    }
-
     @Test
     public void searchValidTest(){
         onView(withId(locationEditText)).perform(replaceText(location), closeSoftKeyboard());
 
         onView(withId(R.id.startDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,27));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,14));
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withId(R.id.endDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,27));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,15));
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withId(R.id.startTimeText)).perform(click());
@@ -134,5 +83,77 @@ public class SearchTest {
 
 
     }
+    @Test
+    public void searchSameTimeTest(){
+        onView(withId(locationEditText)).perform(replaceText(location), closeSoftKeyboard());
+
+        onView(withId(R.id.startDateEditText)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,14));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.endDateEditText)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,14));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.startTimeText)).perform(click());
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(13,0));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.endTimeText)).perform(click());
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(13,0));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.searchButton)).perform(click());
+
+        int x = 0;
+        while (x == 0){
+            try{
+                ViewInteraction appCompatTextView = onView(
+                        allOf(withText("Wait!"), isDisplayed()));
+                //appCompatTextView.perform(click());
+                x = 1;
+            }
+            catch (Exception e){
+                x = 0;
+            }
+        }
+    }
+
+    @Test
+    public void noAddressTest(){
+        onView(withId(locationEditText)).perform(replaceText(""), closeSoftKeyboard());
+
+        onView(withId(R.id.startDateEditText)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,14));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.endDateEditText)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,14));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.startTimeText)).perform(click());
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(13,0));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.endTimeText)).perform(click());
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(13,0));
+        onView(withId(android.R.id.button1)).perform(click());
+
+        onView(withId(R.id.searchButton)).perform(click());
+
+        int x = 0;
+        while (x == 0){
+            try{
+                ViewInteraction appCompatTextView = onView(
+                        allOf(withText("Wait!"), isDisplayed()));
+                //appCompatTextView.perform(click());
+                x = 1;
+            }
+            catch (Exception e){
+                x = 0;
+            }
+        }
+    }
+
 
 }

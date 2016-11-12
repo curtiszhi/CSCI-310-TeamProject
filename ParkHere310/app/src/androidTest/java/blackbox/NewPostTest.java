@@ -61,12 +61,6 @@ public class NewPostTest
     @Rule
     public ActivityTestRule<AddActivity> myActivityRule = new ActivityTestRule<>(AddActivity.class);
 
-    @Before
-    public void initString() {
-//        email = "peter@gmail.com";
-//        pass = "Password1";
-    }
-
 
     @Test
     public void newPostWithValidEntries()
@@ -104,7 +98,7 @@ public class NewPostTest
 
         //Enter dates and times:
         onView(withId(R.id.startDateEditText)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,8));
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2016,11,13));
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withId(R.id.endDateEditText)).perform(click());

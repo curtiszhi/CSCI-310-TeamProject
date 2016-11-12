@@ -38,34 +38,39 @@ public class UpdateUserInfoTest {
 
     @Before
     public void initString() {
-        name = "Testing Name";
-        phone = "1112223333";
+        name = "NewTest1234";
+        phone = "1234567891";
         email = "";
     }
 
     @Test
     public void updateUser(){
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         onView(withId(R.id.action_user)).perform(click());
 
         onView(withId(R.id.editUserDetailsToggleButton)).perform(click());
 
         onView(withId(R.id.nameEditText)).perform(replaceText(name));
         onView(withId(R.id.phoneEditText)).perform(replaceText(phone));
-
-        try{
-            onView(withId(R.id.emailEditText)).perform(typeText(email), closeSoftKeyboard());
-        } catch (PerformException e){
-            //Shouldn't work
-        }
-
         onView(withId(R.id.editUserDetailsToggleButton)).perform(click());
+
 
         onView((withId(R.id.nameEditText))).check(matches(withText(name)));
         onView((withId(R.id.phoneEditText))).check(matches(withText(phone)));
-        onView(withId(R.id.emailEditText)).check(matches(withText("test@test.com")));
 
         //Check if updated info is saved
         Espresso.pressBack();
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         onView(withId(R.id.action_user)).perform(click());
 

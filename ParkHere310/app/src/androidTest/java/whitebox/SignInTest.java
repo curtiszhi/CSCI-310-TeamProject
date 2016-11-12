@@ -107,7 +107,7 @@ public class SignInTest {
         appCompatEditText2.perform(replaceText(""), closeSoftKeyboard());
 
 
-        ViewInteraction appCompatButton = onView(allOf(withId(R.id.loginButton), withText("login"), isDisplayed()));
+        ViewInteraction appCompatButton = onView(allOf(withId(R.id.loginButton), isDisplayed()));
         appCompatButton.perform(click());
         onView(withText("Sign-In Error")).check(matches(isDisplayed()));
     }
