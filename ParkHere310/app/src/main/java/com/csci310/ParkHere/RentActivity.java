@@ -245,10 +245,10 @@ public class RentActivity extends AppCompatActivity {
                     //update activity of spot
                     mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(false);
                    // mDatabase.child("users").child(fd.getHost()).child("hosting/" + fd.getIdentifier()).child("activity").setValue(false);
-                    rateList = new Vector<String>();
-                    rateList.add(fd.getIdentifier());
+                    //rateList = new Vector<String>();
+                    //rateList.add(fd.getIdentifier());
                     //update renter rate list
-                    DatabaseReference ref = mDatabase.child("users").child(mFirebaseUser.getUid()).child("rateList");
+                   /* DatabaseReference ref = mDatabase.child("users").child(mFirebaseUser.getUid()).child("rateList");
                     ref.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -265,7 +265,7 @@ public class RentActivity extends AppCompatActivity {
                             System.out.println("The read failed: " + databaseError.getCode());
                         }
                     });
-                    ref.setValue(rateList);
+                    ref.setValue(rateList);*/
 
                     rentList = new HashMap<String, ArrayList<String>>();
                     ArrayList<String> startend = new ArrayList<String>();

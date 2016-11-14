@@ -195,19 +195,26 @@ public class DetailedViewActivity extends AppCompatActivity{
                 } catch (android.content.ActivityNotFoundException ex) {
                     Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                 }
-                DatabaseReference ref=mDatabase.child("users").child(specific_renterID).child("rateList");
-                ref.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        rateList= dataSnapshot.getValue(Vector.class);
-                        rateList.add(fd.getIdentifier());
-                    }
+                rateList = new Vector<String>();
+                rateList.add(fd.getIdentifier());
+                //update renter rate list
+                DatabaseReference ref = mDatabase.child("users").child(specific_renterID).child("rateList");
+                    ref.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
+                                for (int i = 0; i < tempList.size(); i++) {
+                                    rateList.add(tempList.get(i));
+                                }
+                            }
+                        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        System.out.println("The read failed: " + databaseError.getCode());
-                    }
-                });
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
                 ref.setValue(rateList);
                 Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
                 startActivity(intent);
@@ -222,7 +229,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                     if(specific_renterID!=null) {
 
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-
+                        /*
                         DatabaseReference ref10 = mDatabase.child("users").child(specific_renterID).child("rateList");
                         ref10.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -242,7 +249,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                                 System.out.println("The read failed: " + databaseError.getCode());
                             }
                         });
-                        mDatabase.child("users").child(specific_renterID).child("rateList").child(String.valueOf(index1)).setValue(null);
+                        mDatabase.child("users").child(specific_renterID).child("rateList").child(String.valueOf(index1)).setValue(null);*/
                     }
                 }
                 if(specific_renterID!=null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))) {
@@ -262,7 +269,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                         //mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
-                        DatabaseReference ref11 = mDatabase.child("users").child(specific_renterID).child("rateList");
+                        /*DatabaseReference ref11 = mDatabase.child("users").child(specific_renterID).child("rateList");
                         ref11.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -282,7 +289,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                             }
                         });
                         mDatabase.child("users").child(specific_renterID).child("rateList").child(String.valueOf(index1)).setValue(null);
-
+                        */
                     }
                 }
 
@@ -366,6 +373,8 @@ public class DetailedViewActivity extends AppCompatActivity{
                 end = df.parse(endTime.substring(0,endTime.length()-2)+":00");
                 if (d.getTime() < end.getTime()) {
                     confirmButton.setEnabled(false);
+                }else{
+                    cancelButton.setEnabled(false);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
