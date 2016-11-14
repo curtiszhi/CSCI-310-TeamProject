@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Base64;
@@ -26,6 +27,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
 
     public static ArrayList<FeedItem> feedItemList;
+    private ArrayList<String> confirm_list;
     private String start;
     private String end;
 
@@ -38,6 +40,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         }
         if(hi.equals("host")){
             this.feedItemList = ListingActivity.hostList;
+            confirm_list=ListingActivity.confirm_list;
         }
         if(hi.equals("results")){
             pay = true;
@@ -67,7 +70,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
     @Override
     public void onBindViewHolder(FeedListRowHolder feedListRowHolder, int i) {
         FeedItem feedItem = feedItemList.get(i);
-        feedListRowHolder.house.setText(feedItem.getAddress());
+        if(confirm_list.size()!=0){
+            TextView address=(TextView) feedListRowHolder.house;
+            address.setTypeface(null, Typeface.BOLD);
+            feedListRowHolder.house.setText(feedItem.getAddress());
+
+        }else{
+        feedListRowHolder.house.setText(feedItem.getAddress());}
         if (!feedItem.getPhotos().isEmpty()) {
             if (feedItem.getPhotos().get(0) != null) {
                 byte[] decodedString = Base64.decode(feedItem.getPhotos().get(0), Base64.DEFAULT);
@@ -76,6 +85,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
             }
         }
        // feedListRowHolder.thumbnail.setImageResource(feedItem.getThumbnail());
+
         feedListRowHolder.dates.setText("Start: " + feedItem.getStartDates()+ " End: " + feedItem.getEndDates());
         String stringdouble= Double.toString(feedItem.getPrice());
         feedListRowHolder.price.setText("$" + stringdouble);

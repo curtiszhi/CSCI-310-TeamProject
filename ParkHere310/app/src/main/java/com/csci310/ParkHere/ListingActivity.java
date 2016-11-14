@@ -58,12 +58,19 @@ public class ListingActivity extends AppCompatActivity {
     public static ArrayList<FeedItem> hostList;
     public static ArrayList<FeedItem> rentList;
     static MyRecyclerAdapter adapter;
+    public static ArrayList<String> confirm_list;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing);
+        Bundle bundle = getIntent().getExtras();
+        confirm_list=new ArrayList<String>();
+        if(bundle!=null){
+            confirm_list=bundle.getStringArrayList("confirm");
+        }
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
