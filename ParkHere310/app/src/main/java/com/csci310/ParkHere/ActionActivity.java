@@ -57,6 +57,10 @@ public class ActionActivity extends AppCompatActivity {
     public static User user_all;
     private ActionActivity self;
     public static double[] latlng;
+    private ArrayList<String> spot_host;
+    private ArrayList<String> confirm_list;
+    private String temp_spot_identifier;
+    private Map<String,ArrayList<String>> Time_list;
 
 //khjvg
     @Override
@@ -96,6 +100,10 @@ public class ActionActivity extends AppCompatActivity {
         cover = (CheckBox) findViewById(R.id.coverBox);
         handy = (CheckBox) findViewById(R.id.handicappedBox);
         search = (Button) findViewById(R.id.searchButton);
+
+        checkConfirm();
+
+
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,6 +135,81 @@ public class ActionActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    private void checkConfirm(){
+        DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser_universal.getUid()).child("hosting");
+        spot_host=new ArrayList<String>();
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    spot_host = (ArrayList<String>) dataSnapshot.getValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+        confirm_list=new ArrayList<String>();
+        if(spot_host.size()!=0) {
+            for(int i=0;i<spot_host.size();i++) {
+                DatabaseReference ref1 = mDatabase.child("parking-spots-hosting").child(spot_host.get(i)).child("rentedTime");
+                temp_spot_identifier=spot_host.get(i);
+                Time_list=new HashMap<String,ArrayList<String>>();
+
+                    ref1.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            Time_list = (HashMap<String,ArrayList<String>>) dataSnapshot.getValue();
+                            String endTime_c="";
+                            for (HashMap.Entry<String, ArrayList<String>> entry : Time_list.entrySet()) {
+                                ArrayList<String> value = (ArrayList<String>)entry.getValue();
+                                endTime_c=value.get(1);
+                            }
+                            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                            String today=getToday(df);
+                            Date time1 = null;
+                            Date d=null;
+                            try {
+                                time1 = df.parse(endTime_c.substring(0,endTime_c.length()-2)+":00");
+                                d = df.parse(today);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            if(time1.getTime() < d.getTime()){
+                                confirm_list.add(temp_spot_identifier);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+            }
+        }
+
+        if(confirm_list.size()!=0){
+            AlertDialog alertDialog = new AlertDialog.Builder(ActionActivity.this).create();
+            alertDialog.setTitle("Spot to Confirm");
+            alertDialog.setMessage("Please go to confirm these "+confirm_list.size()+" spots");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    Intent intent = new Intent(ActionActivity.this, ListingActivity.class);
+                    intent.putExtra("confirm", confirm_list );
+                    startActivity(intent);
+
+                }
+            });
+            alertDialog.show();
+        }
+
+
     }
 
     private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate,
