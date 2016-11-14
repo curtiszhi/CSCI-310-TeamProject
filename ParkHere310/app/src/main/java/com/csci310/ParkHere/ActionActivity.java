@@ -356,7 +356,7 @@ public class ActionActivity extends AppCompatActivity {
             Date time2 = df.parse(end_s.substring(0,end_s.length()-2)+":00");
             long diff = time2.getTime() - time1.getTime();
 
-            if(diff>=3600000){
+            if(diff>=/*3600000*/0){
                 checkdate=true;
 
             }else{

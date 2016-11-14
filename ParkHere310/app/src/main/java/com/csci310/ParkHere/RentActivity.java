@@ -383,7 +383,10 @@ public class RentActivity extends AppCompatActivity {
         long diff = time2.getTime() - time1.getTime();
         long diffHours = diff / (60 * 60 * 1000);
         System.out.println(fd.getPrice() + " " + diffHours);
-        price.setText("$" + Double.toString(fd.getPrice() * diffHours));
+        if(diffHours==0){
+            price.setText("$" + Double.toString(fd.getPrice() * 1));
+        }else{
+        price.setText("$" + Double.toString(fd.getPrice() * diffHours));}
         String time_frame = start + " to " + end;
         time.setText(time_frame);
         String filter_spot = "";

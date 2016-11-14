@@ -216,6 +216,8 @@ public class DetailedViewActivity extends AppCompatActivity{
                         }
                     });
                 ref.setValue(rateList);
+                mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
+                mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                 Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
                 startActivity(intent);
             }
@@ -373,8 +375,6 @@ public class DetailedViewActivity extends AppCompatActivity{
                 end = df.parse(endTime.substring(0,endTime.length()-2)+":00");
                 if (d.getTime() < end.getTime()) {
                     confirmButton.setEnabled(false);
-                }else{
-                    cancelButton.setEnabled(false);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
