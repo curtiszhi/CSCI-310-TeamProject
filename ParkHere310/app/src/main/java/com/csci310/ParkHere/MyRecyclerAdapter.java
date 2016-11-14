@@ -71,7 +71,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
     @Override
     public void onBindViewHolder(FeedListRowHolder feedListRowHolder, int i) {
         FeedItem feedItem = feedItemList.get(i);
-        if(confirm_list.size()!=0){
+        if(confirm_list != null && confirm_list.size()!=0){
            if(confirm_list.contains(feedItem.getIdentifier())){
                TextView address=(TextView) feedListRowHolder.house;
                address.setTypeface(null, Typeface.BOLD);
