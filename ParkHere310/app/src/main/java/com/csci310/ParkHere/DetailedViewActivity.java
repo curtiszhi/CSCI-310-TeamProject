@@ -217,6 +217,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                     });
                 ref.setValue(rateList);
                 mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
+                mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                 mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                 Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
                 startActivity(intent);
