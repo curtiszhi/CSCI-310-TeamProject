@@ -258,8 +258,8 @@ public class DetailedViewActivity extends AppCompatActivity{
                             Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                         } */
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-                        mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("activity").setValue(true);
-                        mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
+                        //mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("activity").setValue(true);
+                        //mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
                         DatabaseReference ref11 = mDatabase.child("users").child(specific_renterID).child("rateList");

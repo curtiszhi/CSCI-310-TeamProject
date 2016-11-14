@@ -289,34 +289,34 @@ public class AddActivity extends AppCompatActivity {
                         if(check(starttime,endtime,startdate,enddate)){
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("filter").setValue(filter);
-                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("filter").setValue(filter);
-
+                           // mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("filter").setValue(filter);
+                            //System.out.println(mFirebaseUser.getUid());
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("startTime").setValue(starttime);
-                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("startTime").setValue(starttime);
+                            //mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("startTime").setValue(starttime);
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("endTime").setValue(endtime);
-                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("endTime").setValue(endtime);
+                            //mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("endTime").setValue(endtime);
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("startDates").setValue(startdate);
-                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("startDates").setValue(startdate);
+                           // mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("startDates").setValue(startdate);
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("endDates").setValue(enddate);
-                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("endDates").setValue(enddate);
+                           // mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("endDates").setValue(enddate);
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("description").setValue(description_parking);
-                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("description").setValue(description_parking);
+                            //mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("description").setValue(description_parking);
 
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("price").setValue(price_parking);
-                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("price").setValue(price_parking);
+                           // mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("price").setValue(price_parking);
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
-                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
+                            //mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("photos").setValue(photos);
-                            mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("photos").setValue(photos);
+                            //mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("photos").setValue(photos);
 
-                            if(renter!=null){
+                           /* if(renter!=null){
                                 mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("filter").setValue(filter);
                                 mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("startTime").setValue(starttime);
                                 mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("endTime").setValue(endtime);
@@ -326,7 +326,7 @@ public class AddActivity extends AppCompatActivity {
                                 mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("cancelpolicy").setValue(cancel_policy);
                                 mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("photos").setValue(photos);
                                 mDatabase.child("users").child(renter).child("renting").child(fd.getIdentifier()).child("price").setValue(price_parking);
-                            }
+                            }*/
 
 
 
@@ -449,18 +449,18 @@ public class AddActivity extends AppCompatActivity {
         }
     }
     public void write_new_spot(FeedItem Fd) {
-        ref=mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier());
-        ref.addValueEventListener(new ValueEventListener() {
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").child(fd.getIdentifier()).setValue(fd.getIdentifier());
+       /* ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                ref.setValue(fd);
+                ref.setValue(fd.getIdentifier());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
-        });
+        });*/
 
         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).setValue(Fd);
     }

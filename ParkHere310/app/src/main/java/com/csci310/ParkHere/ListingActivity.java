@@ -85,84 +85,10 @@ public class ListingActivity extends AppCompatActivity {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String,HashMap<String, Object>> user_map= (HashMap<String,HashMap<String, Object>>)dataSnapshot.getValue();
-                if(user_map != null){
-                    for (HashMap.Entry<String, HashMap<String, Object>> entry : user_map.entrySet()) {
-                        String itemKey = entry.getKey();
-                        System.out.println("itemkey: "+ itemKey);
-                        FeedItem user_all = new FeedItem();
-                        for (HashMap.Entry<String, Object> innerEntry : entry.getValue().entrySet()) {
-                            String key = innerEntry.getKey();
-                            Object value = innerEntry.getValue();
-                            System.out.println("innerkey: "+ key + "// innervalue: "+ value);
-                            if(key.equals("latitude")){
-                                user_all.setLatitude((double)value);
-                                System.out.println(value);
-                            }
-                            if(key.equals("address")){
-                                user_all.setAddress((String)value);
-                            }
-
-                            if(key.equals("longitude")){
-                                user_all.setLongitude((double)value);
-                            }
-                            if(key.equals("spotID")){
-                                user_all.setSpotID((String)value);
-                            }
-                            if(key.equals("startDates")){
-                                user_all.setStartDates((String)value);
-                            }
-                            if(key.equals("endDates")){
-                                user_all.setEndDates((String)value);
-                            }
-                            if(key.equals("startTime")){
-                                user_all.setStartTime((String)value);
-                            }
-                            if(key.equals("endTime")){
-                                user_all.setEndTime((String)value);
-                            }
-                            if(key.equals("price")){
-                                user_all.setPrice(Double.parseDouble((String) (value+"")));
-                            }
-                            if(key.equals("cancel")){
-                                user_all.setCancel((String)value);
-                            }
-                            if(key.equals("description")){
-                                user_all.setDescription((String)value);
-                            }
-                            if(key.equals("rating")){
-                                user_all.setRating((Vector<Integer>)value);
-                            }
-                            if(key.equals("activity")){
-                                user_all.setActivity((Boolean)value);
-                            }
-                            if(key.equals("filter")){
-                                Vector v = new Vector((ArrayList<String>) value);
-                                user_all.setFilter(v);
-                            }
-                            if(key.equals("host")){
-                                user_all.setHost((String)value);
-                            }
-                            if(key.equals("photos")){
-                                user_all.setPhotos((ArrayList<String>)value);
-                            }
-                            if(key.equals("rentedTime")){
-                                user_all.setRentedTime((Map<String,ArrayList<String>>)value);
-                            }
-                            if(key.equals("identifier")){
-                                user_all.setIdentifier((String)value);
-                            }
-                            if(key.equals("review")){
-                                user_all.setReview((Vector<String>) value);
-                            }
-                            if(key.equals("currentRenter")){
-                                user_all.setCurrentRenter((String)value);
-                            }
-
-                        }
-                        rentList.add(user_all);}
-
-                }}
+                if(dataSnapshot.exists()){
+                HashMap<String,String> user_map= (HashMap<String,String>)dataSnapshot.getValue();
+                getSpot(user_map);}
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -170,96 +96,220 @@ public class ListingActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void getSpot(HashMap<String,String> spot_map){
+
+        Vector<String> names=new Vector<String>();
+        for (HashMap.Entry<String, String> entry : spot_map.entrySet()) {
+            names.add(entry.getKey());
+        }
+        for(int i=0;i<names.size();i++){
+            DatabaseReference database_p = mDatabase.child("parking-spots-hosting").child(names.get(i));
+            database_p.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    HashMap<String, Object> user_map = (HashMap<String,Object>) dataSnapshot.getValue();
+
+                    if (user_map != null) {
+                        FeedItem user_all = new FeedItem();
+                            for (HashMap.Entry<String, Object> innerEntry : user_map.entrySet()) {
+                                String key = innerEntry.getKey();
+                                Object value = innerEntry.getValue();
+                                System.out.println("innerkey: " + key + "// innervalue: " + value);
+
+                                if (key.equals("latitude")) {
+                                    user_all.setLatitude((double) value);
+                                    System.out.println(value);
+                                }
+                                if (key.equals("address")) {
+                                    user_all.setAddress((String) value);
+                                }
+
+                                if (key.equals("longitude")) {
+                                    user_all.setLongitude((double) value);
+                                }
+                                if (key.equals("spotID")) {
+                                    user_all.setSpotID((String) value);
+                                }
+                                if (key.equals("startDates")) {
+                                    user_all.setStartDates((String) value);
+                                }
+                                if (key.equals("endDates")) {
+                                    user_all.setEndDates((String) value);
+                                }
+                                if (key.equals("startTime")) {
+                                    user_all.setStartTime((String) value);
+                                }
+                                if (key.equals("endTime")) {
+                                    user_all.setEndTime((String) value);
+                                }
+                                if (key.equals("price")) {
+                                    user_all.setPrice(Double.parseDouble((String) (value + "")));
+                                }
+                                if (key.equals("cancel")) {
+                                    user_all.setCancel((String) value);
+                                }
+                                if (key.equals("description")) {
+                                    user_all.setDescription((String) value);
+                                }
+                                if (key.equals("rating")) {
+                                    user_all.setRating((Vector<Integer>) value);
+                                }
+                                if (key.equals("activity")) {
+                                    user_all.setActivity((Boolean) value);
+                                }
+                                if (key.equals("filter")) {
+                                    Vector v = new Vector((ArrayList<String>) value);
+                                    user_all.setFilter(v);
+                                }
+                                if (key.equals("host")) {
+                                    user_all.setHost((String) value);
+                                }
+                                if (key.equals("photos")) {
+                                    user_all.setPhotos((ArrayList<String>) value);
+                                }
+                                if (key.equals("rentedTime")) {
+                                    user_all.setRentedTime((Map<String, ArrayList<String>>) value);
+                                }
+                                if (key.equals("identifier")) {
+                                    user_all.setIdentifier((String) value);
+                                }
+                                if (key.equals("review")) {
+                                    user_all.setReview((Vector<String>) value);
+                                }
+                                if (key.equals("currentRenter")) {
+                                    user_all.setCurrentRenter((String) value);
+                                }
+                            }
+                            rentList.add(user_all);
+                        }
+
+
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+        }
+    }
+
     public void getItemsHosting(){
         DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/hosting");
         //DatabaseReference database = mDatabase.child("parking-spots-hosting");
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                HashMap<String,HashMap<String, Object>> user_map= (HashMap<String,HashMap<String, Object>>)dataSnapshot.getValue();
-                    if(user_map != null){
-                    for (HashMap.Entry<String, HashMap<String, Object>> entry : user_map.entrySet()) {
-                    String itemKey = entry.getKey();
-                    System.out.println("itemkey: "+ itemKey);
-                    FeedItem user_all = new FeedItem();
-                    for (HashMap.Entry<String, Object> innerEntry : entry.getValue().entrySet()) {
-                        String key = innerEntry.getKey();
-                        Object value = innerEntry.getValue();
-                        System.out.println("innerkey: "+ key + "// innervalue: "+ value);
-                        if(key.equals("latitude")){
-                            user_all.setLatitude((double)value);
-                            System.out.println(value);
-                        }
-                        if(key.equals("address")){
-                            user_all.setAddress((String)value);
-                        }
-
-                    if(key.equals("longitude")){
-                        user_all.setLongitude((double)value);
-                    }
-                        if(key.equals("spotID")){
-                            user_all.setSpotID((String)value);
-                        }
-                    if(key.equals("startDates")){
-                        user_all.setStartDates((String)value);
-                    }
-                    if(key.equals("endDates")){
-                        user_all.setEndDates((String)value);
-                    }
-                    if(key.equals("startTime")){
-                        user_all.setStartTime((String)value);
-                    }
-                    if(key.equals("endTime")){
-                        user_all.setEndTime((String)value);
-                    }
-                    if(key.equals("price")){
-                        user_all.setPrice(Double.parseDouble((String) (value+"")));
-                    }
-                    if(key.equals("cancel")){
-                        user_all.setCancel((String)value);
-                    }
-                    if(key.equals("description")){
-                        user_all.setDescription((String)value);
-                    }
-                    if(key.equals("rating")){
-                        user_all.setRating((Vector<Integer>)value);
-                    }
-                    if(key.equals("activity")){
-                        user_all.setActivity((Boolean)value);
-                    }
-                    if(key.equals("filter")){
-                        Vector v = new Vector((ArrayList<String>) value);
-                        user_all.setFilter(v);
-                    }
-                    if(key.equals("host")){
-                        user_all.setHost((String)value);
-                    }
-                    if(key.equals("photos")){
-                        user_all.setPhotos((ArrayList<String>)value);
-                    }
-                    if(key.equals("rentedTime")){
-                        user_all.setRentedTime((Map<String,ArrayList<String>>)value);
-                    }
-                    if(key.equals("identifier")){
-                        user_all.setIdentifier((String)value);
-                    }
-                    if(key.equals("review")){
-                        user_all.setReview((Vector<String>) value);
-                    }
-                    if(key.equals("currentRenter")){
-                        user_all.setCurrentRenter((String)value);
-                    }
-
-                }
-                hostList.add(user_all);}
-
-            }}
+                if(dataSnapshot.exists()){
+                HashMap<String,String> user_map= (HashMap<String,String>)dataSnapshot.getValue();
+                getSpot_host(user_map);}
+            }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+    }
+
+    private void getSpot_host(HashMap<String,String> spot_map){
+        Vector<String> names=new Vector<String>();
+        for (HashMap.Entry<String, String> entry : spot_map.entrySet()) {
+            names.add(entry.getKey());
+        }
+        for(int i=0;i<names.size();i++){
+            DatabaseReference database_p = mDatabase.child("parking-spots-hosting").child(names.get(i));
+            database_p.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    HashMap<String, Object> user_map = (HashMap<String,Object>) dataSnapshot.getValue();
+
+                    if (user_map != null) {
+                        FeedItem user_all = new FeedItem();
+                        for (HashMap.Entry<String, Object> innerEntry : user_map.entrySet()) {
+                            String key = innerEntry.getKey();
+                            Object value = innerEntry.getValue();
+                            System.out.println("innerkey: " + key + "// innervalue: " + value);
+
+                            if (key.equals("latitude")) {
+                                user_all.setLatitude((double) value);
+                                System.out.println(value);
+                            }
+                            if (key.equals("address")) {
+                                user_all.setAddress((String) value);
+                            }
+
+                            if (key.equals("longitude")) {
+                                user_all.setLongitude((double) value);
+                            }
+                            if (key.equals("spotID")) {
+                                user_all.setSpotID((String) value);
+                            }
+                            if (key.equals("startDates")) {
+                                user_all.setStartDates((String) value);
+                            }
+                            if (key.equals("endDates")) {
+                                user_all.setEndDates((String) value);
+                            }
+                            if (key.equals("startTime")) {
+                                user_all.setStartTime((String) value);
+                            }
+                            if (key.equals("endTime")) {
+                                user_all.setEndTime((String) value);
+                            }
+                            if (key.equals("price")) {
+                                user_all.setPrice(Double.parseDouble((String) (value + "")));
+                            }
+                            if (key.equals("cancel")) {
+                                user_all.setCancel((String) value);
+                            }
+                            if (key.equals("description")) {
+                                user_all.setDescription((String) value);
+                            }
+                            if (key.equals("rating")) {
+                                user_all.setRating((Vector<Integer>) value);
+                            }
+                            if (key.equals("activity")) {
+                                user_all.setActivity((Boolean) value);
+                            }
+                            if (key.equals("filter")) {
+                                Vector v = new Vector((ArrayList<String>) value);
+                                user_all.setFilter(v);
+                            }
+                            if (key.equals("host")) {
+                                user_all.setHost((String) value);
+                            }
+                            if (key.equals("photos")) {
+                                user_all.setPhotos((ArrayList<String>) value);
+                            }
+                            if (key.equals("rentedTime")) {
+                                user_all.setRentedTime((Map<String, ArrayList<String>>) value);
+                            }
+                            if (key.equals("identifier")) {
+                                user_all.setIdentifier((String) value);
+                            }
+                            if (key.equals("review")) {
+                                user_all.setReview((Vector<String>) value);
+                            }
+                            if (key.equals("currentRenter")) {
+                                user_all.setCurrentRenter((String) value);
+                            }
+                        }
+                        hostList.add(user_all);
+                    }
+
+
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+        }
     }
 
     @SuppressWarnings("deprecation")
