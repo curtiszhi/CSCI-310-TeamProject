@@ -27,7 +27,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
 
     public static ArrayList<FeedItem> feedItemList;
-    private ArrayList<String> confirm_list;
+    //public static FeedListRowHolder feedListRowHolder;
+    public static ArrayList<String> confirm_list;
     private String start;
     private String end;
 
@@ -71,9 +72,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
     public void onBindViewHolder(FeedListRowHolder feedListRowHolder, int i) {
         FeedItem feedItem = feedItemList.get(i);
         if(confirm_list.size()!=0){
-            TextView address=(TextView) feedListRowHolder.house;
-            address.setTypeface(null, Typeface.BOLD);
-            feedListRowHolder.house.setText(feedItem.getAddress());
+           if(confirm_list.contains(feedItem.getIdentifier())){
+               TextView address=(TextView) feedListRowHolder.house;
+               address.setTypeface(null, Typeface.BOLD);
+               feedListRowHolder.house.setText(feedItem.getAddress());
+           }else{
+               feedListRowHolder.house.setText(feedItem.getAddress());
+           }
+
 
         }else{
         feedListRowHolder.house.setText(feedItem.getAddress());}

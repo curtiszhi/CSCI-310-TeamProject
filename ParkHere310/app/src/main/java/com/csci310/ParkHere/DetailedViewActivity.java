@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import static com.csci310.ParkHere.ActionActivity.user_all;
+import static com.csci310.ParkHere.ListingActivity.confirm_list;
 
 /**
  * Created by seanyuan on 10/17/16.
@@ -219,6 +220,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                 mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
                 mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                 mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
+                confirm_list.remove(fd.getIdentifier());
                 Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
                 startActivity(intent);
             }
