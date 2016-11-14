@@ -57,7 +57,7 @@ public class ActionActivity extends AppCompatActivity {
     public static User user_all;
     private ActionActivity self;
     public static double[] latlng;
-    private ArrayList<String> spot_host;
+    private Map<String,String> spot_host;
     private ArrayList<String> confirm_list;
     private String temp_spot_identifier;
     private Map<String,ArrayList<String>> Time_list;
@@ -138,12 +138,12 @@ public class ActionActivity extends AppCompatActivity {
     }
     private void checkConfirm(){
         DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser_universal.getUid()).child("hosting");
-        spot_host=new ArrayList<String>();
+        spot_host=new HashMap<String,String>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
-                    spot_host = (ArrayList<String>) dataSnapshot.getValue();
+                    spot_host = (HashMap<String,String>) dataSnapshot.getValue();
                 }
             }
 
@@ -154,9 +154,10 @@ public class ActionActivity extends AppCompatActivity {
         });
         confirm_list=new ArrayList<String>();
         if(spot_host.size()!=0) {
-            for(int i=0;i<spot_host.size();i++) {
-                DatabaseReference ref1 = mDatabase.child("parking-spots-hosting").child(spot_host.get(i)).child("rentedTime");
-                temp_spot_identifier=spot_host.get(i);
+            for (HashMap.Entry<String, String> entry_1 : spot_host.entrySet()) {
+                String spot_name=entry_1.getKey();
+                DatabaseReference ref1 = mDatabase.child("parking-spots-hosting").child(spot_name).child("rentedTime");
+                temp_spot_identifier=spot_name;
                 Time_list=new HashMap<String,ArrayList<String>>();
 
                     ref1.addValueEventListener(new ValueEventListener() {
