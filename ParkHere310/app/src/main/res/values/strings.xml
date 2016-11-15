@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">ParkHere310</string>
     <string name="about">About</string>
-    <string name="about_body"><![CDATA[Application enabling users to share private parking spaces across the US.]]></string>
+    <string name="about_body"><![CDATA[Application enabling users to share private parking spaces across the US. To begin, enter in the location credentials you are searching for. Spots can be rented for a minimum of an hour at a time. To add a spot, click the three dot menu and select "New Post"]]></string>
     <string name="title_activity_payment">paymentActivity</string>
 
 

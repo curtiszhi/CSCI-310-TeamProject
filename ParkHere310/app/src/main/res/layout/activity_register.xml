@@ -4,7 +4,8 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-    tools:ignore="ExtraText">
+    tools:ignore="ExtraText"
+    android:background="@drawable/register">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,15 +13,14 @@
         android:layout_gravity="center_horizontal"
         android:paddingTop="20dp"
         android:textSize="30dp"
-        android:textColor="#009688"
+        android:textColor="@color/cardview_light_background"
         android:textStyle="bold"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/nameEditText"
-        android:hint=" Enter Name"
+        android:hint=" What's your name?"
         android:focusable="true"
-        android:textColorHighlight="#fb00ff"
         android:textColorHint="#2945a3"
         android:layout_marginTop="10dp"
         android:background="@android:drawable/editbox_background_normal" />
@@ -29,10 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/emailEditText"
-        android:hint=" Enter Email"
+        android:hint=" What's your email?"
         android:focusable="true"
         android:inputType="textEmailAddress"
-        android:textColorHighlight="#fb00ff"
         android:textColorHint="#2945a3"
         android:background="@android:drawable/editbox_background_normal" />
 
@@ -44,7 +43,7 @@
         android:focusable="true"
         android:id="@+id/passwordEditText"
         android:textColorHint="#2945a3"
-        android:hint=" Password"
+        android:hint=" Super secret password"
         android:background="@android:drawable/editbox_background_normal" />
     <EditText
         android:layout_width="match_parent"
@@ -54,18 +53,16 @@
         android:focusable="true"
         android:id="@+id/confirmPasswordEditText"
         android:textColorHint="#2945a3"
-        android:hint=" Confirm Password"
+        android:hint=" Confirm password"
         android:background="@android:drawable/editbox_background_normal" />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/phoneEditText"
-        android:hint=" Enter Phone"
+        android:hint=" Phone number?"
         android:focusable="true"
         android:inputType="phone"
-        android:textColorHighlight="#fb00ff"
         android:textColorHint="#2945a3"
-        android:layout_marginTop="10dp"
         android:background="@android:drawable/editbox_background_normal" />
 
     <ToggleButton
@@ -80,7 +77,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Register!"
+        android:text="Sign Up!"
         android:layout_marginTop="50dp"
         android:id="@+id/registerButton"
         android:layout_gravity="center_horizontal" />

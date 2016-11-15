@@ -96,7 +96,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         String stringdouble= Double.toString(feedItem.getPrice());
         feedListRowHolder.price.setText("$" + stringdouble);
         feedListRowHolder.rating.setRating(feedItem.calculateRate());
-        feedListRowHolder.activity.setText(String.valueOf("Available: " + feedItem.getActivity()));
+        if(feedItem.getActivity()){
+            feedListRowHolder.activity.setText(String.valueOf("Available"));
+        }else{
+            feedListRowHolder.activity.setText(String.valueOf("Archive"));
+        }
         feedListRowHolder.mRootView.setOnClickListener(new ItemOnClickListener(feedListRowHolder.mRootView, i));
     }
 

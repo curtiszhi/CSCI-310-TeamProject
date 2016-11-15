@@ -64,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
+        toggleButton.setChecked(true);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,15 +78,22 @@ public class RegisterActivity extends AppCompatActivity {
                 if(valid){
                 if(pass.equals(conf)) {
                     if(validatePassword(pass)){
-                        progressDiag.setMessage("Registering User...");
+                        progressDiag.setMessage("Adding you to the family...");
                         progressDiag.show();
                         mFirebaseAuth.createUserWithEmailAndPassword(emailEditText.getText().toString().trim(), pass)
                                 .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (!task.isSuccessful()) {
-                                            Toast.makeText(RegisterActivity.this, "failed" + task.getException(),
-                                                    Toast.LENGTH_SHORT).show();
+                                            AlertDialog alertDialog = new AlertDialog.Builder(RegisterActivity.this).create();
+                                            alertDialog.setTitle("Sorry!");
+                                            alertDialog.setMessage("It looks like that email is already taken.");
+                                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            });
+                                            alertDialog.show();
                                             progressDiag.hide();
                                             return;
                                         }else{

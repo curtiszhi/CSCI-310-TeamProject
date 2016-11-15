@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,26 +7,17 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
-    android:background="@color/cardview_light_background">
+    android:background="@drawable/background">
 
-    <TextView android:text="WELCOME!"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/welcomeTextView"
-        android:textSize="30dp"
-        android:layout_centerHorizontal="true"
-        android:textColor="#009688"
-        xmlns:android="http://schemas.android.com/apk/res/android" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login below or select Register"
+        android:text="Log In or Sign Up"
         android:id="@+id/introEditText"
-        android:layout_below="@+id/welcomeTextView"
         android:layout_centerHorizontal="true"
-        android:textColor="#000000"
-        android:textSize="15dp" />
+        android:textColor="@color/cardview_light_background"
+        android:textSize="16dp" />
     <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -53,6 +43,18 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:background="@android:drawable/editbox_dropdown_light_frame" />
+    <TextView android:text="ParkHere310"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/welcomeTextView"
+        android:textSize="35dp"
+        android:textStyle="bold"
+        android:layout_above="@id/emailEditText"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/cardview_light_background"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_marginBottom= "90dp"/>
+
 
     <EditText
         android:title="Password"

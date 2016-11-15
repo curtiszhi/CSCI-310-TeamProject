@@ -2,24 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/action">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:text="ParkHere Search"
         android:textSize="30dp"
+        android:textColor="?attr/colorAccent"
         android:id="@+id/actionFirstWelcome"
         android:textStyle="normal|bold" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textColor="@color/whitetext"
         android:layout_below="@+id/actionFirstWelcome"
-        android:text="Follow the steps below to find your perfect parking spot."
+        android:text="find your perfect parking spot"
         android:id="@+id/actionWelcome"
-        android:textStyle="normal|italic"
-        android:textColor="?attr/colorAccent" />
+        android:textStyle="normal|italic" />
     <TabHost
         android:id="@+id/tabHost"
         android:layout_width="match_parent"
@@ -29,7 +31,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:background="?android:attr/actionBarDivider">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -56,7 +59,9 @@
                         android:text="Step 1: Where will you be traveling?"
                         android:id="@+id/stepOne"
                         android:paddingTop="15dp"
-                        android:textSize="20dp"/>
+                        android:paddingLeft="30dp"
+                        android:textSize="20dp"
+                        android:textColor="@color/whitetext"/>
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -69,7 +74,8 @@
                         android:layout_alignEnd="@+id/stepOne"
                         android:id="@+id/locationEditText"
                         android:paddingLeft="@dimen/activity_horizontal_margin"
-                        android:hint="Location" />
+                        android:hint="Location"
+                        android:background="@android:drawable/editbox_background_normal"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -80,6 +86,8 @@
                         android:layout_alignEnd="@+id/locationEditText"
                         android:text="Step 2: What dates are you looking for?"
                         android:id="@+id/stepTwo"
+                        android:textColor="@color/whitetext"
+                        android:paddingLeft="30dp"
                         android:textSize="20dp"/>
                     <EditText
                         android:layout_width="wrap_content"
@@ -89,7 +97,8 @@
                         android:layout_below="@+id/stepTwo"
                         android:id="@+id/startDateEditText"
                         android:hint="Pick Start Date"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:background="@android:drawable/editbox_background_normal"/>
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -98,7 +107,8 @@
                         android:layout_below="@+id/stepTwo"
                         android:id="@+id/endDateEditText"
                         android:hint="Pick End Date"
-                        android:paddingRight="@dimen/activity_horizontal_margin"/>
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:background="@android:drawable/editbox_background_normal"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -108,6 +118,7 @@
                         android:id="@+id/toText"
                         android:paddingTop="10dp"
                         android:textSize="20dp"
+                        android:textColor="@color/whitetext"
                         android:text="to" />
                     <TextView
                         android:layout_width="match_parent"
@@ -119,6 +130,8 @@
                         android:layout_alignEnd="@+id/locationEditText"
                         android:text="Step 3: What times do you need the spot?"
                         android:id="@+id/stepThree"
+                        android:textColor="@color/whitetext"
+                        android:paddingLeft="30dp"
                         android:textSize="20dp"/>
                     <EditText
                         android:layout_width="wrap_content"
@@ -128,7 +141,8 @@
                         android:layout_below="@+id/stepThree"
                         android:id="@+id/startTimeText"
                         android:hint="Pick Start Time"
-                        android:paddingLeft="@dimen/activity_horizontal_margin"/>
+                        android:paddingLeft="@dimen/activity_horizontal_margin"
+                        android:background="@android:drawable/editbox_background_normal"/>
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -137,7 +151,8 @@
                         android:layout_below="@+id/stepThree"
                         android:id="@+id/endTimeText"
                         android:hint="Pick End Date"
-                        android:paddingRight="@dimen/activity_horizontal_margin"/>
+                        android:paddingRight="@dimen/activity_horizontal_margin"
+                        android:background="@android:drawable/editbox_background_normal"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -146,6 +161,7 @@
                         android:layout_centerHorizontal="true"
                         android:id="@+id/toText2"
                         android:paddingTop="10dp"
+                        android:textColor="@color/whitetext"
                         android:textSize="20dp"
                         android:text="to" />
                 </RelativeLayout>
@@ -157,8 +173,10 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Step 4: Select parking space features."
+                        android:text="Step 4: Select your parking space features."
                         android:id="@+id/stepFour"
+                        android:paddingLeft="30dp"
+                        android:textColor="@color/whitetext"
                         android:paddingTop="15dp"
                         android:textSize="20dp"/>
                     <LinearLayout
@@ -170,14 +188,17 @@
                             android:text="Compact"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:textColor="@color/whitetext"
                             android:id="@+id/compactBox" />
                         <CheckBox
                             android:text="Covered Parking"
                             android:layout_width="wrap_content"
+                            android:textColor="@color/whitetext"
                             android:layout_height="wrap_content"
                             android:id="@+id/coverBox" />
                         <CheckBox
                             android:text="Handicapped"
+                            android:textColor="@color/whitetext"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/handicappedBox" />

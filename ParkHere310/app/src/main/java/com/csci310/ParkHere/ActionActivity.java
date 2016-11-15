@@ -7,6 +7,7 @@ package com.csci310.ParkHere;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -87,6 +88,13 @@ public class ActionActivity extends AppCompatActivity {
         spec.setContent(R.id.filters);
         spec.setIndicator("Filters");
         host.addTab(spec);
+
+        for(int i=0;i<host.getTabWidget().getChildCount();i++)
+        {
+            TextView tv = (TextView) host.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
+            tv.setTextColor(Color.WHITE);
+        }
+
         new DatePicker(ActionActivity.this, R.id.startDateEditText);
         new DatePicker(ActionActivity.this, R.id.endDateEditText);
         new TimePicker(ActionActivity.this, R.id.startTimeText);
@@ -512,6 +520,9 @@ public class ActionActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    //TODO: add back button action - should not be able to return to register screen
+    @Override
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+    }
 
 }

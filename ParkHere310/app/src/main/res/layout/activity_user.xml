@@ -7,20 +7,13 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
         android:weightSum="1">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="User Profile"
-            android:layout_gravity="center_horizontal"
-            android:paddingTop="20dp"
-            android:textSize="30dp"
-            android:textColor="#009688"
-            android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/profilePicImageView"
+            android:layout_marginTop="15dp"
             android:src="@drawable/ic_face_black_24dp"
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -36,10 +29,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height= "wrap_content"
                 android:id="@+id/nameTextView"
-                android:text="Name: "
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="30dp"
-                android:paddingTop="20dp"
+                android:text="Name"
+                android:paddingTop="15dp"
+                android:layout_centerHorizontal="true"
                 android:textSize="20dp"
                 android:textColor="#009688" />
 
@@ -48,19 +40,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/nameEditText"
                 android:hint=""
-                android:paddingTop="20dp"
-                android:paddingLeft="10dp"
                 android:textSize="20dp"
                 android:background="@android:color/transparent"
                 android:focusable="true"
+                android:layout_centerHorizontal="true"
                 android:inputType="textCapWords"
                 android:textColorHighlight="#fb00ff"
                 android:textColorHint="#009688"
-                android:layout_alignParentTop="true"
-                android:layout_toRightOf="@+id/nameTextView"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:gravity="start" />
+                android:layout_below="@id/nameTextView" />
 
         </RelativeLayout>
 
@@ -73,9 +60,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height= "wrap_content"
                 android:id="@+id/emailTextView"
-                android:text="Email: "
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="30dp"
+                android:text="Email"
+                android:layout_centerHorizontal="true"
                 android:paddingTop="20dp"
                 android:textSize="20dp"
                 android:textColor="#009688" />
@@ -85,20 +71,13 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/emailEditText"
                 android:hint=""
-                android:paddingTop="20dp"
-                android:paddingLeft="10dp"
-                android:textSize="20dp"
+                android:layout_centerHorizontal="true"
                 android:background="@android:color/transparent"
                 android:focusable="true"
                 android:inputType="textEmailAddress"
                 android:textColorHighlight="#fb00ff"
                 android:textColorHint="#009688"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_toRightOf="@+id/emailTextView"
-                android:layout_toEndOf="@+id/emailTextView"
-                android:gravity="start" />
+                android:layout_below="@+id/emailTextView" />
 
         </RelativeLayout>
 
@@ -111,9 +90,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height= "wrap_content"
                 android:id="@+id/phoneTextView"
-                android:text="Phone: "
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="30dp"
+                android:text="Phone"
+                android:layout_centerHorizontal="true"
                 android:paddingTop="20dp"
                 android:textSize="20dp"
                 android:textColor="#009688" />
@@ -123,37 +101,21 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/phoneEditText"
                 android:hint=""
-                android:paddingTop="20dp"
-                android:paddingLeft="10dp"
                 android:textSize="20dp"
                 android:background="@android:color/transparent"
                 android:focusable="true"
                 android:inputType="phone"
                 android:textColorHighlight="#fb00ff"
                 android:textColorHint="#009688"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_toRightOf="@+id/phoneTextView"
-                android:layout_toEndOf="@+id/phoneTextView"
-                android:gravity="start" />
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/phoneTextView"/>
 
         </RelativeLayout>
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="434dp"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height= "wrap_content"
-                android:id="@+id/ratingTextView"
-                android:text="Rating: "
-                android:layout_alignParentLeft="true"
-                android:paddingLeft="30dp"
-                android:paddingTop="15dp"
-                android:textSize="20dp"
-                android:textColor="#009688" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
 
             <RatingBar
                 android:id="@+id/ratingBar"
@@ -176,6 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="View History"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/viewHostHistoryButton"
                  />

@@ -17,7 +17,7 @@ tools:context=".MainActivity">
     android:id="@+id/action_user"
     android:orderInCategory="200"
     android:title="User"
-    android:icon="@drawable/ic_user"
+    android:icon="@drawable/face"
     app:showAsAction="ifRoom"></item>
 
 

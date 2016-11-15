@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RatingBar;
 import android.widget.Spinner;
@@ -86,6 +87,7 @@ public class AddActivity extends AppCompatActivity {
     private FeedItem fd;
     private AddActivity self;
     private Spinner dropdown;
+    ProgressBar viewProgressBar;
     private static String[] state_list=new String[]{"AL",
             "AK",
             "AZ",
@@ -287,6 +289,7 @@ public class AddActivity extends AppCompatActivity {
                     else{
 
                         if(check(starttime,endtime,startdate,enddate)){
+                            viewProgressBar.setVisibility(View.VISIBLE);
 
                             mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("filter").setValue(filter);
                            // mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting/" + fd.getIdentifier()).child("filter").setValue(filter);
@@ -330,8 +333,8 @@ public class AddActivity extends AppCompatActivity {
 
 
 
-
-                            Intent intent = new Intent(AddActivity.this, UserActivity.class);//change to UserActivity.class
+                            viewProgressBar.setVisibility(View.INVISIBLE);
+                            Intent intent = new Intent(AddActivity.this, ActionActivity.class);//change to UserActivity.class
                             startActivity(intent);
 
 
