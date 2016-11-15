@@ -221,6 +221,8 @@ public class DetailedViewActivity extends AppCompatActivity{
                 mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                 mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
                 confirm_list.remove(fd.getIdentifier());
+                //change the font
+
                 Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
                 startActivity(intent);
             }
@@ -234,67 +236,59 @@ public class DetailedViewActivity extends AppCompatActivity{
                     if(specific_renterID!=null) {
 
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-                        /*
-                        DatabaseReference ref10 = mDatabase.child("users").child(specific_renterID).child("rateList");
-                        ref10.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
-                                    for (int i = 0; i < tempList.size(); i++) {
-                                        if(tempList.get(i).equals(fd.getIdentifier())){
-                                            index1=i;
-                                        }
-                                    }
-                                }
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                System.out.println("The read failed: " + databaseError.getCode());
-                            }
-                        });
-                        mDatabase.child("users").child(specific_renterID).child("rateList").child(String.valueOf(index1)).setValue(null);*/
+                       double price_total= calculateTotalPrice();
+                        if(price_total!=0.0){
+                            //renter recieve full refund
+                            //send me a email
+                            //how to get the renter`s paypal...
+                        }
+
                     }
                 }
                 if(specific_renterID!=null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))) {
                     if (specific_renterID.equals(mFirebaseUser_universal.getUid())) {
-                       /* Intent i = new Intent(Intent.ACTION_SEND);
-                        i.setType("message/rfc822");
-                        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
-                        i.putExtra(Intent.EXTRA_SUBJECT, "Refund Request");
-                        i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a refund. I agree with the cancellation policy of: " + fd.getCancel());
-                        try {
-                            startActivity(Intent.createChooser(i, "Send mail..."));
-                        } catch (android.content.ActivityNotFoundException ex) {
-                            Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                        } */
+
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-                        //mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("activity").setValue(true);
-                        //mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
+
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
-                        /*DatabaseReference ref11 = mDatabase.child("users").child(specific_renterID).child("rateList");
-                        ref11.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.exists()) {
-                                    ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
-                                    for (int i = 0; i < tempList.size(); i++) {
-                                        if(tempList.get(i).equals(fd.getIdentifier())){
-                                            index1=i;
-                                        }
-                                    }
-                                }
-                            }
+                        double price_total= calculateTotalPrice();
+                        String endTime = renterTime.get(1);
+                        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                        String today = getToday(df);
+                        Date end=null;
+                        Date d = null;
+                        try {
+                            d = df.parse(today);
+                            end = df.parse(endTime.substring(0,endTime.length()-2)+":00");
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        long diff= end.getTime()-d.getTime();
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-                                System.out.println("The read failed: " + databaseError.getCode());
+                        if(fd.getCancel().equals("No refund")){
+                            price_total=0.0;
+                        }else if(fd.getCancel().equals("80% refund rate at any time")){
+                            price_total=price_total*0.8;
+                        }else if(fd.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")){
+                            if(diff>604800000){
+                                price_total=price_total;
+                            }else{
+                                price_total=price_total*0.5;
                             }
-                        });
-                        mDatabase.child("users").child(specific_renterID).child("rateList").child(String.valueOf(index1)).setValue(null);
-                        */
+                        }else if(fd.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")){
+                            if(diff>604800000){
+                                price_total=price_total;
+                            }else{
+                                price_total=0.0;
+                            }
+                        }
+                        if(price_total!=0.0){
+                            //give renter price_total
+                            //give host total-price_total
+                            
+                        }
                     }
                 }
 
@@ -303,6 +297,26 @@ public class DetailedViewActivity extends AppCompatActivity{
                 startActivity(intent);
             }
         });
+    }
+    private double calculateTotalPrice(){
+        double price_t=0.0;
+        if(renterTime.size() != 0){
+        String start2 = renterTime.get(0).substring(0,renterTime.get(0).length()-2);
+        String end2 = renterTime.get(1).substring(0,renterTime.get(1).length()-2);
+        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+        Date time1 = null;
+        Date time2 = null;
+        try {
+            time1 = df.parse(start2+":00");
+            time2 = df.parse(end2+":00");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long diff = time2.getTime() - time1.getTime();
+        long diffHours = diff / (60 * 60 * 1000);
+            price_t=(diffHours+1)*fd.getPrice();
+       }
+        return price_t;
     }
     public String getToday(java.text.SimpleDateFormat  dformat){
         Date date = new Date();
@@ -378,6 +392,10 @@ public class DetailedViewActivity extends AppCompatActivity{
                 end = df.parse(endTime.substring(0,endTime.length()-2)+":00");
                 if (d.getTime() < end.getTime()) {
                     confirmButton.setEnabled(false);
+                }else{
+                    if(specific_renterID!=null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))){
+                    cancelButton.setEnabled(false);
+                    }
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
