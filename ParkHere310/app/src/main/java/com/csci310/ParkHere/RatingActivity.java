@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class RatingActivity extends AppCompatActivity {
@@ -32,12 +33,16 @@ public class RatingActivity extends AppCompatActivity {
     private static DatabaseReference mDatabase;
     private FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
-    FeedItem fd;
+
     private Vector<Float> originalSpot;
     private Integer originalHost;
     private Vector<String> originalSpotComment;
     private Vector<String> originalHostComment;
     private Vector<String> rateList;
+
+    private ArrayList<String> rate_list;
+    private int position;
+    private String spot_Identifier;
 
 
 
@@ -45,12 +50,17 @@ public class RatingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
+        rate_list=new ArrayList<String>();
+        Bundle bundle = getIntent().getExtras();
+        rate_list = bundle.getStringArrayList("rate");
+        position=bundle.getInt("position");
+        spot_Identifier=rate_list.get(position);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
-        Bundle bundle = getIntent().getExtras();
-        String value = bundle.getString("parkingID");
-        getInfo(value);
+
+        getInfo(spot_Identifier);
+        
         hostText= (TextView) findViewById(R.id.host_name);
         hostText.setText(host_name);
         userRateHost = (RatingBar) findViewById(R.id.RateHost);
