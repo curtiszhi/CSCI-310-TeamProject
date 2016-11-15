@@ -160,7 +160,7 @@ public class ListingActivity extends AppCompatActivity {
                                     user_all.setDescription((String) value);
                                 }
                                 if (key.equals("rating")) {
-                                    user_all.setRating((Vector<Integer>) value);
+                                    user_all.setRating((ArrayList<Integer>) value);
                                 }
                                 if (key.equals("activity")) {
                                     user_all.setActivity((Boolean) value);
@@ -182,7 +182,7 @@ public class ListingActivity extends AppCompatActivity {
                                     user_all.setIdentifier((String) value);
                                 }
                                 if (key.equals("review")) {
-                                    user_all.setReview((Vector<String>) value);
+                                    user_all.setReview((ArrayList<String>) value);
                                 }
                                 if (key.equals("currentRenter")) {
                                     user_all.setCurrentRenter((String) value);
@@ -276,7 +276,7 @@ public class ListingActivity extends AppCompatActivity {
                                 user_all.setDescription((String) value);
                             }
                             if (key.equals("rating")) {
-                                user_all.setRating((Vector<Integer>) value);
+                                user_all.setRating((ArrayList<Integer>) value);
                             }
                             if (key.equals("activity")) {
                                 user_all.setActivity((Boolean) value);
@@ -298,7 +298,7 @@ public class ListingActivity extends AppCompatActivity {
                                 user_all.setIdentifier((String) value);
                             }
                             if (key.equals("review")) {
-                                user_all.setReview((Vector<String>) value);
+                                user_all.setReview((ArrayList<String>) value);
                             }
                             if (key.equals("currentRenter")) {
                                 user_all.setCurrentRenter((String) value);

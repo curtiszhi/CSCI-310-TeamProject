@@ -111,15 +111,8 @@ public class DetailedViewActivity extends AppCompatActivity{
         setUp();
         downloadPhoto();
         display();
-        /*
-            public void onItemSelected(AdapterView<?>spinner,View container,
-                                       int position,long id) {
 
-                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy hh:mmaa");
 
-            }
-
-           */
 
 
         image_view.setOnTouchListener(new OnSwipeTouchListener(DetailedViewActivity.this) {
@@ -181,51 +174,7 @@ public class DetailedViewActivity extends AppCompatActivity{
 
             }
         });
-        /*confirmButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
-                i.putExtra(Intent.EXTRA_SUBJECT, "Payout Request");
-                i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a payment for a successful hosting at" + fd.getAddress()
-                + "My PayPal email is: [INSERT EMAIL HERE]");
-                try {
-                    startActivity(Intent.createChooser(i, "Send mail..."));
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                }
-                rateList = new Vector<String>();
-                rateList.add(fd.getIdentifier());
-                //update renter rate list
-                DatabaseReference ref = mDatabase.child("users").child(specific_renterID).child("rateList");
-                    ref.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
-                                for (int i = 0; i < tempList.size(); i++) {
-                                    rateList.add(tempList.get(i));
-                                }
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            System.out.println("The read failed: " + databaseError.getCode());
-                        }
-                    });
-                ref.setValue(rateList);
-                mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
-                mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
-                mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
-                confirm_list.remove(fd.getIdentifier());
-                //change the font
-
-                Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
-                startActivity(intent);
-            }
-        });*/
         cancelButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

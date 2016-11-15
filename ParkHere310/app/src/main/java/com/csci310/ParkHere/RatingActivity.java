@@ -18,27 +18,34 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
 
 public class RatingActivity extends AppCompatActivity {
     private String host_name;
+    private String host_ID;
+    private String address;
+
     private float rateHost;
     private float rateSpot;
     private String commentHost;
     private String commentSpot;
-    private TextView hostText;
+
+    private TextView hostText,addressText;
     private EditText commentHostText, commentSpotText;
     private RatingBar userRateHost,userRateSpot;
     private Button rate;
+
     private static DatabaseReference mDatabase;
     private FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
 
-    private Vector<Float> originalSpot;
-    private Integer originalHost;
+    private ArrayList<Integer> originalSpot;
+    private ArrayList<Integer> originalHost;
+   // private Integer originalHost;
     private Vector<String> originalSpotComment;
     private Vector<String> originalHostComment;
-    private Vector<String> rateList;
+
 
     private ArrayList<String> rate_list;
     private int position;
@@ -58,11 +65,10 @@ public class RatingActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        originalSpot=new ArrayList<Integer>();
 
         getInfo(spot_Identifier);
-        
-        hostText= (TextView) findViewById(R.id.host_name);
-        hostText.setText(host_name);
+
         userRateHost = (RatingBar) findViewById(R.id.RateHost);
         userRateSpot = (RatingBar) findViewById(R.id.RateSpot);
         commentHostText=(EditText) findViewById(R.id.review_host);
@@ -76,39 +82,71 @@ public class RatingActivity extends AppCompatActivity {
                 rateSpot=userRateSpot.getRating();
                 commentHost=commentHostText.getText().toString().trim();
                 commentSpot=commentSpotText.getText().toString().trim();
-                update(fd);
+                update();
 
             }
         });
 
     }
     private void getInfo(String parkID){
-        mDatabase.child("parking-spots-renting");
-        mDatabase.orderByChild("identifier").equalTo(parkID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    Log.d("User key", child.getKey());
-                    Log.d("User ref", child.getRef().toString());
-                    Log.d("User val", child.getValue().toString());
-                    fd = (FeedItem) child.getValue();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
-    private void update(FeedItem feeder){
-        DatabaseReference ref=mDatabase.child("parking-spots-hosting").child(feeder.getIdentifier()).child("rating");
+        DatabaseReference ref=mDatabase.child("parking-spots-hosting").child(parkID).child("host");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                originalSpot= dataSnapshot.getValue(Vector.class);
-                originalSpot.add(rateSpot);
+                if(dataSnapshot.exists()) {
+                    host_ID = (String) dataSnapshot.getValue();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        DatabaseReference ref2=mDatabase.child("parking-spots-hosting").child(parkID).child("address");
+        ref2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    address = (String) dataSnapshot.getValue();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        DatabaseReference ref1=mDatabase.child("users").child(host_ID).child("userName");
+        ref1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    host_name = (String) dataSnapshot.getValue();
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+        hostText= (TextView) findViewById(R.id.host_name);
+        hostText.setText(host_name);
+
+        addressText= (TextView) findViewById(R.id.spot_address);
+        addressText.setText(address);
+
+
+    }
+    private void update(){
+        DatabaseReference ref=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rating");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                originalSpot= (ArrayList)dataSnapshot.getValue();
+                originalSpot.add(rateSpot);}
             }
 
             @Override
@@ -118,7 +156,7 @@ public class RatingActivity extends AppCompatActivity {
         });
         ref.setValue(originalSpot);
 
-        DatabaseReference ref1=mDatabase.child("users").child(feeder.getHost()).child("rating");
+        DatabaseReference ref1=mDatabase.child("users").child(host_ID).child("rating");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -133,7 +171,7 @@ public class RatingActivity extends AppCompatActivity {
         ref1.setValue(originalHost);
 
         if(commentSpot.length()!=0) {
-            DatabaseReference ref2=mDatabase.child("parking-spots-hosting").child(feeder.getIdentifier()).child("review");
+            DatabaseReference ref2=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("review");
             ref.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -151,7 +189,7 @@ public class RatingActivity extends AppCompatActivity {
         }
 
         if(commentHost.length()!=0) {
-            DatabaseReference ref3=mDatabase.child("users").child(feeder.getHost()).child("review");
+            DatabaseReference ref3=mDatabase.child("users").child(host_ID).child("review");
             ref3.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -168,25 +206,7 @@ public class RatingActivity extends AppCompatActivity {
 
         }
 
-        DatabaseReference ref4=mDatabase.child("users").child(mFirebaseAuth.getCurrentUser().getUid()).child("rateList");
-        ref4.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                rateList= dataSnapshot.getValue(Vector.class);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-        Vector<String> newRateList=new Vector<String>();
-        for(int i=0;i<rateList.size();i++){
-            if(rateList.get(i)!=fd.getIdentifier()){
-                newRateList.add(rateList.get(i));
-            }
-        }
-        ref4.setValue(newRateList);
 
     }
 }
