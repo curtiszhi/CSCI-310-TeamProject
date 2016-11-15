@@ -26,21 +26,21 @@ public class FeedItem {
     private double price;
     private String cancelpolicy;
     private String description;
-    private Vector<Integer> rating;
+    private ArrayList<Integer> rating;
     private Boolean activity;
     private List<String> filters;
     private String Host;
     public Vector<String> photos;
     public Map<String,ArrayList<String>> rentedTime;
     private String identifier;
-    private Vector<String> review;
+    private ArrayList<String> review;
     private String currentRenter;
 
     public FeedItem(){
         photos=new Vector<String>();
         rentedTime= new HashMap<String,ArrayList<String>>();
-        rating=new Vector<Integer>();
-        review = new Vector<String>();
+        rating=new ArrayList<Integer>();
+        review = new ArrayList<String>();
         filters=null;
     }
 
@@ -86,11 +86,11 @@ public class FeedItem {
     }
 
 
-    public Vector<String> getReview() {
+    public ArrayList<String> getReview() {
         return review;
     }
 
-    public void setReview(Vector<String> review) {
+    public void setReview(ArrayList<String> review) {
         this.review = review;
     }
 
@@ -136,11 +136,11 @@ public class FeedItem {
     }
 
 
-    public void setRating(Vector<Integer> rating) {
+    public void setRating(ArrayList<Integer> rating) {
         this.rating = rating;
     }
 
-    public Vector<Integer> getRating(){
+    public ArrayList<Integer> getRating(){
         return rating;
     }
 

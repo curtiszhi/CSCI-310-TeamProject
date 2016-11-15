@@ -13,18 +13,16 @@ public class User {
     private String email;
     private String phone;
     private Boolean isHost;
-    private Vector<String> review;
-    private Vector<String> rateList;
-    private Vector<Integer> rating;
+    private ArrayList<String> review;
+    private ArrayList<Integer> rating;
     private List<String> renting;
     private List<String> hosting;
     private String photo=null;
     public User() {
-        rateList=new Vector<String>();
-        rating=new Vector<Integer>();
+        rating=new ArrayList<Integer>();
         renting=new ArrayList<String>();
         hosting=new ArrayList<String>();
-        review=new Vector<String>();
+        review=new ArrayList<String>();
     }
 
     public String getPhoto() {
@@ -38,11 +36,11 @@ public class User {
 
 
 
-    public void setRating(Vector<Integer> rating) {
+    public void setRating(ArrayList<Integer> rating) {
         this.rating = rating;
     }
 
-    public Vector<Integer> getRating(){
+    public ArrayList<Integer> getRating(){
         return rating;
     }
 
@@ -63,20 +61,12 @@ public class User {
     }
 
 
-    public Vector<String> getRateList() {
-        return rateList;
-    }
 
-    public void setRateList(Vector<String> rateList) {
-        this.rateList = rateList;
-    }
-
-
-    public Vector<String> getReview() {
+    public ArrayList<String> getReview() {
         return review;
     }
 
-    public void setReview(Vector<String> review) {
+    public void setReview(ArrayList<String> review) {
         this.review = review;
     }
 

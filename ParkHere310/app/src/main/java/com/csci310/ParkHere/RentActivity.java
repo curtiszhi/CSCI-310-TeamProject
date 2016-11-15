@@ -244,28 +244,6 @@ public class RentActivity extends AppCompatActivity {
 
                     //update activity of spot
                     mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(false);
-                   // mDatabase.child("users").child(fd.getHost()).child("hosting/" + fd.getIdentifier()).child("activity").setValue(false);
-                    //rateList = new Vector<String>();
-                    //rateList.add(fd.getIdentifier());
-                    //update renter rate list
-                   /* DatabaseReference ref = mDatabase.child("users").child(mFirebaseUser.getUid()).child("rateList");
-                    ref.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
-                                for (int i = 0; i < tempList.size(); i++) {
-                                    rateList.add(tempList.get(i));
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            System.out.println("The read failed: " + databaseError.getCode());
-                        }
-                    });
-                    ref.setValue(rateList);*/
 
                     rentList = new HashMap<String, ArrayList<String>>();
                     ArrayList<String> startend = new ArrayList<String>();
@@ -308,26 +286,7 @@ public class RentActivity extends AppCompatActivity {
                     mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(fd.getIdentifier()).setValue(fd.getIdentifier());
 
 
-                   /* DatabaseReference ref3 = mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).child("rentedTime");
-                    ref3.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                HashMap<String, ArrayList<String>> tempList = (HashMap) dataSnapshot.getValue();
-                                for (HashMap.Entry<String, ArrayList<String>> entry : tempList.entrySet()) {
-                                    String key = entry.getKey();
-                                    ArrayList<String> value = entry.getValue();
-                                    host_rentedlist.put(key, value);
-                                }
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            System.out.println("The read  failed: " + databaseError.getCode());
-                        }
-                    });
-                    ref3.setValue(host_rentedlist);*/
 
 
                     Intent intent = new Intent(RentActivity.this, MainActivity.class);//change to UserActivity.class
