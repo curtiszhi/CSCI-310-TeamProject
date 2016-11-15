@@ -68,7 +68,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     private int index1=0;
     FeedItem fd;
     private Vector<String> spotPhoto;
-    private Button editButton,confirmButton,cancelButton;
+    private Button editButton,cancelButton;
     int position;
     String value;
     public FirebaseAuth mFirebaseAuth;
@@ -104,7 +104,6 @@ public class DetailedViewActivity extends AppCompatActivity{
         description= (TextView) findViewById(R.id.description);
         cancel= (TextView) findViewById(R.id.cancel);
         editButton= (Button) findViewById(R.id.editButton);
-        confirmButton=(Button) findViewById(R.id.confirmButton);
         cancelButton=(Button) findViewById(R.id.cancelButton);
 
         count=0;
@@ -182,7 +181,7 @@ public class DetailedViewActivity extends AppCompatActivity{
 
             }
         });
-        confirmButton.setOnClickListener(new View.OnClickListener(){
+        /*confirmButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Intent.ACTION_SEND);
@@ -226,7 +225,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                 Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
                 startActivity(intent);
             }
-        });
+        });*/
         cancelButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -287,7 +286,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                         if(price_total!=0.0){
                             //give renter price_total
                             //give host total-price_total
-                            
+
                         }
                     }
                 }
@@ -390,11 +389,9 @@ public class DetailedViewActivity extends AppCompatActivity{
             try {
                 d = df.parse(today);
                 end = df.parse(endTime.substring(0,endTime.length()-2)+":00");
-                if (d.getTime() < end.getTime()) {
-                    confirmButton.setEnabled(false);
-                }else{
+                if (d.getTime() > end.getTime()) {
                     if(specific_renterID!=null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))){
-                    cancelButton.setEnabled(false);
+                        cancelButton.setEnabled(false);
                     }
                 }
             } catch (ParseException e) {
@@ -402,8 +399,6 @@ public class DetailedViewActivity extends AppCompatActivity{
             }
 
 
-        }else{
-            confirmButton.setEnabled(false);
         }
 
 
@@ -426,7 +421,6 @@ public class DetailedViewActivity extends AppCompatActivity{
         cancel.setText(fd.getCancel());
         if(!fd.getHost().equals((mFirebaseAuth.getCurrentUser().getUid()))){
             System.out.println("sammmmmmmmmeeeeeee");
-            confirmButton.setVisibility(Button.GONE);
             editButton.setVisibility(Button.GONE);
         }
         time.post(new Runnable(){
