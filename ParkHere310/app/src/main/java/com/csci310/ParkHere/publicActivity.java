@@ -71,17 +71,24 @@ public class publicActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                ArrayList<Integer> tempList = (ArrayList) dataSnapshot.getValue();
-                if(tempList.size()!=0){
-                int total=0;
-                for(int i=0;i<tempList.size();i++){
-                    total=total+tempList.get(i);
+                    ArrayList<Double> tempList = (ArrayList) dataSnapshot.getValue();
+                    if(tempList.size()!=0){
+                    float total=0;
+                    for(int i=0;i<tempList.size();i++){
+                        total+=tempList.get(i);
+                    }
+                        rating=total/(float)tempList.size();
+                    }
+                    else{
+                        rating=(float)0;
+                    }
                 }
-                    rating=(float)total/(float)tempList.size();
-                }
-                else{
-                    rating=(float)0;
-                }}
+                ratingBar.post(new Runnable(){
+                    @Override
+                    public void run(){
+                        ratingBar.setRating(rating);
+                    }
+                });
 
             }
 
@@ -122,6 +129,12 @@ public class publicActivity extends AppCompatActivity {
                         review.add(tempList.get(i));
                     }
                 }}
+                for(int i=0;i<review.size();i++){
+                    TextView review_text = new TextView(publicActivity.this);
+                    review_text.setText(review.get(i));
+                    review_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
+                    ((LinearLayout) review_layout).addView(review_text);
+                }
 
             }
 
@@ -143,19 +156,9 @@ public class publicActivity extends AppCompatActivity {
                 name_text.setText("name: "+name);
             }
         });
-        ratingBar.post(new Runnable(){
-            @Override
-            public void run(){
-                ratingBar.setRating(rating);
-            }
-        });
 
 
-        for(int i=0;i<review.size();i++){
-            TextView review_text = new TextView(this);
-            review_text.setText(review.get(i));
-            review_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
-            ((LinearLayout) review_layout).addView(review_text);
-        }
+
+
     }
 }

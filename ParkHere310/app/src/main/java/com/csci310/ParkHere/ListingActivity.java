@@ -160,7 +160,7 @@ public class ListingActivity extends AppCompatActivity {
                                     user_all.setDescription((String) value);
                                 }
                                 if (key.equals("rating")) {
-                                    user_all.setRating((ArrayList<Integer>) value);
+                                    user_all.setRating((ArrayList<Double>) value);
                                 }
                                 if (key.equals("activity")) {
                                     user_all.setActivity((Boolean) value);
@@ -276,7 +276,7 @@ public class ListingActivity extends AppCompatActivity {
                                 user_all.setDescription((String) value);
                             }
                             if (key.equals("rating")) {
-                                user_all.setRating((ArrayList<Integer>) value);
+                                user_all.setRating((ArrayList<Double>) value);
                             }
                             if (key.equals("activity")) {
                                 user_all.setActivity((Boolean) value);

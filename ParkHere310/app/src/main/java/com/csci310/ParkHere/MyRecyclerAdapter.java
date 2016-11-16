@@ -28,7 +28,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
     public static ArrayList<FeedItem> feedItemList;
     //public static FeedListRowHolder feedListRowHolder;
-    public static ArrayList<String> confirm_list;
     private String start;
     private String end;
 
@@ -41,7 +40,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         }
         if(hi.equals("host")){
             this.feedItemList = ListingActivity.hostList;
-            confirm_list=ListingActivity.confirm_list;
         }
         if(hi.equals("results")){
             pay = true;
@@ -71,18 +69,10 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
     @Override
     public void onBindViewHolder(FeedListRowHolder feedListRowHolder, int i) {
         FeedItem feedItem = feedItemList.get(i);
-        if(confirm_list != null && confirm_list.size()!=0){
-           if(confirm_list.contains(feedItem.getIdentifier())){
-               TextView address=(TextView) feedListRowHolder.house;
-               address.setTypeface(null, Typeface.BOLD);
-               feedListRowHolder.house.setText(feedItem.getAddress());
-           }else{
-               feedListRowHolder.house.setText(feedItem.getAddress());
-           }
 
+        TextView address=(TextView) feedListRowHolder.house;
 
-        }else{
-        feedListRowHolder.house.setText(feedItem.getAddress());}
+        feedListRowHolder.house.setText(feedItem.getAddress());
         if (!feedItem.getPhotos().isEmpty()) {
             if (feedItem.getPhotos().get(0) != null) {
                 byte[] decodedString = Base64.decode(feedItem.getPhotos().get(0), Base64.DEFAULT);
