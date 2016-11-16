@@ -65,25 +65,25 @@ public class SplitParkingSpot
     {
         ArrayList<FeedItem> spots = new ArrayList<>();
 
-        spots.add(setSpotWithTimeActivity(userStart, userEnd, false));
+        spots.add(setSpotWithTimeActivity(userStart, userEnd, false, 0));
         if (timeElapsedBefore)
-            spots.add(setSpotWithTimeActivity(originalStart, userStart, true));
+            spots.add(setSpotWithTimeActivity(originalStart, userStart, true, 1));
         if (timeElapsedAfter)
-            spots.add(setSpotWithTimeActivity(userEnd, originalEnd, true));
+            spots.add(setSpotWithTimeActivity(userEnd, originalEnd, true, 2));
 
         return spots;
     }
 
-    private FeedItem setSpotWithTimeActivity(String start, String end, boolean activity)
+    private FeedItem setSpotWithTimeActivity(String start, String end, boolean activity, int id)
     {
         FeedItem fd = (FeedItem)SplitParkingSpot.deepClone(originalSpot);
         if (fd != null)
         {
-            fd.setIdentifier(originalSpot.getHost() + Long.toString(System.currentTimeMillis()));
+            fd.setIdentifier(originalSpot.getHost() + Long.toString(System.currentTimeMillis()) + id);
             fd.setStartDates(start.split(" ")[0]);
-            fd.setStartTime(start.split(" ")[1]);
+            fd.setStartTime(start.split(" ")[1] + "PM");
             fd.setEndDates(end.split(" ")[0]);
-            fd.setEndTime(end.split(" ")[1]);
+            fd.setEndTime(end.split(" ")[1] + "PM");
             fd.setActivity(activity);
         }
 
