@@ -248,7 +248,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                 }
 
 
-                Intent intent = new Intent(DetailedViewActivity.this, UserActivity.class);//change to UserActivity.class
+                Intent intent = new Intent(DetailedViewActivity.this, ActionActivity.class);//change to UserActivity.class
                 startActivity(intent);
             }
         });
