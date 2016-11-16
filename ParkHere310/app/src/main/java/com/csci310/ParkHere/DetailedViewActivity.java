@@ -379,6 +379,7 @@ public class DetailedViewActivity extends AppCompatActivity{
         }else{
             if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){
                 cancelButton.setEnabled(false);
+                cancelButton.setText("This is an old listing");
             }
 
         }
