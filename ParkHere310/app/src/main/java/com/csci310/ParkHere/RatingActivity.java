@@ -163,8 +163,8 @@ public class RatingActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
         AlertDialog alertDialog = new AlertDialog.Builder(RatingActivity.this).create();
-        alertDialog.setTitle("Sorry!");
-        alertDialog.setMessage("It looks like that email is already taken.");
+        alertDialog.setTitle("Wait!");
+        alertDialog.setMessage("Please finish all ratings before moving on. Thanks!");
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
