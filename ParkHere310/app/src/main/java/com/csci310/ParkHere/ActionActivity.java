@@ -545,8 +545,38 @@ public class ActionActivity extends AppCompatActivity {
         }
 
         if(item.getItemId() == R.id.newPosting){
-            Intent intent = new Intent(ActionActivity.this, AddActivity.class);
-            startActivity(intent);
+            if(user_all.getHost()){
+                Intent intent = new Intent(ActionActivity.this, AddActivity.class);
+                startActivity(intent);
+            }else{
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(ActionActivity.this);
+                builder1.setMessage("You are currently not a host. Would you like to enable host features?");
+                builder1.setCancelable(true);
+
+                builder1.setPositiveButton(
+                        "Yes!",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                                user_all.setHost(true);
+                                mDatabase.child("users").child(mFirebaseUser_universal.getUid()).child("host").setValue(true);
+                                Intent intent = new Intent(ActionActivity.this, AddActivity.class);
+                                startActivity(intent);
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "Nope",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+            }
+
         }
 
         return super.onOptionsItemSelected(item);
