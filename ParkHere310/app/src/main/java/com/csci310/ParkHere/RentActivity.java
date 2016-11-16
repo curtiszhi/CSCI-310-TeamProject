@@ -188,8 +188,13 @@ public class RentActivity extends AppCompatActivity {
         rent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SplitParkingSpot(fd, start, end);
-                getPayment();
+                try {
+                    new SplitParkingSpot(fd, start, end);
+                }
+                catch (Exception e) {e.printStackTrace();}
+                finally {
+                    getPayment();
+                }
             }
         });
         hostPublic.setOnClickListener(new View.OnClickListener() {

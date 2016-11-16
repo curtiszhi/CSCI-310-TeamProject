@@ -27,6 +27,8 @@ public class SplitParkingSpot
     private boolean timeElapsedAfter;
     private java.text.SimpleDateFormat sdf;
     private DatabaseReference mDatabase;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
 
     SplitParkingSpot(FeedItem fd, String userStart, String userEnd)
     {
@@ -52,6 +54,8 @@ public class SplitParkingSpot
             e.printStackTrace();
         }
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
         //Split the spot and add the new spots:
         for (FeedItem spot : getUpdatedSpots())
@@ -64,12 +68,13 @@ public class SplitParkingSpot
     private ArrayList<FeedItem> getUpdatedSpots()
     {
         ArrayList<FeedItem> spots = new ArrayList<>();
+        int id = 0;
 
-        spots.add(setSpotWithTimeActivity(userStart, userEnd, false, 0));
+        spots.add(setSpotWithTimeActivity(userStart, userEnd, false, id++));
         if (timeElapsedBefore)
-            spots.add(setSpotWithTimeActivity(originalStart, userStart, true, 1));
+            spots.add(setSpotWithTimeActivity(originalStart, userStart, true, id++));
         if (timeElapsedAfter)
-            spots.add(setSpotWithTimeActivity(userEnd, originalEnd, true, 2));
+            spots.add(setSpotWithTimeActivity(userEnd, originalEnd, true, id++));
 
         return spots;
     }
@@ -94,6 +99,8 @@ public class SplitParkingSpot
     {
         mDatabase.child("users").child(spot.getHost()).child("hosting").child(spot.getIdentifier()).setValue(spot.getIdentifier());
         mDatabase.child("parking-spots-hosting").child(spot.getIdentifier()).setValue(spot);
+        if (!spot.getActivity())    //if this spot is rented
+            mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(spot.getIdentifier()).setValue(spot.getIdentifier());
     }
 
     private void deleteSpot(FeedItem spot)
