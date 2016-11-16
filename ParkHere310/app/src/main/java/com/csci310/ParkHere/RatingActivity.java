@@ -1,5 +1,7 @@
 package com.csci310.ParkHere;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -158,6 +160,19 @@ public class RatingActivity extends AppCompatActivity {
 
 
     }
+    public void onBackPressed() {
+        // Do Here what ever you want do on back press;
+        AlertDialog alertDialog = new AlertDialog.Builder(RatingActivity.this).create();
+        alertDialog.setTitle("Sorry!");
+        alertDialog.setMessage("It looks like that email is already taken.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
+    }
+
     private void update(){
         ref=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rating");
         ref.addValueEventListener(new ValueEventListener() {
