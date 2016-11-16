@@ -7,6 +7,7 @@ package com.csci310.ParkHere;
         import android.app.DatePickerDialog;
         import android.content.Context;
         import android.view.View;
+        import android.view.inputmethod.InputMethodManager;
         import android.widget.EditText;
 
         import java.util.Calendar;
@@ -41,6 +42,7 @@ public class DatePicker  implements View.OnClickListener, DatePickerDialog.OnDat
     }
     @Override
     public void onClick(View v) {
+        hideSoftKeyboard((Activity)_context);
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 
         DatePickerDialog dialog = new DatePickerDialog(_context, this,
@@ -69,5 +71,13 @@ public class DatePicker  implements View.OnClickListener, DatePickerDialog.OnDat
                 // Month is 0 based, just add 1
                 .append(month_s).append("-").append(day_s).append("-")
                 .append(_birthYear).append(" "));
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
     }
 }

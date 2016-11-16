@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import java.util.Calendar;
@@ -40,6 +41,7 @@ public class TimePicker implements View.OnClickListener, TimePickerDialog.OnTime
     }
     @Override
     public void onClick(View v) {
+        hideSoftKeyboard((Activity)_context);
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
 
         TimePickerDialog tp1 = new TimePickerDialog(_context, this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
@@ -66,5 +68,12 @@ public class TimePicker implements View.OnClickListener, TimePickerDialog.OnTime
         }
         timeEditText.setText(new StringBuilder()
                 .append(hour_s).append(":").append(minute_s).append(AM_PM));
+    }
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
     }
 }
