@@ -1,5 +1,10 @@
 package com.csci310.ParkHere;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
@@ -21,6 +26,9 @@ public class SplitParkingSpot
     private boolean timeElapsedBefore;
     private boolean timeElapsedAfter;
     private java.text.SimpleDateFormat sdf;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseUser mFirebaseUser;
+    private DatabaseReference mDatabase;
 
     SplitParkingSpot(FeedItem fd, String userStart, String userEnd)
     {
@@ -45,6 +53,9 @@ public class SplitParkingSpot
         {
             e.printStackTrace();
         }
+        mFirebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         //Split the spot and update the database:
         for (FeedItem spot : getUpdatedSpots())
@@ -81,7 +92,8 @@ public class SplitParkingSpot
 
     private void addSpot(FeedItem spot)
     {
-
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").child(spot.getIdentifier()).setValue(spot.getIdentifier());
+        mDatabase.child("parking-spots-hosting").child(spot.getIdentifier()).setValue(spot);
     }
 
     public static Object deepClone(Object object)
