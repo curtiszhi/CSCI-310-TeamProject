@@ -57,9 +57,12 @@ public class SplitParkingSpot
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        //Split the spot and update the database:
+        //Split the spot and add the new spots:
         for (FeedItem spot : getUpdatedSpots())
             addSpot(spot);
+
+        //Delete the old spot:
+        deleteSpot(originalSpot);
     }
 
     private ArrayList<FeedItem> getUpdatedSpots()
@@ -80,6 +83,7 @@ public class SplitParkingSpot
         FeedItem fd = (FeedItem)SplitParkingSpot.deepClone(originalSpot);
         if (fd != null)
         {
+            fd.setIdentifier(originalSpot.getHost() + Long.toString(System.currentTimeMillis()));
             fd.setStartDates(start.split(" ")[0]);
             fd.setStartTime(start.split(" ")[1]);
             fd.setEndDates(end.split(" ")[0]);
@@ -94,6 +98,12 @@ public class SplitParkingSpot
     {
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").child(spot.getIdentifier()).setValue(spot.getIdentifier());
         mDatabase.child("parking-spots-hosting").child(spot.getIdentifier()).setValue(spot);
+    }
+
+    private void deleteSpot(FeedItem spot)
+    {
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").child(spot.getIdentifier()).removeValue();
+        mDatabase.child("parking-spots-hosting").child(spot.getIdentifier()).removeValue();
     }
 
     public static Object deepClone(Object object)
