@@ -26,8 +26,6 @@ public class SplitParkingSpot
     private boolean timeElapsedBefore;
     private boolean timeElapsedAfter;
     private java.text.SimpleDateFormat sdf;
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
 
     SplitParkingSpot(FeedItem fd, String userStart, String userEnd)
@@ -38,8 +36,8 @@ public class SplitParkingSpot
             this.userStart = userStart.substring(0, userStart.length() - 2);
         else
             this.userStart = userStart;
-        if (userStart.contains("M"))
-            this.userEnd = userStart.substring(0, userEnd.length() - 2);
+        if (userEnd.contains("M"))
+            this.userEnd = userEnd.substring(0, userEnd.length() - 2);
         else
             this.userEnd = userEnd;
         originalStart = originalSpot.getStartDates() + " " + originalSpot.getStartTime().substring(0, originalSpot.getStartTime().length() - 2);
@@ -53,8 +51,6 @@ public class SplitParkingSpot
         {
             e.printStackTrace();
         }
-        mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirebaseUser = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         //Split the spot and add the new spots:
@@ -96,13 +92,13 @@ public class SplitParkingSpot
 
     private void addSpot(FeedItem spot)
     {
-        mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").child(spot.getIdentifier()).setValue(spot.getIdentifier());
+        mDatabase.child("users").child(spot.getHost()).child("hosting").child(spot.getIdentifier()).setValue(spot.getIdentifier());
         mDatabase.child("parking-spots-hosting").child(spot.getIdentifier()).setValue(spot);
     }
 
     private void deleteSpot(FeedItem spot)
     {
-        mDatabase.child("users").child(mFirebaseUser.getUid()).child("hosting").child(spot.getIdentifier()).removeValue();
+        mDatabase.child("users").child(spot.getHost()).child("hosting").child(spot.getIdentifier()).removeValue();
         mDatabase.child("parking-spots-hosting").child(spot.getIdentifier()).removeValue();
     }
 

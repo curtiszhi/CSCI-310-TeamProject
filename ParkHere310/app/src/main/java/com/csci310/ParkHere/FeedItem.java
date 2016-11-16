@@ -3,6 +3,7 @@ package com.csci310.ParkHere;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,7 +15,8 @@ import java.util.Vector;
  * Created by seanyuan on 10/7/16.
  */
 
-public class FeedItem {
+public class FeedItem implements Serializable {
+
     private String spotID;
     private String address;
     private double latitude;
