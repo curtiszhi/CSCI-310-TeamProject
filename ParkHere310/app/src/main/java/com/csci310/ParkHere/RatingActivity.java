@@ -1,5 +1,6 @@
 package com.csci310.ParkHere;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,14 +43,24 @@ public class RatingActivity extends AppCompatActivity {
 
     private ArrayList<Integer> originalSpot;
     private ArrayList<Integer> originalHost;
-   // private Integer originalHost;
-    private Vector<String> originalSpotComment;
-    private Vector<String> originalHostComment;
+    private ArrayList<String> originalSpotComment;
+    private ArrayList<String> originalHostComment;
 
 
     private ArrayList<String> rate_list;
     private int position;
     private String spot_Identifier;
+
+    private DatabaseReference ref;
+    private DatabaseReference ref1;
+    private DatabaseReference ref2;
+    private DatabaseReference ref3;
+
+    private boolean count1=true;
+    private boolean count2=true;
+    private boolean count3=true;
+    private boolean count4=true;
+
 
 
 
@@ -65,7 +76,11 @@ public class RatingActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
+
         originalSpot=new ArrayList<Integer>();
+        originalHost=new ArrayList<Integer>();
+        originalSpotComment=new ArrayList<String>();
+        originalHostComment=new ArrayList<String>();
 
         getInfo(spot_Identifier);
 
@@ -83,6 +98,7 @@ public class RatingActivity extends AppCompatActivity {
                 commentHost=commentHostText.getText().toString().trim();
                 commentSpot=commentSpotText.getText().toString().trim();
                 update();
+                check();
 
             }
         });
@@ -95,6 +111,23 @@ public class RatingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
                     host_ID = (String) dataSnapshot.getValue();
+                    DatabaseReference ref1=mDatabase.child("users").child(host_ID).child("userName");
+                    ref1.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()) {
+                                host_name = (String) dataSnapshot.getValue();
+
+                                hostText= (TextView) findViewById(R.id.host_name);
+                                hostText.setText(host_name);
+
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
                 }
             }
             @Override
@@ -109,6 +142,9 @@ public class RatingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
                     address = (String) dataSnapshot.getValue();
+                    addressText= (TextView) findViewById(R.id.spot_address);
+                    addressText.setText(address);
+
                 }
             }
             @Override
@@ -117,36 +153,27 @@ public class RatingActivity extends AppCompatActivity {
             }
         });
 
-        DatabaseReference ref1=mDatabase.child("users").child(host_ID).child("userName");
-        ref1.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
-                    host_name = (String) dataSnapshot.getValue();
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
 
-        hostText= (TextView) findViewById(R.id.host_name);
-        hostText.setText(host_name);
 
-        addressText= (TextView) findViewById(R.id.spot_address);
-        addressText.setText(address);
 
 
     }
     private void update(){
-        DatabaseReference ref=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rating");
+        ref=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rating");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                 originalSpot= (ArrayList)dataSnapshot.getValue();
-                originalSpot.add(rateSpot);}
+                originalSpot.add((int)rateSpot);
+                }
+                else{
+                    originalSpot.add((int)rateSpot);
+                }
+                if(count1==true){
+                ref.setValue(originalSpot);
+                    count1=false;}
+
             }
 
             @Override
@@ -154,13 +181,23 @@ public class RatingActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        ref.setValue(originalSpot);
 
-        DatabaseReference ref1=mDatabase.child("users").child(host_ID).child("rating");
-        ref.addValueEventListener(new ValueEventListener() {
+        System.out.println(rateSpot);
+
+
+        ref1=mDatabase.child("users").child(host_ID).child("rating");
+        ref1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                originalHost= dataSnapshot.getValue(Integer.class);
+                if(dataSnapshot.exists()){
+                originalHost= (ArrayList)dataSnapshot.getValue();
+                originalHost.add(Math.round(rateHost));}
+                else{
+                    originalHost.add(Math.round(rateHost));
+                }
+                if(count2==true){
+                ref1.setValue(originalHost);
+                count2=false;}
             }
 
             @Override
@@ -168,15 +205,23 @@ public class RatingActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        ref1.setValue(originalHost);
+
+        System.out.println(rateHost);
 
         if(commentSpot.length()!=0) {
-            DatabaseReference ref2=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("review");
-            ref.addValueEventListener(new ValueEventListener() {
+            ref2=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("review");
+            ref2.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    originalSpotComment= dataSnapshot.getValue(Vector.class);
-                    originalSpotComment.add(commentSpot);
+                    if(dataSnapshot.exists()){
+                    originalSpotComment= (ArrayList)dataSnapshot.getValue();
+                    originalSpotComment.add(commentSpot);}
+                    else{
+                        originalSpotComment.add(commentSpot);
+                    }
+                    if(count3==true){
+                    ref2.setValue(originalSpotComment);
+                    count3=false;}
                 }
 
                 @Override
@@ -184,17 +229,25 @@ public class RatingActivity extends AppCompatActivity {
                     System.out.println("The read failed: " + databaseError.getCode());
                 }
             });
-            ref2.setValue(originalSpotComment);
+
+            System.out.println(commentSpot);
 
         }
 
         if(commentHost.length()!=0) {
-            DatabaseReference ref3=mDatabase.child("users").child(host_ID).child("review");
+            ref3=mDatabase.child("users").child(host_ID).child("review");
             ref3.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    originalHostComment= dataSnapshot.getValue(Vector.class);
-                    originalHostComment.add(commentHost);
+                    if(dataSnapshot.exists()) {
+                        originalHostComment = (ArrayList)dataSnapshot.getValue();
+                        originalHostComment.add(commentHost);
+                    }else{
+                        originalHostComment.add(commentHost);
+                    }
+                    if(count4==true){
+                    ref3.setValue(originalHostComment);
+                    count4=false;}
                 }
 
                 @Override
@@ -202,11 +255,25 @@ public class RatingActivity extends AppCompatActivity {
                     System.out.println("The read failed: " + databaseError.getCode());
                 }
             });
-            ref3.setValue(originalHostComment);
+            System.out.println(commentHost);
 
         }
+        mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(spot_Identifier).setValue("rated");
+        mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("activity").setValue(true);
+        mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rentedTime").setValue(null);
 
 
+    }
+    private void check(){
+        if(rate_list.size()==position+1){
+            Intent intent = new Intent(RatingActivity.this, ActionActivity.class);
+            startActivity(intent);
+        }else{
+            Intent intent = new Intent(RatingActivity.this, RatingActivity.class);
+            intent.putExtra("rate", rate_list);
+            intent.putExtra("position", position+1);
+            startActivity(intent);
 
+        }
     }
 }

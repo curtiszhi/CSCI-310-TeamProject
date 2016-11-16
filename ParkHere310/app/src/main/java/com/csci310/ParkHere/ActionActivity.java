@@ -36,6 +36,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -61,11 +66,15 @@ public class ActionActivity extends AppCompatActivity {
     private ArrayList<String> rate_list;
     private String temp_spot_identifier;
     private Map<String,ArrayList<String>> Time_list;
+    private int counter=0;
+    private boolean check_size=true;
+
 
 //khjvg
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         self = this;
         setContentView(R.layout.action_activity);
         user_all=new User();
@@ -101,7 +110,9 @@ public class ActionActivity extends AppCompatActivity {
         handy = (CheckBox) findViewById(R.id.handicappedBox);
         search = (Button) findViewById(R.id.searchButton);
 
+
         checkRate();
+
 
 
         search.setOnClickListener(new View.OnClickListener() {
@@ -136,14 +147,76 @@ public class ActionActivity extends AppCompatActivity {
             }
         });
     }
-    private void checkRate(){
+    private void checkRate() {
         DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser_universal.getUid()).child("renting");
+        rate_list=new ArrayList<String>();
         spot_rent=new HashMap<String,String>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 if(dataSnapshot.exists()) {
                     spot_rent = (HashMap<String,String>) dataSnapshot.getValue();
+                    if(spot_rent.size()!=0) {
+
+                        for (HashMap.Entry<String, String> entry_1 : spot_rent.entrySet()) {
+                            counter++;
+                            String spot_name=entry_1.getKey();
+                            System.out.println(spot_name+"   name");
+                            String spot_status=entry_1.getValue();
+                            System.out.println(spot_status+"   status");
+                            if(!spot_status.equals("rated")) {
+                                DatabaseReference ref1 = mDatabase.child("parking-spots-hosting").child(spot_name).child("rentedTime");
+                                temp_spot_identifier = spot_name;
+                                Time_list = new HashMap<String, ArrayList<String>>();
+
+                                ref1.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.exists()) {
+                                            System.out.println(Time_list.size()+"   rentedTime.size");
+                                            Time_list = (HashMap<String, ArrayList<String>>) dataSnapshot.getValue();
+                                            String endTime_c = "";
+                                            for (HashMap.Entry<String, ArrayList<String>> entry : Time_list.entrySet()) {
+                                                ArrayList<String> value = (ArrayList<String>) entry.getValue();
+                                                endTime_c = value.get(1);
+                                            }
+                                            System.out.println(endTime_c+"   endTime");
+                                            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                                            String today = getToday(df);
+                                            Date time1 = null;
+                                            Date d = null;
+                                            try {
+                                                time1 = df.parse(endTime_c.substring(0, endTime_c.length() - 2) + ":00");
+                                                System.out.println(endTime_c.substring(0, endTime_c.length() - 2) + ":00"+"   format endTime");
+                                                d = df.parse(today);
+                                            } catch (ParseException e) {
+                                                e.printStackTrace();
+                                            }
+                                            if (time1.getTime() < d.getTime()) {
+                                                System.out.println("smaller");
+                                                rate_list.add(temp_spot_identifier);
+                                                if(counter==spot_rent.size()){
+                                                    goRate();
+                                                }
+
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+                                        System.out.println("The read failed: " + databaseError.getCode());
+                                    }
+                                });
+                            }
+
+                        }
+                        System.out.println(rate_list.size()+"   rateList size");
+
+
+                    }
+
                 }
             }
 
@@ -152,58 +225,22 @@ public class ActionActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        rate_list=new ArrayList<String>();
-        if(spot_rent.size()!=0) {
-            for (HashMap.Entry<String, String> entry_1 : spot_rent.entrySet()) {
-                String spot_name=entry_1.getKey();
-                String spot_status=entry_1.getValue();
-                if(!spot_status.equals("rated")) {
-                    DatabaseReference ref1 = mDatabase.child("parking-spots-hosting").child(spot_name).child("rentedTime");
-                    temp_spot_identifier = spot_name;
-                    Time_list = new HashMap<String, ArrayList<String>>();
 
-                    ref1.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                Time_list = (HashMap<String, ArrayList<String>>) dataSnapshot.getValue();
-                                String endTime_c = "";
-                                for (HashMap.Entry<String, ArrayList<String>> entry : Time_list.entrySet()) {
-                                    ArrayList<String> value = (ArrayList<String>) entry.getValue();
-                                    endTime_c = value.get(1);
-                                }
-                                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-                                String today = getToday(df);
-                                Date time1 = null;
-                                Date d = null;
-                                try {
-                                    time1 = df.parse(endTime_c.substring(0, endTime_c.length() - 2) + ":00");
-                                    d = df.parse(today);
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                }
-                                if (time1.getTime() < d.getTime()) {
-                                    rate_list.add(temp_spot_identifier);
-                                }
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            System.out.println("The read failed: " + databaseError.getCode());
-                        }
-                    });
-                }
-            }
-        }
+
+
+    }
+
+    private void goRate(){
 
         if(rate_list.size()!=0){
+            System.out.println(rate_list.size()+"   aaaaaarateList size");
             AlertDialog alertDialog = new AlertDialog.Builder(ActionActivity.this).create();
             alertDialog.setTitle("Spot to Rate");
             if(rate_list.size()==1){
                 alertDialog.setMessage("Please go to Rate this spot");
             }else{
-            alertDialog.setMessage("Please go to Rate these "+rate_list.size()+" spots");}
+                alertDialog.setMessage("Please go to Rate these "+rate_list.size()+" spots");}
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -217,8 +254,8 @@ public class ActionActivity extends AppCompatActivity {
             alertDialog.show();
         }
 
-
     }
+
 
     private void getListWithOptions(final String starttime, final String endtime, final String startdate, final String enddate,
                                     final boolean requestCompact, final boolean requestCover, final boolean handicapped, final String address)
@@ -378,14 +415,14 @@ public class ActionActivity extends AppCompatActivity {
                     }
 
                     if(key.equals("rating")){
-                        ArrayList<Integer> value = ( ArrayList<Integer>)entry.getValue();
+                        ArrayList<Double> value = ( ArrayList<Double>)entry.getValue();
 
                         user_all.setRating(value);
                     }
                     if(key.equals("renting")){
                         Vector<String> temp = new Vector<String>();
-                        HashMap<String,HashMap<String, Object>> temp_map= (HashMap<String,HashMap<String, Object>>)entry.getValue();
-                        for (HashMap.Entry<String, HashMap<String, Object>> entry1 : temp_map.entrySet()) {
+                        HashMap<String,String> temp_map= (HashMap<String,String>)entry.getValue();
+                        for (HashMap.Entry<String, String> entry1 : temp_map.entrySet()) {
                             String itemKey = entry1.getKey();
                             temp.add(itemKey);
                         }
@@ -393,8 +430,8 @@ public class ActionActivity extends AppCompatActivity {
                     }
                     if(key.equals("hosting")){
                         Vector<String> temp = new Vector<String>();
-                        HashMap<String,HashMap<String, Object>> temp_map= (HashMap<String,HashMap<String, Object>>)entry.getValue();
-                        for (HashMap.Entry<String, HashMap<String, Object>> entry1 : temp_map.entrySet()) {
+                        HashMap<String,String> temp_map= (HashMap<String,String>)entry.getValue();
+                        for (HashMap.Entry<String, String> entry1 : temp_map.entrySet()) {
                             String itemKey = entry1.getKey();
                             temp.add(itemKey);
                         }

@@ -84,7 +84,7 @@ public class RentActivity extends AppCompatActivity {
     private String start;
     private String end;
     int position;
-    private Vector<String> rateList;
+
     private Map<String, ArrayList<String>> rentList;
     private Map<String, ArrayList<String>> renter_rentedlist;
     private Map<String, ArrayList<String>> host_rentedlist;

@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -63,6 +65,7 @@ public class DetailedViewActivity extends AppCompatActivity{
     private TextView cancel;
     private ImageView image_view;
     private TextView image_label;
+    private LinearLayout review_layout;
 
     private int count;
     private int index1=0;
@@ -74,7 +77,6 @@ public class DetailedViewActivity extends AppCompatActivity{
     public FirebaseAuth mFirebaseAuth;
     public FirebaseUser mFirebaseUser_universal;
     public DatabaseReference mDatabase;
-    private Vector<String> rateList;
     private String specific_renterID=null;
     private ArrayList<String> renterTime;
     private String name;
@@ -105,6 +107,7 @@ public class DetailedViewActivity extends AppCompatActivity{
         cancel= (TextView) findViewById(R.id.cancel);
         editButton= (Button) findViewById(R.id.editButton);
         cancelButton=(Button) findViewById(R.id.cancelButton);
+        review_layout = (LinearLayout) findViewById(R.id.review);
 
         count=0;
 
@@ -166,6 +169,10 @@ public class DetailedViewActivity extends AppCompatActivity{
                 intent.putExtra("ID", specific_renterID);
                 startActivity(intent);}
                 else if((specific_renterID!=null)&&(mFirebaseUser_universal.getUid().equals(specific_renterID))){
+                    Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
+                    intent.putExtra("ID", fd.getHost());
+                    startActivity(intent);
+                }else if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){
                     Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
                     intent.putExtra("ID", fd.getHost());
                     startActivity(intent);
@@ -328,6 +335,27 @@ public class DetailedViewActivity extends AppCompatActivity{
                 });
             }
             }
+        else if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){
+            DatabaseReference database = mDatabase.child("users").child(fd.getHost()).child("userName");
+            database.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    name = (String) dataSnapshot.getValue();
+                    System.out.println(name+"3333333");
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+            viewButton.post(new Runnable(){
+                @Override
+                public void run(){
+                    viewButton.setText("Host:"+name);
+                }
+            });
+        }
 
         if (renterTime.size() != 0) {
             String endTime = renterTime.get(1);
@@ -347,6 +375,11 @@ public class DetailedViewActivity extends AppCompatActivity{
                 e.printStackTrace();
             }
 
+
+        }else{
+            if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){
+                cancelButton.setEnabled(false);
+            }
 
         }
 
@@ -384,6 +417,12 @@ public class DetailedViewActivity extends AppCompatActivity{
         });
 
         ratingBar.setRating(fd.calculateRate());
+        for (int i = 0; i < fd.getReview().size(); i++) {
+            TextView review_text = new TextView(this);
+            review_text.setText(fd.getReview().get(i));
+            review_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
+            ((LinearLayout) review_layout).addView(review_text);
+        }
 
     }
 
