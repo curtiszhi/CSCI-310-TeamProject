@@ -27,8 +27,8 @@ public class RatingActivity extends AppCompatActivity {
     private String host_ID;
     private String address;
 
-    private float rateHost;
-    private float rateSpot;
+    private String rateHost;
+    private String rateSpot;
     private String commentHost;
     private String commentSpot;
 
@@ -41,8 +41,8 @@ public class RatingActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
 
-    private ArrayList<Integer> originalSpot;
-    private ArrayList<Integer> originalHost;
+    private ArrayList<String> originalSpot;
+    private ArrayList<String> originalHost;
     private ArrayList<String> originalSpotComment;
     private ArrayList<String> originalHostComment;
 
@@ -77,8 +77,8 @@ public class RatingActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        originalSpot=new ArrayList<Integer>();
-        originalHost=new ArrayList<Integer>();
+        originalSpot=new ArrayList<String>();
+        originalHost=new ArrayList<String>();
         originalSpotComment=new ArrayList<String>();
         originalHostComment=new ArrayList<String>();
 
@@ -93,8 +93,8 @@ public class RatingActivity extends AppCompatActivity {
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rateHost=userRateHost.getRating();
-                rateSpot=userRateSpot.getRating();
+                rateHost=(int)userRateHost.getRating()+"";
+                rateSpot=(int)userRateSpot.getRating()+"";
                 commentHost=commentHostText.getText().toString().trim();
                 commentSpot=commentSpotText.getText().toString().trim();
                 update();
@@ -165,10 +165,10 @@ public class RatingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                 originalSpot= (ArrayList)dataSnapshot.getValue();
-                originalSpot.add((int)rateSpot);
+                originalSpot.add(rateSpot);
                 }
                 else{
-                    originalSpot.add((int)rateSpot);
+                    originalSpot.add(rateSpot);
                 }
                 if(count1==true){
                 ref.setValue(originalSpot);
@@ -191,9 +191,9 @@ public class RatingActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
                 originalHost= (ArrayList)dataSnapshot.getValue();
-                originalHost.add(Math.round(rateHost));}
+                originalHost.add(rateHost);}
                 else{
-                    originalHost.add(Math.round(rateHost));
+                    originalHost.add(rateHost);
                 }
                 if(count2==true){
                 ref1.setValue(originalHost);

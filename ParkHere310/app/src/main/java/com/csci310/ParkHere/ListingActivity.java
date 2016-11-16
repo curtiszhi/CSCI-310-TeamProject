@@ -160,7 +160,11 @@ public class ListingActivity extends AppCompatActivity {
                                     user_all.setDescription((String) value);
                                 }
                                 if (key.equals("rating")) {
-                                    user_all.setRating((ArrayList<Double>) value);
+                                    ArrayList<String> temp=(ArrayList<String>) value;
+
+
+                                     user_all.setRating(temp);
+
                                 }
                                 if (key.equals("activity")) {
                                     user_all.setActivity((Boolean) value);
@@ -267,7 +271,7 @@ public class ListingActivity extends AppCompatActivity {
                                 user_all.setEndTime((String) value);
                             }
                             if (key.equals("price")) {
-                                user_all.setPrice(Double.parseDouble((String) (value + "")));
+                                user_all.setPrice(Double.parseDouble( (value + "")));
                             }
                             if (key.equals("cancel")) {
                                 user_all.setCancel((String) value);
@@ -276,7 +280,11 @@ public class ListingActivity extends AppCompatActivity {
                                 user_all.setDescription((String) value);
                             }
                             if (key.equals("rating")) {
-                                user_all.setRating((ArrayList<Double>) value);
+
+                                ArrayList<String> temp=(ArrayList<String>) value;
+
+                                user_all.setRating(temp);
+
                             }
                             if (key.equals("activity")) {
                                 user_all.setActivity((Boolean) value);

@@ -423,7 +423,7 @@ public class ActionActivity extends AppCompatActivity {
                     }
 
                     if(key.equals("rating")){
-                        ArrayList<Double> value = ( ArrayList<Double>)entry.getValue();
+                        ArrayList<String> value = ( ArrayList<String>)entry.getValue();
 
                         user_all.setRating(value);
                     }

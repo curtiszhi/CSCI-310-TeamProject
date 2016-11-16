@@ -26,7 +26,7 @@ public class FeedItem {
     private double price;
     private String cancelpolicy;
     private String description;
-    private ArrayList<Double> rating;
+    private ArrayList<String> rating;
     private Boolean activity;
     private List<String> filters;
     private String Host;
@@ -39,7 +39,7 @@ public class FeedItem {
     public FeedItem(){
         photos=new Vector<String>();
         rentedTime= new HashMap<String,ArrayList<String>>();
-        rating=new ArrayList<Double>();
+        rating=new ArrayList<String>();
         review = new ArrayList<String>();
         filters=null;
     }
@@ -136,11 +136,11 @@ public class FeedItem {
     }
 
 
-    public void setRating(ArrayList<Double> rating) {
+    public void setRating(ArrayList<String> rating) {
         this.rating = rating;
     }
 
-    public ArrayList<Double> getRating(){
+    public ArrayList<String> getRating(){
         return rating;
     }
 
@@ -149,11 +149,12 @@ public class FeedItem {
         if(rating.size()==0){
             return (float)0;}
         else{
-            float total=0;
+            double total=0;
             for(int i=0;i<rating.size();i++){
-                total+=rating.get(i);
+
+                total+=Double.parseDouble( (rating.get(i)).trim()+"");
             }
-            Float rate=total/(float)rating.size();
+            Float rate=(float)total/(float)rating.size();
             return rate;
         }
     }

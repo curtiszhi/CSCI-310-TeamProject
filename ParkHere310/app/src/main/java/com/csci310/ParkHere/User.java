@@ -14,12 +14,12 @@ public class User {
     private String phone;
     private Boolean isHost;
     private ArrayList<String> review;
-    private ArrayList<Double> rating;
+    private ArrayList<String> rating;
     private List<String> renting;
     private List<String> hosting;
     private String photo=null;
     public User() {
-        rating=new ArrayList<Double>();
+        rating=new ArrayList<String>();
         renting=new ArrayList<String>();
         hosting=new ArrayList<String>();
         review=new ArrayList<String>();
@@ -36,11 +36,11 @@ public class User {
 
 
 
-    public void setRating(ArrayList<Double> rating) {
+    public void setRating(ArrayList<String> rating) {
         this.rating = rating;
     }
 
-    public ArrayList<Double> getRating(){
+    public ArrayList<String> getRating(){
         return rating;
     }
 
@@ -51,11 +51,11 @@ public class User {
             return rate;
         }
         else{
-            float total=0;
+            double total=0;
             for(int i=0;i<rating.size();i++){
-                total+=rating.get(i);
+                total+=Double.parseDouble( (rating.get(i)).trim()+"");
             }
-            rate=total/(float)rating.size();
+            rate=(float)total/(float)rating.size();
         }
         return rate;
     }

@@ -71,11 +71,11 @@ public class publicActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    ArrayList<Double> tempList = (ArrayList) dataSnapshot.getValue();
+                    ArrayList<String> tempList = (ArrayList) dataSnapshot.getValue();
                     if(tempList.size()!=0){
                     float total=0;
                     for(int i=0;i<tempList.size();i++){
-                        total+=tempList.get(i);
+                        total+=Double.parseDouble((tempList.get(i).trim() + ""));
                     }
                         rating=total/(float)tempList.size();
                     }
