@@ -160,6 +160,7 @@ public class RatingActivity extends AppCompatActivity {
 
 
     }
+    @Override
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
         AlertDialog alertDialog = new AlertDialog.Builder(RatingActivity.this).create();

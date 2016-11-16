@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseUser mFirebaseUser;
     private DatabaseReference mDatabase;
     private ProgressDialog progressDiag;
-    private Boolean defaultHost;
+    private Boolean defaultHost = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

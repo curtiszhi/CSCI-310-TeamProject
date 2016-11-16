@@ -240,9 +240,18 @@ public class DetailedViewActivity extends AppCompatActivity{
                             }
                         }
                         if(price_total!=0.0){
-                            //give renter price_total
-                            //give host total-price_total
-
+                            Intent i = new Intent(Intent.ACTION_SEND);
+                            i.setType("message/rfc822");
+                            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
+                            i.putExtra(Intent.EXTRA_SUBJECT, "Refund Request");
+                            i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a refund. I agree with the cancellation policy of: " + fd.getCancel());
+                            try {
+                                startActivity(Intent.createChooser(i, "Send mail..."));
+                            } catch (android.content.ActivityNotFoundException ex) {
+                                Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                            }
+                            Intent intent = new Intent(DetailedViewActivity.this, ActionActivity.class);//change to UserActivity.class
+                            startActivity(intent);
                         }
                     }
                 }
