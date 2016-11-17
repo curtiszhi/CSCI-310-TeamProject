@@ -21,8 +21,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class RatingActivity extends AppCompatActivity {
@@ -62,6 +66,11 @@ public class RatingActivity extends AppCompatActivity {
     private boolean count2=true;
     private boolean count3=true;
     private boolean count4=true;
+
+    private double single_price=0;
+    private Map<String, ArrayList<String>> rented_Time;
+    private ArrayList<String> time_frame=new ArrayList<String>();
+    private double total_price;
 
 
 
@@ -191,6 +200,69 @@ public class RatingActivity extends AppCompatActivity {
         });
 
 
+        DatabaseReference ref3=mDatabase.child("parking-spots-hosting").child(parkID).child("price");
+        ref3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()) {
+                    Long l=(Long)dataSnapshot.getValue();
+                    single_price=l.doubleValue();
+                    System.out.println(single_price+"   per hourrrrrrrrrrrrr");
+
+
+                    DatabaseReference ref4=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rentedTime");
+                    ref4.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()) {
+                                rented_Time=(Map<String, ArrayList<String>>)dataSnapshot.getValue();
+                                if(rented_Time.size() != 0){
+                                    for (HashMap.Entry<String, ArrayList<String>> innerEntry : rented_Time.entrySet()) {
+
+                                        ArrayList<String> value = innerEntry.getValue();
+                                        time_frame=value;
+                                    }
+                                    String start2 = time_frame.get(0).substring(0,time_frame.get(0).length()-2);
+                                    String end2 = time_frame.get(1).substring(0,time_frame.get(1).length()-2);
+                                    SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                                    Date time1 = null;
+                                    Date time2 = null;
+                                    try {
+                                        time1 = df.parse(start2+":00");
+                                        time2 = df.parse(end2+":00");
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    long diff = time2.getTime() - time1.getTime();
+                                    long diffHours = diff / (60 * 60 * 1000);
+                                    System.out.println(diffHours+"   hour differenttttttt");
+                                    total_price=(diffHours+1.0)*single_price*0.8;
+                                    System.out.println(total_price+"   price to getttttttttt");
+                                }
+
+
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
+
+
+
+
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+
+
+
 
 
 
@@ -313,7 +385,13 @@ public class RatingActivity extends AppCompatActivity {
         mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("activity").setValue(true);
         mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rentedTime").setValue(null);
 
-        Intent i = new Intent(Intent.ACTION_SEND);
+
+        java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+        String today = getToday(df);
+        mDatabase.child("payment").child(host_ID).child("Get Payment").child(today).setValue(total_price);
+
+
+        /*Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
         i.putExtra(Intent.EXTRA_SUBJECT, "Refund to the renter");
@@ -322,10 +400,16 @@ public class RatingActivity extends AppCompatActivity {
             startActivity(Intent.createChooser(i, "Send mail..."));
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(RatingActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }
+        }*/
         Intent intent = new Intent(RatingActivity.this, ActionActivity.class);
         startActivity(intent);
 
+
+
+    }
+    public String getToday(java.text.SimpleDateFormat  dformat){
+        Date date = new Date();
+        return dformat.format(date);
     }
 
 }

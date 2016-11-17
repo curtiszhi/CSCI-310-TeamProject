@@ -291,8 +291,10 @@ public class RentActivity extends AppCompatActivity {
                     fd.setActivity(false);
                     mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(fd.getIdentifier()).setValue(fd.getIdentifier());
 
-
-
+                    java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                    String today = getToday(df);
+                    double price_t = Double.parseDouble(total_price.replace("$", ""));
+                    mDatabase.child("payment").child(mFirebaseUser.getUid()).child("To Parkhere").child(today).setValue(price_t);
 
 
                     Intent intent = new Intent(RentActivity.this, MainActivity.class);//change to UserActivity.class
@@ -307,6 +309,10 @@ public class RentActivity extends AppCompatActivity {
         } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
             Log.i("paymentExample", "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
         }
+    }
+    public String getToday(java.text.SimpleDateFormat  dformat){
+        Date date = new Date();
+        return dformat.format(date);
     }
 
     private void setUp() {

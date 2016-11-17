@@ -194,7 +194,7 @@ public class DetailedViewActivity extends AppCompatActivity{
 
                        double price_total= calculateTotalPrice();
                         if(price_total!=0.0){
-                            Intent i = new Intent(Intent.ACTION_SEND);
+                            /*Intent i = new Intent(Intent.ACTION_SEND);
                             i.setType("message/rfc822");
                             i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
                             i.putExtra(Intent.EXTRA_SUBJECT, "Refund to the renter");
@@ -203,9 +203,15 @@ public class DetailedViewActivity extends AppCompatActivity{
                                 startActivity(Intent.createChooser(i, "Send mail..."));
                             } catch (android.content.ActivityNotFoundException ex) {
                                 Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                            }
+                            }*/
+                            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                            String today = getToday(df);
+                            mDatabase.child("payment").child(specific_renterID).child("Get Refund_Host_Cancel").child(today).setValue(price_total);
+
+
                             Intent intent = new Intent(DetailedViewActivity.this, ActionActivity.class);//change to UserActivity.class
                             startActivity(intent);
+
                         }
 
                     }
@@ -255,7 +261,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                             }
                         }
                         if(price_total!=0.0){
-                            System.out.print("send emaillllllllllll");
+                           /* System.out.print("send emaillllllllllll");
                             Intent i = new Intent(Intent.ACTION_SEND);
                             i.setType("message/rfc822");
                             i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
@@ -266,9 +272,14 @@ public class DetailedViewActivity extends AppCompatActivity{
                                 startActivity(Intent.createChooser(i, "Send mail..."));
                             } catch (android.content.ActivityNotFoundException ex) {
                                 Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                            }
+                            }*/
+
+                            java.text.SimpleDateFormat df1 = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                            String today1 = getToday(df);
+                            mDatabase.child("payment").child(specific_renterID).child("Get Refund_Renter_Cancel").child(today1).setValue(price_total);
 
                         }
+                        mDatabase.child("payment").child(fd.getHost()).child("Get Refund_Renter_Cancel").child(today).setValue(total_price-price_total);
                     }
                 }
 
@@ -402,8 +413,9 @@ public class DetailedViewActivity extends AppCompatActivity{
                     e.printStackTrace();
                 }
             }else{
+                if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){
                 cancelButton.setEnabled(false);
-                cancelButton.setText("This is an old listing");
+                cancelButton.setText("This is an old listing");}
             }
 
 
