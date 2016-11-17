@@ -194,9 +194,18 @@ public class DetailedViewActivity extends AppCompatActivity{
 
                        double price_total= calculateTotalPrice();
                         if(price_total!=0.0){
-                            //renter recieve full refund
-                            //send me a email
-                            //how to get the renter`s paypal...
+                            Intent i = new Intent(Intent.ACTION_SEND);
+                            i.setType("message/rfc822");
+                            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
+                            i.putExtra(Intent.EXTRA_SUBJECT, "Refund to the renter");
+                            i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to cancel my spot and give the renter whole refund "+price_total);
+                            try {
+                                startActivity(Intent.createChooser(i, "Send mail..."));
+                            } catch (android.content.ActivityNotFoundException ex) {
+                                Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                            }
+                            Intent intent = new Intent(DetailedViewActivity.this, ActionActivity.class);//change to UserActivity.class
+                            startActivity(intent);
                         }
 
                     }
@@ -209,6 +218,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
                         double price_total= calculateTotalPrice();
+                        double total_price=price_total;
                         String endTime = renterTime.get(1);
                         java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                         String today = getToday(df);
@@ -244,7 +254,8 @@ public class DetailedViewActivity extends AppCompatActivity{
                             i.setType("message/rfc822");
                             i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
                             i.putExtra(Intent.EXTRA_SUBJECT, "Refund Request");
-                            i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a refund. I agree with the cancellation policy of: " + fd.getCancel());
+                            i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a refund. I agree with the cancellation policy of: " +
+                                    fd.getCancel()+"the total refund is: "+price_total+"and the money goes to the host is: "+total_price);
                             try {
                                 startActivity(Intent.createChooser(i, "Send mail..."));
                             } catch (android.content.ActivityNotFoundException ex) {
@@ -367,21 +378,26 @@ public class DetailedViewActivity extends AppCompatActivity{
         }
 
         if (renterTime.size() != 0) {
-            String endTime = renterTime.get(1);
-            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-            String today = getToday(df);
-            Date end;
-            Date d = null;
-            try {
-                d = df.parse(today);
-                end = df.parse(endTime.substring(0,endTime.length()-2)+":00");
-                if (d.getTime() > end.getTime()) {
-                    if(specific_renterID!=null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))){
-                        cancelButton.setEnabled(false);
+            if(specific_renterID.equals(mFirebaseUser_universal.getUid())) {
+                String endTime = renterTime.get(1);
+                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                String today = getToday(df);
+                Date end;
+                Date d = null;
+                try {
+                    d = df.parse(today);
+                    end = df.parse(endTime.substring(0, endTime.length() - 2) + ":00");
+                    if (d.getTime() > end.getTime()) {
+                        if (specific_renterID != null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))) {
+                            cancelButton.setEnabled(false);
+                        }
                     }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
+            }else{
+                cancelButton.setEnabled(false);
+                cancelButton.setText("This is an old listing");
             }
 
 
@@ -446,6 +462,8 @@ public class DetailedViewActivity extends AppCompatActivity{
             Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             image_view.setImageBitmap(b);
             image_label.setText("1 of " + spotPhoto.size() + " images");
+        }else{
+            image_label.setText("0 image");
         }
     }
 

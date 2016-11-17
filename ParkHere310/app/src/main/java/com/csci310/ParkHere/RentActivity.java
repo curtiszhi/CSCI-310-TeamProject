@@ -188,13 +188,13 @@ public class RentActivity extends AppCompatActivity {
         rent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
+                /*try {
                     new SplitParkingSpot(fd, start, end);
                 }
                 catch (Exception e) {e.printStackTrace();}
-                finally {
+                finally {*/
                     getPayment();
-                }
+               // }
             }
         });
         hostPublic.setOnClickListener(new View.OnClickListener() {
@@ -400,6 +400,8 @@ public class RentActivity extends AppCompatActivity {
             Bitmap b = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             image_view.setImageBitmap(b);
             image_label.setText("1 of " + spotPhoto.size() + " images");
+        }else{
+            image_label.setText("0 image");
         }
     }
 

@@ -156,8 +156,10 @@ public class FeedItem implements Serializable {
 
                 total+=Double.parseDouble( (rating.get(i)).trim()+"");
             }
-            Float rate=(float)total/(float)rating.size();
+            float rate=(float)total/(float)rating.size();
+            System.out.println(rate+"rated lllllllllll");
             return rate;
+
         }
     }
 

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,8 +50,7 @@ public class RatingActivity extends AppCompatActivity {
     private ArrayList<String> originalHostComment;
 
 
-    private ArrayList<String> rate_list;
-    private int position;
+    private String rate_list;
     private String spot_Identifier;
 
     private DatabaseReference ref;
@@ -70,11 +70,10 @@ public class RatingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rating);
-        rate_list=new ArrayList<String>();
         Bundle bundle = getIntent().getExtras();
-        rate_list = bundle.getStringArrayList("rate");
-        position=bundle.getInt("position");
-        spot_Identifier=rate_list.get(position);
+        rate_list = bundle.getString("rate");
+        spot_Identifier=rate_list;
+        System.out.println(spot_Identifier+"   ooooooo size");
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
@@ -95,17 +94,41 @@ public class RatingActivity extends AppCompatActivity {
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rateHost=(int)userRateHost.getRating()+"";
-                rateSpot=(int)userRateSpot.getRating()+"";
-                commentHost=commentHostText.getText().toString().trim();
-                commentSpot=commentSpotText.getText().toString().trim();
-                update();
-                check();
-
+                if(check_rate()) {
+                    rateHost = (int) userRateHost.getRating() + "";
+                    rateSpot = (int) userRateSpot.getRating() + "";
+                    commentHost = commentHostText.getText().toString().trim();
+                    commentSpot = commentSpotText.getText().toString().trim();
+                    update();
+                    //check();
+                }else{
+                    AlertDialog alertDialog = new AlertDialog.Builder(RatingActivity.this).create();
+                    alertDialog.setTitle("Wait!");
+                    alertDialog.setMessage("Please rate both spot and host");
+                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                }
             }
         });
 
     }
+
+    private boolean check_rate(){
+        boolean check=true;
+        if((int)userRateHost.getRating()==0){
+            check=false;
+        }
+        if((int)userRateSpot.getRating()==0){
+            check=false;
+        }
+        return check;
+
+    }
+
     private void getInfo(String parkID){
         DatabaseReference ref=mDatabase.child("parking-spots-hosting").child(parkID).child("host");
         ref.addValueEventListener(new ValueEventListener() {
@@ -121,7 +144,13 @@ public class RatingActivity extends AppCompatActivity {
                                 host_name = (String) dataSnapshot.getValue();
 
                                 hostText= (TextView) findViewById(R.id.host_name);
-                                hostText.setText(host_name);
+
+                                hostText.post(new Runnable(){
+                                    @Override
+                                    public void run(){
+                                        hostText.setText(host_name);
+                                    }
+                                });
 
                             }
                         }
@@ -145,7 +174,13 @@ public class RatingActivity extends AppCompatActivity {
                 if(dataSnapshot.exists()) {
                     address = (String) dataSnapshot.getValue();
                     addressText= (TextView) findViewById(R.id.spot_address);
-                    addressText.setText(address);
+
+                    addressText.post(new Runnable(){
+                        @Override
+                        public void run(){
+                            addressText.setText(address);
+                        }
+                    });
 
                 }
             }
@@ -278,18 +313,25 @@ public class RatingActivity extends AppCompatActivity {
         mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("activity").setValue(true);
         mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rentedTime").setValue(null);
 
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
+        i.putExtra(Intent.EXTRA_SUBJECT, "Refund to the renter");
+        i.putExtra(Intent.EXTRA_TEXT   , "Hi! this whole trasaction is finished!");
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(RatingActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
+        Intent intent = new Intent(RatingActivity.this, ActionActivity.class);
+        startActivity(intent);
 
     }
-    private void check(){
-        if(rate_list.size()==position+1){
+   /* private void check(){
+
             Intent intent = new Intent(RatingActivity.this, ActionActivity.class);
             startActivity(intent);
-        }else{
-            Intent intent = new Intent(RatingActivity.this, RatingActivity.class);
-            intent.putExtra("rate", rate_list);
-            intent.putExtra("position", position+1);
-            startActivity(intent);
 
-        }
     }
+    */
 }

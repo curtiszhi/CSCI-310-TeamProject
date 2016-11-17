@@ -75,7 +75,7 @@
             android:layout_marginLeft="10dp"
             android:paddingTop="5dp"
             android:numStars="5"
-            android:stepSize="1.0"
+            android:stepSize="0.1"
             android:progressTint="#FFCC00"
             android:rating="2.0"
             style="?android:attr/ratingBarStyleSmall"/>
