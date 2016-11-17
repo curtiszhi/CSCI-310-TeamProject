@@ -119,8 +119,6 @@ public class ActionActivity extends AppCompatActivity {
         search = (Button) findViewById(R.id.searchButton);
 
 
-        checkRate();
-
 
 
         search.setOnClickListener(new View.OnClickListener() {
@@ -585,5 +583,9 @@ public class ActionActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkRate();
+    }
 }
