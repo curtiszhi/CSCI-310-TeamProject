@@ -327,11 +327,5 @@ public class RatingActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-   /* private void check(){
 
-            Intent intent = new Intent(RatingActivity.this, ActionActivity.class);
-            startActivity(intent);
-
-    }
-    */
 }

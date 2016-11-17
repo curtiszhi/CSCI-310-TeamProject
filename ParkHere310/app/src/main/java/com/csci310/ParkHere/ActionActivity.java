@@ -64,14 +64,13 @@ public class ActionActivity extends AppCompatActivity {
     private ActionActivity self;
     public static double[] latlng;
     private Map<String,String> spot_rent;
-    private ArrayList<String> rate_list;
+    private String rate_list=null;
     private String temp_spot_identifier;
     private Map<String,ArrayList<String>> Time_list;
-    private int counter=0;
-    private boolean check_size=true;
+    private int check_size=0;
 
 
-//khjvg
+    //khjvg
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +85,7 @@ public class ActionActivity extends AppCompatActivity {
         tempSpots = new HashMap<FeedItem, double[]>();
         searchResult = new ArrayList<FeedItem>();
         for(int i=0;i<1;i++){
-        initUserListener();}
+            initUserListener();}
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
         TabHost.TabSpec spec = host.newTabSpec("Basics");
@@ -119,6 +118,8 @@ public class ActionActivity extends AppCompatActivity {
         search = (Button) findViewById(R.id.searchButton);
 
 
+        checkRate();
+
 
 
         search.setOnClickListener(new View.OnClickListener() {
@@ -145,9 +146,9 @@ public class ActionActivity extends AppCompatActivity {
                     alertDialog.show();
                 }else{
 
-                tempSpots.clear();
-                searchResult.clear();
-                getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped, address);
+                    tempSpots.clear();
+                    searchResult.clear();
+                    getListWithOptions(starttime, endtime, startdate, enddate, requestCompact, requestCover, handicapped, address);
 
                 }
             }
@@ -155,7 +156,7 @@ public class ActionActivity extends AppCompatActivity {
     }
     private void checkRate() {
         DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser_universal.getUid()).child("renting");
-        rate_list=new ArrayList<String>();
+
         spot_rent=new HashMap<String,String>();
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -166,7 +167,6 @@ public class ActionActivity extends AppCompatActivity {
                     if(spot_rent.size()!=0) {
 
                         for (HashMap.Entry<String, String> entry_1 : spot_rent.entrySet()) {
-                            counter++;
                             String spot_name=entry_1.getKey();
                             System.out.println(spot_name+"   name");
                             String spot_status=entry_1.getValue();
@@ -201,8 +201,9 @@ public class ActionActivity extends AppCompatActivity {
                                             }
                                             if (time1.getTime() < d.getTime()) {
                                                 System.out.println("smaller");
-                                                rate_list.add(temp_spot_identifier);
-                                                if(counter==spot_rent.size()){
+                                                rate_list=temp_spot_identifier;
+                                                check_size=check_size+1;
+                                                if(check_size==1) {
                                                     goRate();
                                                 }
 
@@ -217,8 +218,12 @@ public class ActionActivity extends AppCompatActivity {
                                 });
                             }
 
+                           /* if(counter==spot_rent.size()){
+                            goRate();
+                            }*/
+
                         }
-                        System.out.println(rate_list.size()+"   rateList size");
+                        System.out.println(rate_list+"   rateList size");
 
 
                     }
@@ -239,20 +244,19 @@ public class ActionActivity extends AppCompatActivity {
 
     private void goRate(){
 
-        if(rate_list.size()!=0){
-            System.out.println(rate_list.size()+"   aaaaaarateList size");
+
+        if(rate_list!=null ){
+
             AlertDialog alertDialog = new AlertDialog.Builder(ActionActivity.this).create();
             alertDialog.setTitle("Spot to Rate");
-            if(rate_list.size()==1){
-                alertDialog.setMessage("Please go to Rate this spot");
-            }else{
-                alertDialog.setMessage("Please go to Rate these "+rate_list.size()+" spots");}
+
+            alertDialog.setMessage("Please go to Rate this spot");
+
             alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                     Intent intent = new Intent(ActionActivity.this, RatingActivity.class);
                     intent.putExtra("rate", rate_list);
-                    intent.putExtra("position", 0);
                     startActivity(intent);
 
                 }
@@ -274,13 +278,13 @@ public class ActionActivity extends AppCompatActivity {
                 {
                     if (child.child("activity").getValue().toString().equals("true") &&
 //                        child.child("rentedTime").getValue() == null &&
-                        isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
-                                starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
-                        isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))
+                            isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
+                                    starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
+                            isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))
                     {
                         tempSpots.put(child.getValue(FeedItem.class), new double[]
                                 {Double.parseDouble(child.child("latitude").getValue().toString()),
-                                Double.parseDouble(child.child("longitude").getValue().toString())});
+                                        Double.parseDouble(child.child("longitude").getValue().toString())});
                     }
                 }
                 new AddressOperation(self).execute(address);
@@ -380,8 +384,8 @@ public class ActionActivity extends AppCompatActivity {
         for (DataSnapshot filter : filterNode.getChildren())
             arrayList.add(filter.getValue().toString().toLowerCase());
         if ((requestCompact && !arrayList.contains("compact")) ||
-            (requestCover && !arrayList.contains("covered parking")) ||
-            (requestHandicap && !arrayList.contains("handicap")))
+                (requestCover && !arrayList.contains("covered parking")) ||
+                (requestHandicap && !arrayList.contains("handicap")))
             return false;
         return true;
     }
@@ -394,62 +398,62 @@ public class ActionActivity extends AppCompatActivity {
                 HashMap<String,Object> user_map= (HashMap)dataSnapshot.getValue();
                 if(user_map !=null){
                     System.out.println("got the user");
-                for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
-                    String key = entry.getKey();
-                    if(key.equals("email")){
-                        String value = (String)entry.getValue();
-                        user_all.setEmail(value);
+                    for (HashMap.Entry<String, Object> entry : user_map.entrySet()) {
+                        String key = entry.getKey();
+                        if(key.equals("email")){
+                            String value = (String)entry.getValue();
+                            user_all.setEmail(value);
 
-                        System.out.println((String)value);
-                    }
-                    if(key.equals("userName")){
-                        String value = (String)entry.getValue();
-                        user_all.setUserName(value);
-                    }
-                    if(key.equals("phone")){
-                        String value = (String)entry.getValue();
-                        user_all.setPhone(value);
-                    }
-                    if(key.equals("host")){
-                        Boolean value = (Boolean)entry.getValue();
-                        user_all.setHost(value);
-                    }
-                    if(key.equals("review")){
-                        ArrayList<String> value = ( ArrayList<String>)entry.getValue();
-
-                        user_all.setReview(value);
-                    }
-
-                    if(key.equals("rating")){
-                        ArrayList<String> value = ( ArrayList<String>)entry.getValue();
-
-                        user_all.setRating(value);
-                    }
-                    if(key.equals("renting")){
-                        Vector<String> temp = new Vector<String>();
-                        HashMap<String,String> temp_map= (HashMap<String,String>)entry.getValue();
-                        for (HashMap.Entry<String, String> entry1 : temp_map.entrySet()) {
-                            String itemKey = entry1.getKey();
-                            temp.add(itemKey);
+                            System.out.println((String)value);
                         }
-                        user_all.setRenting(temp);
-                    }
-                    if(key.equals("hosting")){
-                        Vector<String> temp = new Vector<String>();
-                        HashMap<String,String> temp_map= (HashMap<String,String>)entry.getValue();
-                        for (HashMap.Entry<String, String> entry1 : temp_map.entrySet()) {
-                            String itemKey = entry1.getKey();
-                            temp.add(itemKey);
+                        if(key.equals("userName")){
+                            String value = (String)entry.getValue();
+                            user_all.setUserName(value);
                         }
-                        user_all.setHosting(temp);
-                    }
-                    if(key.equals("photo")){
-                        String value = (String)entry.getValue();
-                        user_all.setPhoto(value);
-                    }
+                        if(key.equals("phone")){
+                            String value = (String)entry.getValue();
+                            user_all.setPhone(value);
+                        }
+                        if(key.equals("host")){
+                            Boolean value = (Boolean)entry.getValue();
+                            user_all.setHost(value);
+                        }
+                        if(key.equals("review")){
+                            ArrayList<String> value = ( ArrayList<String>)entry.getValue();
 
+                            user_all.setReview(value);
+                        }
+
+                        if(key.equals("rating")){
+                            ArrayList<String> value = ( ArrayList<String>)entry.getValue();
+
+                            user_all.setRating(value);
+                        }
+                        if(key.equals("renting")){
+                            Vector<String> temp = new Vector<String>();
+                            HashMap<String,String> temp_map= (HashMap<String,String>)entry.getValue();
+                            for (HashMap.Entry<String, String> entry1 : temp_map.entrySet()) {
+                                String itemKey = entry1.getKey();
+                                temp.add(itemKey);
+                            }
+                            user_all.setRenting(temp);
+                        }
+                        if(key.equals("hosting")){
+                            Vector<String> temp = new Vector<String>();
+                            HashMap<String,String> temp_map= (HashMap<String,String>)entry.getValue();
+                            for (HashMap.Entry<String, String> entry1 : temp_map.entrySet()) {
+                                String itemKey = entry1.getKey();
+                                temp.add(itemKey);
+                            }
+                            user_all.setHosting(temp);
+                        }
+                        if(key.equals("photo")){
+                            String value = (String)entry.getValue();
+                            user_all.setPhoto(value);
+                        }
+
+                    }
                 }
-}
 
             }
 
@@ -585,7 +589,7 @@ public class ActionActivity extends AppCompatActivity {
     }
     @Override
     protected void onResume() {
-        super.onResume();
-        checkRate();
+           super.onResume();
+                checkRate();
     }
 }

@@ -210,8 +210,11 @@ public class DetailedViewActivity extends AppCompatActivity{
 
                     }
                 }
+                System.out.println(specific_renterID+ "      llllllll");
+                System.out.println(mFirebaseUser_universal.getUid()+ "      mmmmmmmmmmm");
                 if(specific_renterID!=null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))) {
                     if (specific_renterID.equals(mFirebaseUser_universal.getUid())) {
+                        System.out.println("get in llllllll");
 
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
 
@@ -220,6 +223,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                         double price_total= calculateTotalPrice();
                         double total_price=price_total;
                         String endTime = renterTime.get(1);
+                        System.out.println(total_price+"   xxxxxxxxx");
                         java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                         String today = getToday(df);
                         Date end=null;
@@ -231,10 +235,11 @@ public class DetailedViewActivity extends AppCompatActivity{
                             e.printStackTrace();
                         }
                         long diff= end.getTime()-d.getTime();
-
+                        System.out.println(fd.getCancel()+"     uuuuuuuuuuuuuuuuu");
                         if(fd.getCancel().equals("No refund")){
                             price_total=0.0;
                         }else if(fd.getCancel().equals("80% refund rate at any time")){
+                            System.out.println("hehe   ccccccccc");
                             price_total=price_total*0.8;
                         }else if(fd.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")){
                             if(diff>604800000){
@@ -250,6 +255,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                             }
                         }
                         if(price_total!=0.0){
+                            System.out.print("send emaillllllllllll");
                             Intent i = new Intent(Intent.ACTION_SEND);
                             i.setType("message/rfc822");
                             i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
@@ -261,8 +267,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                             } catch (android.content.ActivityNotFoundException ex) {
                                 Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                             }
-                            Intent intent = new Intent(DetailedViewActivity.this, ActionActivity.class);//change to UserActivity.class
-                            startActivity(intent);
+
                         }
                     }
                 }
@@ -291,6 +296,7 @@ public class DetailedViewActivity extends AppCompatActivity{
         long diffHours = diff / (60 * 60 * 1000);
             price_t=(diffHours+1)*fd.getPrice();
        }
+        System.out.print(price_t+"    total priceeeeeeeeeeeee");
         return price_t;
     }
     public String getToday(java.text.SimpleDateFormat  dformat){
@@ -379,14 +385,14 @@ public class DetailedViewActivity extends AppCompatActivity{
 
         if (renterTime.size() != 0) {
             if(specific_renterID.equals(mFirebaseUser_universal.getUid())) {
-                String endTime = renterTime.get(1);
+                String startTime = renterTime.get(0);
                 java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                 String today = getToday(df);
                 Date end;
                 Date d = null;
                 try {
                     d = df.parse(today);
-                    end = df.parse(endTime.substring(0, endTime.length() - 2) + ":00");
+                    end = df.parse(startTime.substring(0, startTime.length() - 2) + ":00");
                     if (d.getTime() > end.getTime()) {
                         if (specific_renterID != null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))) {
                             cancelButton.setEnabled(false);
