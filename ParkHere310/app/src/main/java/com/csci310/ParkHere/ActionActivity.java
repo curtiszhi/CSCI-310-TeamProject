@@ -78,12 +78,13 @@ public class ActionActivity extends AppCompatActivity {
         self = this;
         setContentView(R.layout.action_activity);
         user_all=new User();
-        initUserListener();
+
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = mDatabase.child("parking-spots-hosting");
         tempSpots = new HashMap<FeedItem, double[]>();
+        initUserListener();
         searchResult = new ArrayList<FeedItem>();
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
@@ -546,10 +547,10 @@ public class ActionActivity extends AppCompatActivity {
         }
 
         if(item.getItemId() == R.id.newPosting){
-           // if(user_all.getHost()){
+           //if(user_all.getHost()){
                 Intent intent = new Intent(ActionActivity.this, AddActivity.class);
                 startActivity(intent);
-            /*}else{
+           /* }else{
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(ActionActivity.this);
                 builder1.setMessage("You are currently not a host. Would you like to enable host features?");
                 builder1.setCancelable(true);
