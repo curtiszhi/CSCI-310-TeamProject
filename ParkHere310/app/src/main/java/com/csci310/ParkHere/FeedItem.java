@@ -37,6 +37,16 @@ public class FeedItem implements Serializable {
     private String identifier;
     private ArrayList<String> review;
     private String currentRenter;
+    private int bookings;
+
+    public int getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(int bookings) {
+        this.bookings = bookings;
+    }
+
 
     public FeedItem(){
         photos=new Vector<String>();
@@ -44,6 +54,7 @@ public class FeedItem implements Serializable {
         rating=new ArrayList<String>();
         review = new ArrayList<String>();
         filters=null;
+        bookings=0;
     }
 
 

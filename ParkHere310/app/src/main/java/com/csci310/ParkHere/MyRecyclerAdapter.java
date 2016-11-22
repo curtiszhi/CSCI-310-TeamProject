@@ -86,6 +86,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         String stringdouble= Double.toString(feedItem.getPrice());
         feedListRowHolder.price.setText("$" + stringdouble);
         feedListRowHolder.rating.setRating(feedItem.calculateRate());
+        feedListRowHolder.booking.setText("prior bookings:"+feedItem.getBookings());
         if(feedItem.getActivity()){
             feedListRowHolder.activity.setText(String.valueOf("Available"));
         }else{

@@ -205,8 +205,10 @@ public class RatingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()) {
-                    Long l=(Long)dataSnapshot.getValue();
-                    single_price=l.doubleValue();
+                    Object temp_2=(Object)dataSnapshot.getValue();
+
+                    single_price=Double.parseDouble((String) (temp_2 + ""));
+
                     System.out.println(single_price+"   per hourrrrrrrrrrrrr");
 
 

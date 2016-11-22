@@ -547,10 +547,10 @@ public class ActionActivity extends AppCompatActivity {
         }
 
         if(item.getItemId() == R.id.newPosting){
-            if(user_all.getHost()){
+           // if(user_all.getHost()){
                 Intent intent = new Intent(ActionActivity.this, AddActivity.class);
                 startActivity(intent);
-            }else{
+            /*}else{
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(ActionActivity.this);
                 builder1.setMessage("You are currently not a host. Would you like to enable host features?");
                 builder1.setCancelable(true);
@@ -577,7 +577,7 @@ public class ActionActivity extends AppCompatActivity {
 
                 AlertDialog alert11 = builder1.create();
                 alert11.show();
-            }
+            }*/
 
         }
 

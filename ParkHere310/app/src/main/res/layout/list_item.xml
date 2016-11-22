@@ -42,6 +42,8 @@
             android:text="10/25-10/26"
             android:textColor="#222"
             android:textSize="15dp" />
+
+
         <TextView
             android:id="@+id/price"
             android:layout_width="wrap_content"
@@ -58,12 +60,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="20dp"
-            android:paddingTop="15dp"
             android:layout_below="@+id/price"
             android:layout_alignParentRight="true"
             android:text="Active"
             android:textColor="#222"
             android:textSize="15dp" />
+        <TextView
+            android:id="@+id/bookings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/activity"
+            android:paddingRight="20dp"
+            android:text="prior bookings:0"
+            android:textColor="#222"
+            android:textSize="15dp" />
+
+
 
         <RatingBar
             android:layout_width="wrap_content"

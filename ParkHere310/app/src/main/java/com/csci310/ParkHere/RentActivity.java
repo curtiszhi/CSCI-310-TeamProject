@@ -88,6 +88,9 @@ public class RentActivity extends AppCompatActivity {
     private Map<String, ArrayList<String>> rentList;
     private Map<String, ArrayList<String>> renter_rentedlist;
     private Map<String, ArrayList<String>> host_rentedlist;
+    private DatabaseReference ref1;
+    private DatabaseReference ref2;
+    private boolean check_data=true;
 
     //Paypal Configuration Object
     private static PayPalConfiguration config = new PayPalConfiguration()
@@ -266,16 +269,48 @@ public class RentActivity extends AppCompatActivity {
                     host_rentedlist = new HashMap<String, ArrayList<String>>();
                     host_rentedlist = rentList;
                     //update spot renttime
-                    DatabaseReference ref1 = mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime");
+                    ref1 = mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime");
                     ref1.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
+                                int counter_1=0;
                                 HashMap<String, ArrayList<String>> tempList = (HashMap) dataSnapshot.getValue();
                                 for (HashMap.Entry<String, ArrayList<String>> entry : tempList.entrySet()) {
+                                    counter_1++;
                                     String key = entry.getKey();
                                     ArrayList<String> value = entry.getValue();
                                     rentList.put(key, value);
+                                    if(counter_1==tempList.size()){
+                                        ref1.setValue(rentList);
+                                    }
+                                }
+                            }else{
+                                ref1.setValue(rentList);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read  failed: " + databaseError.getCode());
+                        }
+                    });
+
+                    ref2 = mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("bookings");
+                    ref2.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(check_data) {
+                                if (dataSnapshot.exists()) {
+                                    Object temp_1 = (Object) dataSnapshot.getValue();
+
+                                    int original_bookings = Integer.parseInt((String) (temp_1 + ""));
+                                    ref2.setValue(1 + original_bookings);
+                                    check_data = false;
+
+                                } else {
+                                    ref2.setValue(1);
+                                    check_data = false;
                                 }
                             }
                         }
@@ -285,7 +320,9 @@ public class RentActivity extends AppCompatActivity {
                             System.out.println("The read  failed: " + databaseError.getCode());
                         }
                     });
-                    ref1.setValue(rentList);
+
+
+
                     //update user renting list
                     fd.setRentedTime(renter_rentedlist);
                     fd.setActivity(false);

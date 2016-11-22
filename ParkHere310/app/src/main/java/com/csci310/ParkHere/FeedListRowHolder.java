@@ -18,6 +18,7 @@ public class FeedListRowHolder extends RecyclerView.ViewHolder {
     protected RatingBar rating;
     protected TextView activity;
     protected View mRootView;
+    protected TextView booking;
 
     public FeedListRowHolder(View view) {
         super(view);
@@ -28,6 +29,7 @@ public class FeedListRowHolder extends RecyclerView.ViewHolder {
         this.price = (TextView) view.findViewById(R.id.price);
         this.rating = (RatingBar) view.findViewById(R.id.ratingBar);
         this.activity = (TextView) view.findViewById(R.id.activity);
+        this.booking=(TextView) view.findViewById(R.id.bookings);
     }
 
 }

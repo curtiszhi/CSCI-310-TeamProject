@@ -153,6 +153,9 @@ public class ListingActivity extends AppCompatActivity {
                                 if (key.equals("price")) {
                                     user_all.setPrice(Double.parseDouble((String) (value + "")));
                                 }
+                                if (key.equals("bookings")) {
+                                    user_all.setBookings(Integer.parseInt((String) (value + "")));
+                                }
                                 if (key.equals("cancel")) {
                                     user_all.setCancel((String) value);
                                 }
@@ -272,6 +275,9 @@ public class ListingActivity extends AppCompatActivity {
                             }
                             if (key.equals("price")) {
                                 user_all.setPrice(Double.parseDouble( (value + "")));
+                            }
+                            if (key.equals("bookings")) {
+                                user_all.setBookings(Integer.parseInt((String) (value + "")));
                             }
                             if (key.equals("cancel")) {
                                 user_all.setCancel((String) value);
