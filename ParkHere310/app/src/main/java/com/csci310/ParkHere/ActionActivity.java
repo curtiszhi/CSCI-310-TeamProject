@@ -281,9 +281,20 @@ public class ActionActivity extends AppCompatActivity {
                                     starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
                             isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))
                     {
-                        tempSpots.put(child.getValue(FeedItem.class), new double[]
-                                {Double.parseDouble(child.child("latitude").getValue().toString()),
-                                        Double.parseDouble(child.child("longitude").getValue().toString())});
+                        boolean isValid = true;
+                        if (child.child("rentedTime").exists())
+                        {
+                            for (DataSnapshot timeSlot : child.child("rentedTime").getChildren())
+                            {
+                                if (!isSeparateDT(startdate + " " + starttime, enddate + " " + endtime,
+                                                timeSlot.child("0").getValue().toString(), timeSlot.child("1").getValue().toString()))
+                                    isValid = false;
+                            }
+                        }
+                        if (isValid)
+                            tempSpots.put(child.getValue(FeedItem.class), new double[]
+                                    {Double.parseDouble(child.child("latitude").getValue().toString()),
+                                            Double.parseDouble(child.child("longitude").getValue().toString())});
                     }
                 }
                 new AddressOperation(self).execute(address);
@@ -357,6 +368,23 @@ public class ActionActivity extends AppCompatActivity {
             long spotStartTime = sdf.parse(sDate2str + " " + sTime2str.substring(0,sTime1str.length()-2)+":00").getTime();
             long spotEndTime = sdf.parse(eDate2str + " " + eTime2str.substring(0,sTime1str.length()-2)+":00").getTime();
             if (userStartTime >= spotStartTime && userEndTime <= spotEndTime)
+                return true;
+        }
+        catch (ParseException parseException) {parseException.printStackTrace();}
+        return false;
+    }
+
+    private boolean isSeparateDT (String sDT1, String eDT1,
+                                  String sDT2, String eDT2)
+    {
+        try
+        {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm");
+            long userStartTime = sdf.parse(sDT1.substring(0, sDT1.length()-2)).getTime();
+            long userEndTime = sdf.parse(eDT1.substring(0, eDT1.length()-2)).getTime();
+            long spotStartTime = sdf.parse(sDT2.substring(0, sDT2.length()-2)).getTime();
+            long spotEndTime = sdf.parse(eDT2.substring(0, eDT2.length()-2)).getTime();
+            if (userStartTime >= spotEndTime || userEndTime <= spotStartTime)
                 return true;
         }
         catch (ParseException parseException) {parseException.printStackTrace();}

@@ -252,7 +252,7 @@ public class RentActivity extends AppCompatActivity {
                     Log.i("paymentExample", confirm.toJSONObject().toString(4));
 
                     //update activity of spot
-                    mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(false);
+//                    mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(false);
 
                     rentList = new HashMap<String, ArrayList<String>>();
                     ArrayList<String> startend = new ArrayList<String>();

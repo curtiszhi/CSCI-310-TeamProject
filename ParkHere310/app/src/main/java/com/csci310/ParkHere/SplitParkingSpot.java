@@ -99,7 +99,7 @@ public class SplitParkingSpot
     {
         mDatabase.child("users").child(spot.getHost()).child("hosting").child(spot.getIdentifier()).setValue(spot.getIdentifier());
         mDatabase.child("parking-spots-hosting").child(spot.getIdentifier()).setValue(spot);
-        if (!spot.getActivity())    //if this spot is rented
+        if (!spot.getActivity())    //if this spot is rented, add to the user's renting list
             mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(spot.getIdentifier()).setValue(spot.getIdentifier());
     }
 
