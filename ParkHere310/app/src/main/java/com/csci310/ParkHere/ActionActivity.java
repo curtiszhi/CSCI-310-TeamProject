@@ -78,14 +78,13 @@ public class ActionActivity extends AppCompatActivity {
         self = this;
         setContentView(R.layout.action_activity);
         user_all=new User();
+        initUserListener();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spotsDatabase = mDatabase.child("parking-spots-hosting");
         tempSpots = new HashMap<FeedItem, double[]>();
         searchResult = new ArrayList<FeedItem>();
-        for(int i=0;i<1;i++){
-            initUserListener();}
         host = (TabHost)findViewById(R.id.tabHost);
         host.setup();
         TabHost.TabSpec spec = host.newTabSpec("Basics");
