@@ -41,6 +41,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         if(hi.equals("host")){
             this.feedItemList = ListingActivity.hostList;
         }
+        if(hi.equals("wish")){
+            this.feedItemList = ListingActivity.wishList;
+        }
         if(hi.equals("results")){
             pay = true;
             this.feedItemList = ListingResultActivity.resultList;

@@ -57,7 +57,7 @@ public class RentActivity extends AppCompatActivity {
     private String name;
 
     private Button hostPublic;
-    private Button rent;
+    private Button rent,wishlist;
     private RatingBar ratingBar;
     private TextView address;
     private TextView price;
@@ -131,6 +131,7 @@ public class RentActivity extends AppCompatActivity {
         image_view = (ImageView) findViewById(R.id.image);
         image_label = (TextView) findViewById(R.id.image_label);
         rent = (Button) findViewById(R.id.rentButton);
+        wishlist = (Button) findViewById(R.id.wishButton);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         address = (TextView) findViewById(R.id.address);
         price = (TextView) findViewById(R.id.price);
@@ -198,6 +199,13 @@ public class RentActivity extends AppCompatActivity {
                 finally {*/
                     getPayment();
                // }
+            }
+        });
+
+        wishlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatabase.child("users").child(mFirebaseUser.getUid()).child("wishlist").child(fd.getIdentifier()).setValue(fd.getIdentifier());
             }
         });
         hostPublic.setOnClickListener(new View.OnClickListener() {

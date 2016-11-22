@@ -57,6 +57,7 @@ public class ListingActivity extends AppCompatActivity {
     private static DatabaseReference ref;
     public static ArrayList<FeedItem> hostList;
     public static ArrayList<FeedItem> rentList;
+    public static ArrayList<FeedItem> wishList;
     static MyRecyclerAdapter adapter;
     public static ArrayList<String> confirm_list;
 
@@ -76,9 +77,11 @@ public class ListingActivity extends AppCompatActivity {
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         rentList = new ArrayList<>();
         hostList = new ArrayList<>();
+        wishList = new ArrayList<>();
         //displayList = new ArrayList<>();
         getItemsHosting();
         getItemsRenting();
+        getItemsWish();
         rentingActualList = new ArrayList<>();
         hostingActualList = new ArrayList<>();
         //initDataListenerRental();
@@ -443,7 +446,7 @@ public class ListingActivity extends AppCompatActivity {
                                 user_all.setCurrentRenter((String) value);
                             }
                         }
-                        rentList.add(user_all);
+                        wishList.add(user_all);
                     }
 
 
@@ -485,6 +488,22 @@ public class ListingActivity extends AppCompatActivity {
                         @Override
                         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
                             fragmentTransaction.replace(android.R.id.content, new RecyclerViewFragmentHosting());
+                        }
+
+                        @Override
+                        public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+                        }
+
+                        @Override
+                        public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+                        }
+                    }));
+            actionBar.addTab(actionBar.newTab()
+                    .setText("WishList")
+                    .setTabListener(new ActionBar.TabListener() {
+                        @Override
+                        public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+                            fragmentTransaction.replace(android.R.id.content, new RecyclerViewFragmentWish());
                         }
 
                         @Override
@@ -553,6 +572,20 @@ public class ListingActivity extends AppCompatActivity {
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
             MyRecyclerAdapter adapter = new MyRecyclerAdapter(getActivity(), "rent");
+            recyclerView.setAdapter(adapter);
+            return root;
+        }
+    }
+
+    public static class RecyclerViewFragmentWish extends Fragment {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View root = inflater.inflate(R.layout.fragment_recyclerview, container, false);
+            RecyclerView recyclerView = (RecyclerView) root.findViewById(R.id.myList);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            recyclerView.setLayoutManager(layoutManager);
+            adapter = new MyRecyclerAdapter(getActivity(), "wish");
             recyclerView.setAdapter(adapter);
             return root;
         }
