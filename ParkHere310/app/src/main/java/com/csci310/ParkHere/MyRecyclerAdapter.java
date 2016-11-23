@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -27,6 +29,9 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
 
     public static ArrayList<FeedItem> feedItemList;
+    private ArrayList<Integer> booking_code=new ArrayList<Integer>();
+    private int max_booking;
+    private int min_booking;
     //public static FeedListRowHolder feedListRowHolder;
     private String start;
     private String end;
@@ -47,6 +52,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         if(hi.equals("results")){
             pay = true;
             this.feedItemList = ListingResultActivity.resultList;
+            for(int i=0;i<feedItemList.size();i++){
+                booking_code.add(feedItemList.get(i).getBookings());
+            }
+            max_booking= Collections.max(booking_code);
+            min_booking=Collections.min(booking_code);
+
         }
         System.out.println("got list" + this.feedItemList.size());
         this.mContext = context;
@@ -72,10 +83,12 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
     @Override
     public void onBindViewHolder(FeedListRowHolder feedListRowHolder, int i) {
         FeedItem feedItem = feedItemList.get(i);
+        String color_code=find_code(feedItem.getBookings());
 
         TextView address=(TextView) feedListRowHolder.house;
 
         feedListRowHolder.house.setText(feedItem.getAddress());
+        feedListRowHolder.house.setTextColor(Color.parseColor(color_code));
         if (!feedItem.getPhotos().isEmpty()) {
             if (feedItem.getPhotos().get(0) != null) {
                 byte[] decodedString = Base64.decode(feedItem.getPhotos().get(0), Base64.DEFAULT);
@@ -85,15 +98,21 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         }
        // feedListRowHolder.thumbnail.setImageResource(feedItem.getThumbnail());
 
+
         feedListRowHolder.dates.setText("Start: " + feedItem.getStartDates()+ " End: " + feedItem.getEndDates());
+        feedListRowHolder.dates.setTextColor(Color.parseColor(color_code));
         String stringdouble= Double.toString(feedItem.getPrice());
         feedListRowHolder.price.setText("$" + stringdouble);
+        feedListRowHolder.price.setTextColor(Color.parseColor(color_code));
         feedListRowHolder.rating.setRating(feedItem.calculateRate());
         feedListRowHolder.booking.setText("prior bookings:"+feedItem.getBookings());
+        feedListRowHolder.booking.setTextColor(Color.parseColor(color_code));
         if(feedItem.getActivity()){
             feedListRowHolder.activity.setText(String.valueOf("Available"));
+            feedListRowHolder.activity.setTextColor(Color.parseColor(color_code));
         }else{
             feedListRowHolder.activity.setText(String.valueOf("Archive"));
+            feedListRowHolder.activity.setTextColor(Color.parseColor(color_code));
         }
         feedListRowHolder.mRootView.setOnClickListener(new ItemOnClickListener(feedListRowHolder.mRootView, i));
     }
@@ -125,6 +144,45 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
                 current_view.getContext().startActivity(intent);
             }
 
+        }
+    }
+
+
+    private String find_code(int booking){
+        String color="";
+        int code=0;
+        int range=max_booking-min_booking;
+        if(range==0){
+            color="#330000";
+            return color;
+        }
+        else{
+            double split_range=range/6.0;
+            int double_min=booking-min_booking;
+            double temp=double_min/split_range;
+            code=(int)Math.round(temp);
+            if(code==0){
+                color="#FF6666";
+            }
+            if(code==1){
+                color="#FF3333";
+            }
+            if(code==2){
+                color="#FF0000";
+            }
+            if(code==3){
+                color="#CC0000";
+            }
+            if(code==4){
+                color="#990000";
+            }
+            if(code==5){
+                color="#660000";
+            }
+            if(code==6){
+                color="#330000";
+            }
+            return color;
         }
     }
 }
