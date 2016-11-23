@@ -38,16 +38,23 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
     private Context mContext;
     Boolean pay = false;
+    Boolean past = false;
 
     public MyRecyclerAdapter(Context context, String hi) {
         if(hi.equals("rent")){
             this.feedItemList = ListingActivity.rentList;
         }
         if(hi.equals("host")){
+            System.out.println("host is true");
             this.feedItemList = ListingActivity.hostList;
         }
         if(hi.equals("wish")){
             this.feedItemList = ListingActivity.wishList;
+        }
+        if(hi.equals("past")){
+            System.out.println("past is true");
+            this.feedItemList = AddPastActivity.hostList;
+            past = true;
         }
         if(hi.equals("results")){
             pay = true;
@@ -138,7 +145,14 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
                 intent.putExtra("start", start);
                 intent.putExtra("end", end);
                 current_view.getContext().startActivity(intent);
-            }else{
+            }else if(past){
+                System.out.println("else if past");
+                Intent intent = new Intent(current_view.getContext(), AddActivity.class);
+                intent.putExtra("ItemPosition", position);
+                intent.putExtra("isPast", "true");
+                current_view.getContext().startActivity(intent);
+            }
+            else {
                 Intent intent = new Intent(current_view.getContext(), DetailedViewActivity.class);
                 intent.putExtra("ItemPosition", position);
                 current_view.getContext().startActivity(intent);

@@ -576,7 +576,7 @@ public class ActionActivity extends AppCompatActivity {
 
         if(item.getItemId() == R.id.newPosting){
            //if(user_all.getHost()){
-                Intent intent = new Intent(ActionActivity.this, AddActivity.class);
+                Intent intent = new Intent(ActionActivity.this, AddPastActivity.class);
                 startActivity(intent);
            /* }else{
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(ActionActivity.this);

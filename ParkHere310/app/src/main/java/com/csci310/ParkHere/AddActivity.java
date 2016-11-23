@@ -177,6 +177,7 @@ public class AddActivity extends AppCompatActivity {
         dropdown=(Spinner)findViewById(R.id.state);
         ArrayAdapter<String> adapter=new ArrayAdapter<>(AddActivity.this,android.R.layout.simple_spinner_dropdown_item,state_list);
         dropdown.setAdapter(adapter);
+        viewProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 
 
         new DatePicker(AddActivity.this, R.id.startDateEditText);
@@ -187,40 +188,101 @@ public class AddActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             value = bundle.getString("ItemPosition");
-            position = Integer.parseInt(value);
-            fd = MyRecyclerAdapter.feedItemList.get(position);
-            isEdit = true;
-            location.setVisibility(View.GONE);
-            city.setVisibility(View.GONE);
-            postcode.setVisibility(View.GONE);
-            dropdown.setVisibility(View.GONE);
-            photos = fd.photos;
-            description.setText(fd.getDescription());
-            price.setText(Double.toString(fd.getPrice()));
-            startTime.setText(fd.getStartTime());
-            endTime.setText(fd.getEndTime());
-            startDate.setText(fd.getStartDates());
-            endDate.setText(fd.getEndDates());
-            spinner.setSelection(fd.getFilter());
-            if(fd.getCancel().equals("No refund")) {
-                RadioButton no=(RadioButton)findViewById(R.id.radio_norefund);
-                cancel_policy="No refund";
-                no.setChecked(true);
-            }
-            if(fd.getCancel().equals("80% refund rate at any time")) {
-                RadioButton no=(RadioButton)findViewById(R.id.radio_80refund);
-                cancel_policy="80% refund rate at any time";
-                no.setChecked(true);
-            }
-            if(fd.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")) {
-                RadioButton no=(RadioButton)findViewById(R.id.radio_full_50);
-                cancel_policy="Full refund if cancel before 7 days, 50% refund if cancel less than 7 days";
-                no.setChecked(true);
-            }
-            if(fd.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")) {
-                RadioButton no=(RadioButton)findViewById(R.id.radio_full_0);
-                cancel_policy="Full refund if cancel before 7 days, no refund if cancel less than 7 days";
-                no.setChecked(true);
+            String past = bundle.getString("isPast");
+            if(past.equals("true")){
+                isEdit = false;
+                position = Integer.parseInt(value);
+                FeedItem fd2 = MyRecyclerAdapter.feedItemList.get(position);
+                fd = new FeedItem();
+                String addressfull = fd2.getAddress();
+                String [] info = addressfull.split(",");
+                //location.setVisibility(View.GONE);
+                location.setText(info[0].trim());
+                System.out.println(info[0].trim());
+                //city.setVisibility(View.GONE);
+                city.setText(info[1].trim());
+                System.out.println(info[1].trim());
+                //postcode.setVisibility(View.GONE);
+                String zip2 = info[2].trim().replaceAll("\\D+","");
+                System.out.println(zip2);
+                postcode.setText(zip2);
+                String state2 =  info[2].trim().replaceAll("[0-9]","");
+                System.out.println(state2);
+                //dropdown.setVisibility(View.GONE);
+                int index = -1;
+                for (int i=0;i<state_list.length;i++) {
+                    System.out.println(state_list[i] + "==" + state2);
+                    if (state_list[i].trim().equals(state2.trim())) {
+                        index = i;
+                        System.out.println("equals");
+                        break;
+                    }
+                }
+                dropdown.setSelection(index);
+                photos = fd2.photos;
+                description.setText(fd2.getDescription());
+                price.setText(Double.toString(fd2.getPrice()));
+                startTime.setText(fd2.getStartTime());
+                endTime.setText(fd2.getEndTime());
+                startDate.setText(fd2.getStartDates());
+                endDate.setText(fd2.getEndDates());
+                spinner.setSelection(fd2.getFilter());
+                if(fd2.getCancel().equals("No refund")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_norefund);
+                    cancel_policy="No refund";
+                    no.setChecked(true);
+                }
+                if(fd2.getCancel().equals("80% refund rate at any time")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_80refund);
+                    cancel_policy="80% refund rate at any time";
+                    no.setChecked(true);
+                }
+                if(fd2.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_full_50);
+                    cancel_policy="Full refund if cancel before 7 days, 50% refund if cancel less than 7 days";
+                    no.setChecked(true);
+                }
+                if(fd2.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_full_0);
+                    cancel_policy="Full refund if cancel before 7 days, no refund if cancel less than 7 days";
+                    no.setChecked(true);
+                }
+            }else{
+                position = Integer.parseInt(value);
+                fd = MyRecyclerAdapter.feedItemList.get(position);
+                isEdit = true;
+                location.setVisibility(View.GONE);
+                city.setVisibility(View.GONE);
+                postcode.setVisibility(View.GONE);
+                dropdown.setVisibility(View.GONE);
+                photos = fd.photos;
+                description.setText(fd.getDescription());
+                price.setText(Double.toString(fd.getPrice()));
+                startTime.setText(fd.getStartTime());
+                endTime.setText(fd.getEndTime());
+                startDate.setText(fd.getStartDates());
+                endDate.setText(fd.getEndDates());
+                spinner.setSelection(fd.getFilter());
+                if(fd.getCancel().equals("No refund")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_norefund);
+                    cancel_policy="No refund";
+                    no.setChecked(true);
+                }
+                if(fd.getCancel().equals("80% refund rate at any time")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_80refund);
+                    cancel_policy="80% refund rate at any time";
+                    no.setChecked(true);
+                }
+                if(fd.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_full_50);
+                    cancel_policy="Full refund if cancel before 7 days, 50% refund if cancel less than 7 days";
+                    no.setChecked(true);
+                }
+                if(fd.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_full_0);
+                    cancel_policy="Full refund if cancel before 7 days, no refund if cancel less than 7 days";
+                    no.setChecked(true);
+                }
             }
 
         } else{
@@ -334,6 +396,8 @@ public class AddActivity extends AppCompatActivity {
 
 
                             viewProgressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(AddActivity.this, "Spot Added!",
+                                    Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(AddActivity.this, ActionActivity.class);//change to UserActivity.class
                             startActivity(intent);
 

@@ -1,10 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Instructions"
+        android:textSize="30dp"
+        android:textColor="?attr/colorAccent"
+        android:id="@+id/actionFirstWelcome"
+        android:textStyle="normal|bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/actionFirstWelcome"
+        android:text="adding your awesome parking spot"
+        android:id="@+id/actionWelcome"
+        android:textStyle="normal|italic" />
+
+    <TextView
+        android:layout_marginTop="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionWelcome"
+        android:maxLines="20"
+        android:text="  1. Please fill in all required information.\n\n  2. We recommend you add multiple photos of your spot.\n\n  3. Start date must be during or after today's date.\n\n  4. Start time must be on or after the current time.
+         "
+        android:id="@+id/actioninstructions"
+        android:textStyle="normal|italic" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add My Spot!"
+        android:id="@+id/newpostButton"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
-
-    </RelativeLayout>
+</RelativeLayout>
