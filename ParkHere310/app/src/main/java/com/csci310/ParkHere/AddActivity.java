@@ -41,6 +41,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -462,10 +463,23 @@ public class AddActivity extends AppCompatActivity {
                             fd.setEndTime(endtime);
                             fd.setPrice(price_parking);
                             fd.setFilter(filter);
-                           
-                            new AddressOperation(self).execute(full_address);
-                            Intent intent = new Intent(AddActivity.this, MainActivity.class);//change to UserActivity.class
-                            startActivity(intent);
+
+                            if(!checkPast(fd)){
+                                AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
+                                alertDialog.setTitle("Alert");
+                                alertDialog.setMessage("Please make sure time difference is larger than 1 hour or the starting time is before the current time ");
+                                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                alertDialog.show();
+                            }else{
+                                new AddressOperation(self).execute(full_address);
+                                Intent intent = new Intent(AddActivity.this, MainActivity.class);//change to UserActivity.class
+                                startActivity(intent);
+                            }
 
                         } else {
                             AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
@@ -491,6 +505,44 @@ public class AddActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
+    private Boolean checkPast(final FeedItem feeder){
+        Query hostingQuery = mDatabase.child("parking-spots-hosting").startAt(feeder.getHost());
+        final Boolean[] resulter = {true};
+        hostingQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    System.out.println("spot found");
+                    FeedItem online = (FeedItem) postSnapshot.getValue();
+                    Integer newpoststart = Integer.parseInt(feeder.getStartDates().replace("-", "")+feeder.getStartDates().replaceAll("\\D+",""));
+                    Integer newpostend = Integer.parseInt(feeder.getStartDates().replace("-", "")+feeder.getStartDates().replaceAll("\\D+",""));
+
+                    Integer onlinestart = Integer.parseInt(online.getStartDates().replace("-", "") + online.getStartDates().replaceAll("\\D+",""));
+                    Integer onlineend = Integer.parseInt(online.getStartDates().replace("-", "")+online.getStartDates().replaceAll("\\D+",""));
+
+                    if(newpoststart < onlinestart && newpostend > onlinestart){
+                        resulter[0] = false;
+                    }
+                    if(newpoststart == onlinestart){
+                        resulter[0] = false;
+                    }
+                    if(newpoststart>onlinestart && newpoststart < onlineend){
+                        resulter[0] = false;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("error", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
+        return resulter[0];
+    }
+
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();
