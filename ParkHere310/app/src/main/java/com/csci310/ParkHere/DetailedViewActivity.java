@@ -225,7 +225,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                         mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
 
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
-                        mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").setValue(null);
+                        mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").child(specific_renterID).setValue(null);
                         double price_total= calculateTotalPrice();
                         double total_price=price_total;
                         String endTime = renterTime.get(1);
