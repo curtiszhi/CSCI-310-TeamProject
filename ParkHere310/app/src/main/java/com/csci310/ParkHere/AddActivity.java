@@ -41,6 +41,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -161,7 +162,7 @@ public class AddActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         spinner = (MultiSelectionSpinner) findViewById(R.id.mySpinner1);
         spinner.setItems(items);
-
+        hostList = new ArrayList<>();
         photos = new Vector<String>();
         photoButton = (Button) findViewById(R.id.photo);
         post = (Button) findViewById(R.id.postButton);
@@ -177,6 +178,7 @@ public class AddActivity extends AppCompatActivity {
         dropdown=(Spinner)findViewById(R.id.state);
         ArrayAdapter<String> adapter=new ArrayAdapter<>(AddActivity.this,android.R.layout.simple_spinner_dropdown_item,state_list);
         dropdown.setAdapter(adapter);
+        viewProgressBar = (ProgressBar) findViewById(R.id.progressBar1);
 
 
         new DatePicker(AddActivity.this, R.id.startDateEditText);
@@ -187,40 +189,103 @@ public class AddActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if(bundle != null){
             value = bundle.getString("ItemPosition");
-            position = Integer.parseInt(value);
-            fd = MyRecyclerAdapter.feedItemList.get(position);
-            isEdit = true;
-            location.setVisibility(View.GONE);
-            city.setVisibility(View.GONE);
-            postcode.setVisibility(View.GONE);
-            dropdown.setVisibility(View.GONE);
-            photos = fd.photos;
-            description.setText(fd.getDescription());
-            price.setText(Double.toString(fd.getPrice()));
-            startTime.setText(fd.getStartTime());
-            endTime.setText(fd.getEndTime());
-            startDate.setText(fd.getStartDates());
-            endDate.setText(fd.getEndDates());
-            spinner.setSelection(fd.getFilter());
-            if(fd.getCancel().equals("No refund")) {
-                RadioButton no=(RadioButton)findViewById(R.id.radio_norefund);
-                cancel_policy="No refund";
-                no.setChecked(true);
-            }
-            if(fd.getCancel().equals("80% refund rate at any time")) {
-                RadioButton no=(RadioButton)findViewById(R.id.radio_80refund);
-                cancel_policy="80% refund rate at any time";
-                no.setChecked(true);
-            }
-            if(fd.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")) {
-                RadioButton no=(RadioButton)findViewById(R.id.radio_full_50);
-                cancel_policy="Full refund if cancel before 7 days, 50% refund if cancel less than 7 days";
-                no.setChecked(true);
-            }
-            if(fd.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")) {
-                RadioButton no=(RadioButton)findViewById(R.id.radio_full_0);
-                cancel_policy="Full refund if cancel before 7 days, no refund if cancel less than 7 days";
-                no.setChecked(true);
+            String past = bundle.getString("isPast");
+            if(past.equals("true")){
+                getItemsHosting();
+                isEdit = false;
+                position = Integer.parseInt(value);
+                FeedItem fd2 = MyRecyclerAdapter.feedItemList.get(position);
+                fd = new FeedItem();
+                String addressfull = fd2.getAddress();
+                String [] info = addressfull.split(",");
+                location.setEnabled(false);
+                location.setText(info[0].trim());
+                setTitle(info[0].trim());
+                System.out.println(info[0].trim());
+                city.setEnabled(false);
+                city.setText(info[1].trim());
+                System.out.println(info[1].trim());
+                postcode.setEnabled(false);
+                String zip2 = info[2].trim().replaceAll("\\D+","");
+                System.out.println(zip2);
+                postcode.setText(zip2);
+                String state2 =  info[2].trim().replaceAll("[0-9]","");
+                System.out.println(state2);
+                dropdown.setEnabled(false);
+                int index = -1;
+                for (int i=0;i<state_list.length;i++) {
+                    System.out.println(state_list[i] + "==" + state2);
+                    if (state_list[i].trim().equals(state2.trim())) {
+                        index = i;
+                        System.out.println("equals");
+                        break;
+                    }
+                }
+                dropdown.setSelection(index);
+                photos = fd2.photos;
+                description.setText(fd2.getDescription());
+                price.setText(Double.toString(fd2.getPrice()));
+                startTime.setText(fd2.getStartTime());
+                endTime.setText(fd2.getEndTime());
+                startDate.setText(fd2.getStartDates());
+                endDate.setText(fd2.getEndDates());
+                spinner.setSelection(fd2.getFilter());
+                if(fd2.getCancel().equals("No refund")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_norefund);
+                    cancel_policy="No refund";
+                    no.setChecked(true);
+                }
+                if(fd2.getCancel().equals("80% refund rate at any time")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_80refund);
+                    cancel_policy="80% refund rate at any time";
+                    no.setChecked(true);
+                }
+                if(fd2.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_full_50);
+                    cancel_policy="Full refund if cancel before 7 days, 50% refund if cancel less than 7 days";
+                    no.setChecked(true);
+                }
+                if(fd2.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_full_0);
+                    cancel_policy="Full refund if cancel before 7 days, no refund if cancel less than 7 days";
+                    no.setChecked(true);
+                }
+            }else{
+                position = Integer.parseInt(value);
+                fd = MyRecyclerAdapter.feedItemList.get(position);
+                isEdit = true;
+                location.setVisibility(View.GONE);
+                city.setVisibility(View.GONE);
+                postcode.setVisibility(View.GONE);
+                dropdown.setVisibility(View.GONE);
+                photos = fd.photos;
+                description.setText(fd.getDescription());
+                price.setText(Double.toString(fd.getPrice()));
+                startTime.setText(fd.getStartTime());
+                endTime.setText(fd.getEndTime());
+                startDate.setText(fd.getStartDates());
+                endDate.setText(fd.getEndDates());
+                spinner.setSelection(fd.getFilter());
+                if(fd.getCancel().equals("No refund")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_norefund);
+                    cancel_policy="No refund";
+                    no.setChecked(true);
+                }
+                if(fd.getCancel().equals("80% refund rate at any time")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_80refund);
+                    cancel_policy="80% refund rate at any time";
+                    no.setChecked(true);
+                }
+                if(fd.getCancel().equals("Full refund if cancel before 7 days, 50% refund if cancel less than 7 days")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_full_50);
+                    cancel_policy="Full refund if cancel before 7 days, 50% refund if cancel less than 7 days";
+                    no.setChecked(true);
+                }
+                if(fd.getCancel().equals("Full refund if cancel before 7 days, no refund if cancel less than 7 days")) {
+                    RadioButton no=(RadioButton)findViewById(R.id.radio_full_0);
+                    cancel_policy="Full refund if cancel before 7 days, no refund if cancel less than 7 days";
+                    no.setChecked(true);
+                }
             }
 
         } else{
@@ -334,6 +399,8 @@ public class AddActivity extends AppCompatActivity {
 
 
                             viewProgressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(AddActivity.this, "Spot Added!",
+                                    Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(AddActivity.this, ActionActivity.class);//change to UserActivity.class
                             startActivity(intent);
 
@@ -398,19 +465,62 @@ public class AddActivity extends AppCompatActivity {
                             fd.setEndTime(endtime);
                             fd.setPrice(price_parking);
                             fd.setFilter(filter);
-                           
-                            new AddressOperation(self).execute(full_address);
-                            Intent intent = new Intent(AddActivity.this, MainActivity.class);//change to UserActivity.class
-                            startActivity(intent);
+                            System.out.println("checking past bookings now");
+                            if(!checkPast(fd)){
+                                AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
+                                alertDialog.setTitle("Alert");
+                                alertDialog.setMessage("Please make sure there are no date/time conflicts with this existing spot.");
+                                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Help",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
+                                                alertDialog.setTitle("Help");
+                                                alertDialog.setMessage("Remember: Check to make sure the spot you are trying to add does not already exist in this same time frame. ");
+                                                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                                                        new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                dialog.dismiss();
+                                                            }
+                                                        });
+                                                alertDialog.show();
+                                            }
+                                        });
+                                alertDialog.show();
+                            }else{
+                                new AddressOperation(self).execute(full_address);
+                                Intent intent = new Intent(AddActivity.this, MainActivity.class);//change to UserActivity.class
+                                startActivity(intent);
+                            }
 
                         } else {
                             AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
                             alertDialog.setTitle("Alert");
-                            alertDialog.setMessage("Please make sure time difference is larger than 1 hour or the starting time is before the current time ");
-                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                            alertDialog.setMessage("Please make sure time-slot is larger than 1 hour and the starting/ending credentials are valid.");
+                            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
+                                        }
+                                    });
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Help",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            AlertDialog alertDialog = new AlertDialog.Builder(AddActivity.this).create();
+                                            alertDialog.setTitle("Help");
+                                            alertDialog.setMessage("Remember: your start/end can't be before the current date/time, your end date/time cannot be before the start. Spots must be added in 1 hour increments. ");
+                                            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "OK",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            dialog.dismiss();
+                                                        }
+                                                    });
+                                            alertDialog.show();
                                         }
                                     });
                             alertDialog.show();
@@ -427,6 +537,150 @@ public class AddActivity extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
+    private Boolean checkPast(final FeedItem feeder){
+        System.out.println("inside past checker");
+        final Boolean[] resulter = {true};
+        if(!hostList.isEmpty()) {
+            for (int i = 0; i < hostList.size(); i++) {
+                System.out.println("spot match found" + feeder.getAddress());
+                long newpoststart = Long.parseLong(feeder.getStartDates().replace("-", "") + feeder.getStartTime().replaceAll("\\D+", ""));
+                long newpostend = Long.parseLong(feeder.getEndDates().replace("-", "") + feeder.getEndTime().replaceAll("\\D+", ""));
+
+                long onlinestart = Long.parseLong(hostList.get(i).getStartDates().replace("-", "") + hostList.get(i).getStartTime().replaceAll("\\D+", ""));
+                long onlineend = Long.parseLong(hostList.get(i).getEndDates().replace("-", "") + hostList.get(i).getEndTime().replaceAll("\\D+", ""));
+
+                if (newpoststart < onlinestart && newpostend > onlinestart) {
+                    resulter[0] = false;
+                }
+                if (newpoststart == onlinestart) {
+                    resulter[0] = false;
+                }
+                if (newpoststart > onlinestart && newpoststart < onlineend) {
+                    resulter[0] = false;
+                }
+            }
+        }
+        return resulter[0];
+    }
+
+    public void getItemsHosting(){
+        DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/hosting");
+        //DatabaseReference database = mDatabase.child("parking-spots-hosting");
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    HashMap<String,String> user_map= (HashMap<String,String>)dataSnapshot.getValue();
+                    getSpot_host(user_map);}
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+    private void getSpot_host(HashMap<String,String> spot_map){
+        Vector<String> names=new Vector<String>();
+        for (HashMap.Entry<String, String> entry : spot_map.entrySet()) {
+            names.add(entry.getKey());
+        }
+        for(int i=0;i<names.size();i++){
+            DatabaseReference database_p = mDatabase.child("parking-spots-hosting").child(names.get(i));
+            database_p.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    HashMap<String, Object> user_map = (HashMap<String,Object>) dataSnapshot.getValue();
+
+                    if (user_map != null) {
+                        FeedItem user_all = new FeedItem();
+                        for (HashMap.Entry<String, Object> innerEntry : user_map.entrySet()) {
+                            String key = innerEntry.getKey();
+                            Object value = innerEntry.getValue();
+                            if (key.equals("latitude")) {
+                                user_all.setLatitude((double) value);
+                            }
+                            if (key.equals("address")) {
+                                user_all.setAddress((String) value);
+                            }
+
+                            if (key.equals("longitude")) {
+                                user_all.setLongitude((double) value);
+                            }
+                            if (key.equals("spotID")) {
+                                user_all.setSpotID((String) value);
+                            }
+                            if (key.equals("startDates")) {
+                                user_all.setStartDates((String) value);
+                            }
+                            if (key.equals("endDates")) {
+                                user_all.setEndDates((String) value);
+                            }
+                            if (key.equals("startTime")) {
+                                user_all.setStartTime((String) value);
+                            }
+                            if (key.equals("endTime")) {
+                                user_all.setEndTime((String) value);
+                            }
+                            if (key.equals("price")) {
+                                user_all.setPrice(Double.parseDouble( (value + "")));
+                            }
+                            if (key.equals("bookings")) {
+                                user_all.setBookings(Integer.parseInt((String) (value + "")));
+                            }
+                            if (key.equals("cancel")) {
+                                user_all.setCancel((String) value);
+                            }
+                            if (key.equals("description")) {
+                                user_all.setDescription((String) value);
+                            }
+                            if (key.equals("rating")) {
+                                ArrayList<String> temp=(ArrayList<String>) value;
+                                user_all.setRating(temp);
+                            }
+                            if (key.equals("activity")) {
+                                user_all.setActivity((Boolean) value);
+                            }
+                            if (key.equals("filter")) {
+                                Vector v = new Vector((ArrayList<String>) value);
+                                user_all.setFilter(v);
+                            }
+                            if (key.equals("host")) {
+                                user_all.setHost((String) value);
+                            }
+                            if (key.equals("photos")) {
+                                user_all.setPhotos((ArrayList<String>) value);
+                            }
+                            if (key.equals("rentedTime")) {
+                                user_all.setRentedTime((Map<String, ArrayList<String>>) value);
+                            }
+                            if (key.equals("identifier")) {
+                                user_all.setIdentifier((String) value);
+                            }
+                            if (key.equals("review")) {
+                                user_all.setReview((ArrayList<String>) value);
+                            }
+                            if (key.equals("currentRenter")) {
+                                user_all.setCurrentRenter((String) value);
+                            }
+                        }
+                        hostList.add(user_all);
+                    }
+
+
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+        }
+    }
+
     public void onRadioButtonClicked(View view) {
         // Is the button now checked?
         boolean checked = ((RadioButton) view).isChecked();

@@ -83,7 +83,7 @@ public class ListingActivity extends AppCompatActivity {
         getItemsRenting();
         getItemsWish();
         rentingActualList = new ArrayList<>();
-        hostingActualList = new ArrayList<>();
+        //hostingActualList = new ArrayList<>();
         //initDataListenerRental();
         //initDataListenerHosting();
         initActionBar();
