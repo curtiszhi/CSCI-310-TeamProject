@@ -4,6 +4,7 @@ package com.csci310.ParkHere;
  * Created by seanyuan on 10/13/16.
  */
         import android.app.Activity;
+        import android.app.AlertDialog;
         import android.app.DatePickerDialog;
         import android.content.Context;
         import android.view.View;
@@ -33,6 +34,8 @@ public class DatePicker  implements View.OnClickListener, DatePickerDialog.OnDat
         this.dateEditText.setOnClickListener(this);
         this._context = context;
     }
+
+
     @Override
     public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         _birthYear = year;

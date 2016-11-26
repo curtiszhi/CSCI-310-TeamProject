@@ -1,6 +1,10 @@
 package com.csci310.ParkHere;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,8 +16,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -49,6 +55,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
+import static android.text.TextUtils.isEmpty;
 
 public class RentActivity extends AppCompatActivity {
 
@@ -92,6 +100,9 @@ public class RentActivity extends AppCompatActivity {
     private DatabaseReference ref2;
     private boolean check_data=true;
 
+    private int wish_check=0;
+    private boolean dismiss=true;
+
     //Paypal Configuration Object
     private static PayPalConfiguration config = new PayPalConfiguration()
             // Start with mock environment.  When ready, switch to sandbox (ENVIRONMENT_SANDBOX)
@@ -118,6 +129,7 @@ public class RentActivity extends AppCompatActivity {
         value = bundle.getString("ItemPosition");
         start = bundle.getString("start");
         end = bundle.getString("end");
+        wish_check=bundle.getInt("wish");
         System.out.println(start + "rent");
         System.out.println(end + "rent");
         position = Integer.parseInt(value);
@@ -147,6 +159,10 @@ public class RentActivity extends AppCompatActivity {
         setUp();
         downloadPhoto();
         display();
+
+        if(wish_check==1){
+          popup();
+        }
 
         Intent intent = new Intent(this, PayPalService.class);
 
@@ -341,7 +357,9 @@ public class RentActivity extends AppCompatActivity {
                     double price_t = Double.parseDouble(total_price.replace("$", ""));
                     mDatabase.child("payment").child(mFirebaseUser.getUid()).child("To Parkhere").child(today).setValue(price_t);
 
-
+                    if(wish_check==1){
+                        mDatabase.child("users").child(mFirebaseUser.getUid()).child("wishlist").child(fd.getIdentifier()).setValue(null);
+                    }
                     Intent intent = new Intent(RentActivity.this, MainActivity.class);//change to UserActivity.class
                     startActivity(intent);
 
@@ -384,6 +402,7 @@ public class RentActivity extends AppCompatActivity {
         //hostPublic.setText(name);
         ratingBar.setRating(fd.calculateRate());
         address.setText(fd.getAddress());
+        if(wish_check==0){
         String start1 = start.substring(0,start.length()-2);
         String end1 = end.substring(0,end.length()-2);
         System.out.println(start1);
@@ -402,7 +421,8 @@ public class RentActivity extends AppCompatActivity {
 
         price.setText("$" + Double.toString(fd.getPrice() * (diffHours+1)));
         String time_frame = start + " to " + end;
-        time.setText(time_frame);
+        time.setText(time_frame);}
+
         String filter_spot = "";
         if (fd.getFilter() != null) {
             for (int i = 0; i < fd.getFilter().size(); i++) {
@@ -456,6 +476,126 @@ public class RentActivity extends AppCompatActivity {
         }
     }
 
+    private void popup(){
+        LayoutInflater li = LayoutInflater.from(this);
+        View promptsView = li.inflate(R.layout.custom, null);
+
+        AlertDialog.Builder alertDialogBuilder  = new AlertDialog.Builder(
+                this);
+        alertDialogBuilder.setView(promptsView);
+
+
+
+
+        final TextView  rentedTime_period;
+        final EditText startTime, endTime, startDate, endDate;
+        final Context context=promptsView.getContext();
+
+        startTime = (EditText) promptsView.findViewById(R.id.startTimeEditText);
+        endTime = (EditText) promptsView.findViewById(R.id.endTimeEditText);
+        startDate = (EditText) promptsView.findViewById(R.id.startDateEditText);
+        endDate = (EditText) promptsView.findViewById(R.id.endDateEditText);
+        System.out.println((startTime==null)+"jhklkjghkjl");
+        /*new DatePicker(RentActivity.this, R.id.startDateEditText);
+        new DatePicker(RentActivity.this, R.id.endDateEditText);
+        new TimePicker(RentActivity.this, R.id.startTimeEditText);
+        new TimePicker(RentActivity.this, R.id.endTimeEditText);*/
+
+        rentedTime_period=(TextView) promptsView.findViewById(R.id.rentedtime_period);
+
+        String all="";
+        for (HashMap.Entry<String, ArrayList<String>> entry : fd.getRentedTime().entrySet()) {
+            ArrayList<String> value = entry.getValue();
+            String start=value.get(0);
+            String end=value.get(0);
+            String total=start+" to "+end;
+            all=all+total+", ";
+        }
+        rentedTime_period.setText(all);
+
+        alertDialogBuilder
+                .setCancelable(false)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                String starttime = startTime.getText().toString().trim();
+                                String endtime = endTime.getText().toString().trim();
+                                String startdate = startDate.getText().toString().trim();
+                                String enddate = endDate.getText().toString().trim();
+                                if(!validateFields(starttime, endtime, startdate,enddate)){
+                                    rent.setEnabled(false);
+                                    AlertDialog alertDialog = new AlertDialog.Builder(RentActivity.this).create();
+                                    alertDialog.setTitle("Wait!");
+                                    alertDialog.setMessage("Please make sure your date/time is not earlier than the current date/time");
+                                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    alertDialog.show();
+
+                                }else{
+                                    if(!compareTime(starttime, endtime, startdate,enddate)){
+                                        rent.setEnabled(false);
+                                        AlertDialog alertDialog = new AlertDialog.Builder(RentActivity.this).create();
+                                        alertDialog.setTitle("Wait!");
+                                        alertDialog.setMessage("Please make sure the time you entered dosen't conflict with the rented ones");
+                                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                        alertDialog.show();
+
+                                    }else{
+                                        String start_w=startdate+" "+starttime;
+                                        String end_w=enddate+" "+endtime;
+                                        String start1 = start_w.substring(0,start_w.length()-2);
+                                        String end1 = end_w.substring(0,end_w.length()-2);
+                                        System.out.println(start1);
+                                        SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                                        Date time1 = null;
+                                        Date time2 = null;
+                                        try {
+                                            time1 = df.parse(start1+":00");
+                                            time2 = df.parse(end1+":00");
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
+                                        long diff = time2.getTime() - time1.getTime();
+                                        long diffHours = diff / (60 * 60 * 1000);
+                                        System.out.println(fd.getPrice() + " " + diffHours);
+
+                                        price.setText("$" + Double.toString(fd.getPrice() * (diffHours+1)));
+                                        String time_frame = start_w + " to " + end_w;
+                                        time.setText(time_frame);
+                                    }
+
+                                }
+
+
+
+
+                                dialog.dismiss();
+
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                dialog.cancel();
+                                rent.setEnabled(false);
+                            }
+                        });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+
+    }
+
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -471,6 +611,85 @@ public class RentActivity extends AppCompatActivity {
                 .setObject(object)
                 .setActionStatus(Action.STATUS_TYPE_COMPLETED)
                 .build();
+    }
+
+    private boolean validateFields(String starttime, String endtime, String startdate, String enddate){
+        boolean checkdate=true;
+
+        if (starttime == null || endtime == null || startdate==null || enddate==null){
+
+            return false;
+        }
+
+
+        try{
+
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+            String start_s=startdate+" "+starttime;
+            String end_s=enddate+" "+endtime;
+            Date time1 = df.parse(start_s.substring(0,start_s.length()-2)+":00");
+            Date time2 = df.parse(end_s.substring(0,end_s.length()-2)+":00");
+            long diff = time2.getTime() - time1.getTime();
+
+            if(diff>=/*3600000*/0){
+                checkdate=true;
+
+            }else{
+                checkdate=false;
+                return checkdate;
+            }
+
+            String today=getToday(df);
+            Date d = df.parse(today);
+            if(time1.getTime() > d.getTime()){
+                checkdate=true;
+            }else{
+                checkdate=false;
+                return checkdate;
+            }
+
+
+        }catch(ParseException ex){
+            ex.printStackTrace();
+        }
+
+        return checkdate;
+
+    }
+
+    private boolean compareTime(String starttime, String endtime, String startdate, String enddate){
+        boolean compare=true;
+
+
+        try{
+
+            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+            String start_s=startdate+" "+starttime;
+            String end_s=enddate+" "+endtime;
+            Date time1 = df.parse(start_s.substring(0,start_s.length()-2)+":00");
+            Date time2 = df.parse(end_s.substring(0,end_s.length()-2)+":00");
+            if(fd.getRentedTime().size()!=0) {
+                for (HashMap.Entry<String, ArrayList<String>> entry : fd.getRentedTime().entrySet()) {
+                    ArrayList<String> value = entry.getValue();
+                    String start=value.get(0);
+                    String end=value.get(0);
+                    Date time_s = df.parse(start.substring(0,start.length()-2)+":00");
+                    Date time_e = df.parse(end.substring(0,end.length()-2)+":00");
+
+                    if(time1.getTime() >= time_s.getTime() && time1.getTime() < time_e.getTime()){
+                        compare=false;
+                    }
+                    if(time2.getTime() >= time_s.getTime() && time2.getTime() < time_e.getTime()){
+                        compare=false;
+                    }
+                }
+            }
+
+
+        }catch(ParseException ex){
+            ex.printStackTrace();
+        }
+        return compare;
     }
 
     @Override

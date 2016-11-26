@@ -38,6 +38,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
 
     private Context mContext;
     Boolean pay = false;
+    boolean wish=false;
 
     public MyRecyclerAdapter(Context context, String hi) {
         if(hi.equals("rent")){
@@ -48,6 +49,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         }
         if(hi.equals("wish")){
             this.feedItemList = ListingActivity.wishList;
+            wish=true;
         }
         if(hi.equals("results")){
             pay = true;
@@ -138,7 +140,13 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
                 intent.putExtra("start", start);
                 intent.putExtra("end", end);
                 current_view.getContext().startActivity(intent);
-            }else{
+            }else if(wish){
+                Intent intent = new Intent(current_view.getContext(), RentActivity.class);
+                intent.putExtra("ItemPosition", position);
+                intent.putExtra("wish", 1);
+                current_view.getContext().startActivity(intent);
+            }
+            else{
                 Intent intent = new Intent(current_view.getContext(), DetailedViewActivity.class);
                 intent.putExtra("ItemPosition", position);
                 current_view.getContext().startActivity(intent);
@@ -153,35 +161,33 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<FeedListRowHolder> {
         int code=0;
         int range=max_booking-min_booking;
         if(range==0){
-            color="#330000";
+            color="#000000";
             return color;
         }
         else{
-            double split_range=range/6.0;
+            double split_range=range/5.0;
             int double_min=booking-min_booking;
             double temp=double_min/split_range;
             code=(int)Math.round(temp);
             if(code==0){
-                color="#FF6666";
+                color="#A0A0A0";
             }
             if(code==1){
-                color="#FF3333";
+                color="#808080";
             }
             if(code==2){
-                color="#FF0000";
+                color="#606060";
             }
             if(code==3){
-                color="#CC0000";
+                color="#404040";
             }
             if(code==4){
-                color="#990000";
+                color="#202020";
             }
             if(code==5){
-                color="#660000";
+                color="#000000";
             }
-            if(code==6){
-                color="#330000";
-            }
+
             return color;
         }
     }

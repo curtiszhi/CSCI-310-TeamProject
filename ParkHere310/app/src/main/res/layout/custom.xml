@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView_post"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+<RelativeLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please enter your time frame!"
+        android:id="@+id/time"
+        android:paddingTop="15dp"
+        android:paddingLeft="55dp"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/top"
+        android:layout_below="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/time"
+            android:id="@+id/startDateEditText"
+            android:hint="Start Date:mm-dd-yy"
+            android:background="@android:drawable/editbox_background_normal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:layout_below="@+id/time"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/toText"
+            android:paddingTop="10dp"
+            android:textSize="20dp"
+
+            android:text="to" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/time"
+            android:id="@+id/endDateEditText"
+            android:hint="End Date:mm-dd-yy"
+
+            android:background="@android:drawable/editbox_background_normal"/>
+
+
+    </LinearLayout >
+
+    <LinearLayout
+
+        android:orientation="horizontal"
+        android:layout_below="@+id/top"
+        android:id="@+id/bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/startTimeEditText"
+            android:hint="StartTime:hh:mmAM"
+            android:background="@android:drawable/editbox_background_normal"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="10dp"
+            android:textSize="20dp"
+
+            android:text="to" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:id="@+id/endTimeEditText"
+            android:hint="EndTime:hh:mm:AM"
+            android:background="@android:drawable/editbox_background_normal"/>
+
+
+    </LinearLayout >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/bottom"
+        android:layout_height="wrap_content"
+        android:text="the already rented time period!"
+        android:id="@+id/rentedtime"
+        android:paddingLeft="55dp"
+        android:textSize="20dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/rentedtime"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/rentedtime_period"
+        android:paddingTop="15dp"
+        android:textSize="15dp" />
+
+
+
+</RelativeLayout >
+</ScrollView>

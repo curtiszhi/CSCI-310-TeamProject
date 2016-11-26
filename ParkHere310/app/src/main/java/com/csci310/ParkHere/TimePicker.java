@@ -33,6 +33,8 @@ public class TimePicker implements View.OnClickListener, TimePickerDialog.OnTime
         this.timeEditText.setOnClickListener(this);
         this._context = context;
     }
+
+
     @Override
     public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
         this.hour = hourOfDay;
