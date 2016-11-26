@@ -183,10 +183,10 @@ public class ActionActivity extends AppCompatActivity {
                                             System.out.println(Time_list.size()+"   rentedTime.size");
                                             Time_list = (HashMap<String, ArrayList<String>>) dataSnapshot.getValue();
                                             String endTime_c = "";
-                                            for (HashMap.Entry<String, ArrayList<String>> entry : Time_list.entrySet()) {
-                                                ArrayList<String> value = (ArrayList<String>) entry.getValue();
-                                                endTime_c = value.get(1);
-                                            }
+
+                                            ArrayList<String> value = Time_list.get(mFirebaseUser_universal.getUid());
+                                            endTime_c = value.get(1);
+
                                             System.out.println(endTime_c+"   endTime");
                                             java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                                             String today = getToday(df);

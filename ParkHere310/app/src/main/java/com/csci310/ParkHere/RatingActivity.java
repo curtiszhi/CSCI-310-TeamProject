@@ -385,7 +385,7 @@ public class RatingActivity extends AppCompatActivity {
         }
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(spot_Identifier).setValue("rated");
         mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("activity").setValue(true);
-        mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rentedTime").setValue(null);
+        mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rentedTime").child(mFirebaseUser.getUid()).setValue(null);
 
 
         java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
