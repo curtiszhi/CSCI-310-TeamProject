@@ -77,6 +77,8 @@ public class AddressOperation extends AsyncTask<String, Void, String>
         {
             URL url = new URL("https://maps.googleapis.com/maps/api/geocode/json?address=" + address + "&key=" + API_KEY);
             URLConnection urlConnection = url.openConnection();
+            urlConnection.setConnectTimeout(5000);
+            urlConnection.setReadTimeout(5000);
             String line = null;
             BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
             while ((line = br.readLine()) != null)
