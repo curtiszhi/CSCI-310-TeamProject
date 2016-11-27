@@ -44,6 +44,7 @@ public class UserActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.print("gets into user activity");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         setTitle("My Profile");

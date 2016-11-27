@@ -159,7 +159,7 @@ public class ActionActivity extends AppCompatActivity {
         DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser_universal.getUid()).child("renting");
         spot_rent=new HashMap<String,String>();
 
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -176,7 +176,7 @@ public class ActionActivity extends AppCompatActivity {
                                 DatabaseReference ref1 = mDatabase.child("parking-spots-hosting").child(spot_name).child("rentedTime");
                                 temp_spot_identifier = spot_name;
                                 Time_list = new HashMap<String, ArrayList<String>>();
-                                ref1.addValueEventListener(new ValueEventListener() {
+                                ref1.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -617,9 +617,9 @@ public class ActionActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
     }
-    /*@Override
+    @Override
     protected void onResume() {
            super.onResume();
                 checkRate();
-    }*/
+    }
 }
