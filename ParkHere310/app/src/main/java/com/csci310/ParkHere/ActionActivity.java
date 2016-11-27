@@ -118,6 +118,7 @@ public class ActionActivity extends AppCompatActivity {
         search = (Button) findViewById(R.id.searchButton);
 
 
+
         checkRate();
 
 
@@ -156,8 +157,8 @@ public class ActionActivity extends AppCompatActivity {
     }
     private void checkRate() {
         DatabaseReference ref=mDatabase.child("users").child(mFirebaseUser_universal.getUid()).child("renting");
-
         spot_rent=new HashMap<String,String>();
+
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -175,40 +176,41 @@ public class ActionActivity extends AppCompatActivity {
                                 DatabaseReference ref1 = mDatabase.child("parking-spots-hosting").child(spot_name).child("rentedTime");
                                 temp_spot_identifier = spot_name;
                                 Time_list = new HashMap<String, ArrayList<String>>();
-
                                 ref1.addValueEventListener(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                        if (dataSnapshot.exists()) {
-                                            System.out.println(Time_list.size()+"   rentedTime.size");
-                                            Time_list = (HashMap<String, ArrayList<String>>) dataSnapshot.getValue();
-                                            String endTime_c = "";
 
-                                            ArrayList<String> value = Time_list.get(mFirebaseUser_universal.getUid());
-                                            endTime_c = value.get(1);
+                                            if (dataSnapshot.exists()) {
+                                                Time_list = (HashMap<String, ArrayList<String>>) dataSnapshot.getValue();
+                                                System.out.println(Time_list.size() + "   rentedTime.size");
+                                                String endTime_c = "";
 
-                                            System.out.println(endTime_c+"   endTime");
-                                            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-                                            String today = getToday(df);
-                                            Date time1 = null;
-                                            Date d = null;
-                                            try {
-                                                time1 = df.parse(endTime_c.substring(0, endTime_c.length() - 2) + ":00");
-                                                System.out.println(endTime_c.substring(0, endTime_c.length() - 2) + ":00"+"   format endTime");
-                                                d = df.parse(today);
-                                            } catch (ParseException e) {
-                                                e.printStackTrace();
-                                            }
-                                            if (time1.getTime() < d.getTime()) {
-                                                System.out.println("smaller");
-                                                rate_list=temp_spot_identifier;
-                                                check_size=check_size+1;
-                                                if(check_size==1) {
-                                                    goRate();
+                                                ArrayList<String> value = Time_list.get(mFirebaseUser_universal.getUid());
+                                                endTime_c = value.get(1);
+
+                                                System.out.println(endTime_c + "   endTime");
+                                                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                                                String today = getToday(df);
+                                                Date time1 = null;
+                                                Date d = null;
+                                                try {
+                                                    time1 = df.parse(endTime_c.substring(0, endTime_c.length() - 2) + ":00");
+                                                    System.out.println(endTime_c.substring(0, endTime_c.length() - 2) + ":00" + "   format endTime");
+                                                    d = df.parse(today);
+                                                } catch (ParseException e) {
+                                                    e.printStackTrace();
                                                 }
+                                                if (time1.getTime() < d.getTime()) {
+                                                    System.out.println("smaller");
+                                                    rate_list = temp_spot_identifier;
+                                                    check_size = check_size + 1;
+                                                    if (check_size == 1) {
+                                                        goRate();
+                                                    }
 
+                                                }
                                             }
-                                        }
+
                                     }
 
                                     @Override
@@ -495,7 +497,7 @@ public class ActionActivity extends AppCompatActivity {
     private boolean validateFields(String starttime, String endtime, String startdate, String enddate, String address){
         boolean checkdate=true;
 
-        if (address == null || isEmpty(address)){
+        if (address == null || isEmpty(address) ||starttime == null ||endtime == null ||startdate == null ||enddate == null ){
 
             return false;
         }
@@ -615,9 +617,9 @@ public class ActionActivity extends AppCompatActivity {
     public void onBackPressed() {
         // Do Here what ever you want do on back press;
     }
-    @Override
+    /*@Override
     protected void onResume() {
            super.onResume();
                 checkRate();
-    }
+    }*/
 }

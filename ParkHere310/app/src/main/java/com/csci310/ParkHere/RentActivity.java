@@ -309,9 +309,14 @@ public class RentActivity extends AppCompatActivity {
                                         ref1.setValue(rentList);
                                     }
                                 }
+
+
                             }else{
                                 ref1.setValue(rentList);
+
                             }
+
+
                         }
 
                         @Override
@@ -360,7 +365,10 @@ public class RentActivity extends AppCompatActivity {
                     if(wish_check==1){
                         mDatabase.child("users").child(mFirebaseUser.getUid()).child("wishlist").child(fd.getIdentifier()).setValue(null);
                     }
-                    Intent intent = new Intent(RentActivity.this, MainActivity.class);//change to UserActivity.class
+
+
+
+                    Intent intent = new Intent(RentActivity.this, ActionActivity.class);//change to ActionActivity.class
                     startActivity(intent);
 
                 } catch (JSONException e) {

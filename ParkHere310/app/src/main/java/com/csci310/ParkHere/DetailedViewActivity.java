@@ -3,6 +3,7 @@ package com.csci310.ParkHere;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -59,13 +60,14 @@ public class DetailedViewActivity extends AppCompatActivity{
     private RatingBar ratingBar;
     private TextView address;
     private TextView price;
-    private TextView time;
+    private LinearLayout time;
     private TextView filters;
     private TextView description;
     private TextView cancel;
     private ImageView image_view;
     private TextView image_label;
     private LinearLayout review_layout;
+    private Spinner sp;
 
     private int count;
     private int index1=0;
@@ -80,10 +82,25 @@ public class DetailedViewActivity extends AppCompatActivity{
     private String specific_renterID=null;
     private ArrayList<String> renterTime;
     private String name;
+
+    private ArrayList<String> all_renter;
+    private ArrayList<ArrayList<String>> all_rented_time;
+    private ArrayList<String> all_renter_name;
+    private ArrayList<TextView> rent_time;
+    private int count_name=0;
+    private  ArrayList<String> spinnerArray = new ArrayList<String>();
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
+        all_renter=new ArrayList<String>();
+        all_rented_time=new ArrayList<ArrayList<String>>();
+        renterTime=new ArrayList<String>();
+        all_renter_name=new ArrayList<String>();
+        rent_time=new ArrayList<TextView>();
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser_universal = mFirebaseAuth.getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -97,11 +114,19 @@ public class DetailedViewActivity extends AppCompatActivity{
 
         image_view=(ImageView) findViewById(R.id.image);
         image_label=(TextView) findViewById(R.id.image_label);
+        sp = (Spinner) findViewById(R.id.spinner1);
+
+        if(mFirebaseUser_universal.getUid().equals(fd.getHost())){
+            System.out.println("yes, hosttttttt");
+            addSpinner();
+        }else{
+            sp.setVisibility(View.GONE);
+        }
         viewButton = (Button) findViewById(R.id.viewButton);
         ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         address= (TextView) findViewById(R.id.address);
         price= (TextView) findViewById(R.id.price);
-        time= (TextView) findViewById(R.id.time);
+        time= (LinearLayout) findViewById(R.id.Time);
         filters= (TextView) findViewById(R.id.filters);
         description= (TextView) findViewById(R.id.description);
         cancel= (TextView) findViewById(R.id.cancel);
@@ -110,12 +135,36 @@ public class DetailedViewActivity extends AppCompatActivity{
         review_layout = (LinearLayout) findViewById(R.id.review);
 
         count=0;
-
+        if(!mFirebaseUser_universal.getUid().equals(fd.getHost())){
         setUp();
         downloadPhoto();
-        display();
+        display();}
 
+        sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(all_rented_time.size()!=0){
+                    final int temp_i=i;
+                    renterTime=all_rented_time.get(i);
+                    specific_renterID=all_renter.get(i);
+                    viewButton.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            viewButton.setText("Renter:" + all_renter_name.get(temp_i));
+                        }
+                    });
+                    for(int j=0;j<rent_time.size();j++){
+                        rent_time.get(j).setTypeface(null, Typeface.NORMAL);
+                        if(j==i){
+                           rent_time.get(j).setTypeface(null, Typeface.BOLD);
+                        }
+                    }
+                }
+            }
 
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
 
 
         image_view.setOnTouchListener(new OnSwipeTouchListener(DetailedViewActivity.this) {
@@ -172,7 +221,7 @@ public class DetailedViewActivity extends AppCompatActivity{
                     Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
                     intent.putExtra("ID", fd.getHost());
                     startActivity(intent);
-                }else if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){
+                }else if((specific_renterID==null)&&!fd.getHost().equals(mFirebaseUser_universal.getUid())){
                     Intent intent = new Intent(DetailedViewActivity.this, publicActivity.class);
                     intent.putExtra("ID", fd.getHost());
                     startActivity(intent);
@@ -188,32 +237,23 @@ public class DetailedViewActivity extends AppCompatActivity{
                 if(mFirebaseUser_universal.getUid().equals(fd.getHost())) {
                     mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).setValue(null);
                     mDatabase.child("users").child(fd.getHost()).child("hosting").child(fd.getIdentifier()).setValue(null);
-                    if(specific_renterID!=null) {
+                    if(all_renter.size()!=0) {
+                        for(int i=0;i<all_renter.size();i++) {
+                            mDatabase.child("users").child(all_renter.get(i)).child("renting").child(fd.getIdentifier()).setValue(null);
 
-                        mDatabase.child("users").child(specific_renterID).child("renting").child(fd.getIdentifier()).setValue(null);
+                            double price_total = calculateTotalPrice(i);
+                            if (price_total != 0.0) {
 
-                       double price_total= calculateTotalPrice();
-                        if(price_total!=0.0){
-                            /*Intent i = new Intent(Intent.ACTION_SEND);
-                            i.setType("message/rfc822");
-                            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
-                            i.putExtra(Intent.EXTRA_SUBJECT, "Refund to the renter");
-                            i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to cancel my spot and give the renter whole refund "+price_total);
-                            try {
-                                startActivity(Intent.createChooser(i, "Send mail..."));
-                            } catch (android.content.ActivityNotFoundException ex) {
-                                Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                            }*/
-                            java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
-                            String today = getToday(df);
-                            mDatabase.child("payment").child(specific_renterID).child("Get Refund_Host_Cancel").child(today).setValue(price_total);
+                                java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+                                String today = getToday(df);
+                                mDatabase.child("payment").child(all_renter.get(i)).child("Get Refund_Host_Cancel").child(today).setValue(price_total);
 
 
-                            Intent intent = new Intent(DetailedViewActivity.this, ActionActivity.class);//change to UserActivity.class
-                            startActivity(intent);
+                                Intent intent = new Intent(DetailedViewActivity.this, ActionActivity.class);//change to UserActivity.class
+                                startActivity(intent);
 
+                            }
                         }
-
                     }
                 }
                 System.out.println(specific_renterID+ "      llllllll");
@@ -226,21 +266,21 @@ public class DetailedViewActivity extends AppCompatActivity{
 
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("activity").setValue(true);
                         mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime").child(specific_renterID).setValue(null);
-                        double price_total= calculateTotalPrice();
+                        double price_total= calculate_TotalPrice();
                         double total_price=price_total;
-                        String endTime = renterTime.get(1);
+                        String startTime = renterTime.get(0);
                         System.out.println(total_price+"   xxxxxxxxx");
                         java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                         String today = getToday(df);
-                        Date end=null;
+                        Date start=null;
                         Date d = null;
                         try {
                             d = df.parse(today);
-                            end = df.parse(endTime.substring(0,endTime.length()-2)+":00");
+                            start = df.parse(startTime.substring(0,startTime.length()-2)+":00");
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        long diff= end.getTime()-d.getTime();
+                        long diff= start.getTime()-d.getTime();
                         System.out.println(fd.getCancel()+"     uuuuuuuuuuuuuuuuu");
                         if(fd.getCancel().equals("No refund")){
                             price_total=0.0;
@@ -261,18 +301,6 @@ public class DetailedViewActivity extends AppCompatActivity{
                             }
                         }
                         if(price_total!=0.0){
-                           /* System.out.print("send emaillllllllllll");
-                            Intent i = new Intent(Intent.ACTION_SEND);
-                            i.setType("message/rfc822");
-                            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
-                            i.putExtra(Intent.EXTRA_SUBJECT, "Refund Request");
-                            i.putExtra(Intent.EXTRA_TEXT   , "Hi! I would like to request a refund. I agree with the cancellation policy of: " +
-                                    fd.getCancel()+"the total refund is: "+price_total+"and the money goes to the host is: "+total_price);
-                            try {
-                                startActivity(Intent.createChooser(i, "Send mail..."));
-                            } catch (android.content.ActivityNotFoundException ex) {
-                                Toast.makeText(DetailedViewActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                            }*/
 
                             java.text.SimpleDateFormat df1 = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                             String today1 = getToday(df);
@@ -289,11 +317,59 @@ public class DetailedViewActivity extends AppCompatActivity{
             }
         });
     }
-    private double calculateTotalPrice(){
+
+    private void addSpinner(){
+
+        for (HashMap.Entry<String, ArrayList<String>> innerEntry : fd.getRentedTime().entrySet()) {
+            String key = innerEntry.getKey();
+            ArrayList<String> value = innerEntry.getValue();
+            all_renter.add(key);
+            all_rented_time.add(value);
+        }
+
+
+        System.out.println(fd.getRentedTime().size()+"  sizeeeeeee");
+        System.out.println(all_renter.size()+"  1sizeeeeeee");
+        System.out.println(all_rented_time.size()+"  2sizeeeeeee");
+        //get all names
+        if(all_renter.size()!=0){
+            for(int i=0;i<all_renter.size();i++){
+                System.out.println(all_renter.get(i)+"  idddddddd");
+
+                DatabaseReference database = mDatabase.child("users").child(all_renter.get(i)).child("userName");
+                database.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        count_name++;
+                        String rent_name = (String) dataSnapshot.getValue();
+                        spinnerArray.add(rent_name);
+                        all_renter_name.add(rent_name);
+                        if(count_name==all_renter.size()){
+                            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(DetailedViewActivity.this, android.R.layout.simple_spinner_dropdown_item, spinnerArray);
+                            sp.setAdapter(spinnerArrayAdapter);
+                            setUp();
+                            downloadPhoto();
+                            display();
+                        }
+                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+            }
+        }
+
+
+
+    }
+
+    private double calculateTotalPrice(int index){
         double price_t=0.0;
-        if(renterTime.size() != 0){
-        String start2 = renterTime.get(0).substring(0,renterTime.get(0).length()-2);
-        String end2 = renterTime.get(1).substring(0,renterTime.get(1).length()-2);
+        ArrayList<String> temp_renterTime=all_rented_time.get(index);
+        if(temp_renterTime.size() != 0){
+        String start2 = temp_renterTime.get(0).substring(0,temp_renterTime.get(0).length()-2);
+        String end2 = temp_renterTime.get(1).substring(0,temp_renterTime.get(1).length()-2);
         SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
         Date time1 = null;
         Date time2 = null;
@@ -310,24 +386,53 @@ public class DetailedViewActivity extends AppCompatActivity{
         System.out.print(price_t+"    total priceeeeeeeeeeeee");
         return price_t;
     }
+
+    private double calculate_TotalPrice(){
+        double price_t=0.0;
+        if(renterTime.size() != 0){
+            String start2 = renterTime.get(0).substring(0,renterTime.get(0).length()-2);
+            String end2 = renterTime.get(1).substring(0,renterTime.get(1).length()-2);
+            SimpleDateFormat df = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
+            Date time1 = null;
+            Date time2 = null;
+            try {
+                time1 = df.parse(start2+":00");
+                time2 = df.parse(end2+":00");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            long diff = time2.getTime() - time1.getTime();
+            long diffHours = diff / (60 * 60 * 1000);
+            price_t=(diffHours+1)*fd.getPrice();
+        }
+        System.out.print(price_t+"    total priceeeeeeeeeeeee");
+        return price_t;
+    }
+
     public String getToday(java.text.SimpleDateFormat  dformat){
         Date date = new Date();
         return dformat.format(date);
     }
-    private void setUp(){
-        renterTime=new ArrayList<String>();
-        System.out.println("11111111111 "+fd.getRentedTime().size());
-        if(fd.getRentedTime().size()!=0){
-        for (HashMap.Entry<String, ArrayList<String>> innerEntry : fd.getRentedTime().entrySet()) {
-            String key = innerEntry.getKey();
-            ArrayList<String> value = innerEntry.getValue();
-            renterTime=value;
-            specific_renterID=key;
-            System.out.println(key+"11111111111");
-        }}
 
+    private void setUp(){
+        if(mFirebaseUser_universal.getUid().equals(fd.getHost())){//is host
+            if(all_rented_time.size()!=0){//if there are renters
+                renterTime=all_rented_time.get(0);
+                specific_renterID=all_renter.get(0);}
+            //if not ID=null, renterTime size=0
+        }else {//not host
+
+            //current renting
+            if(fd.getRentedTime().containsKey(mFirebaseUser_universal.getUid()))
+            {
+                specific_renterID=mFirebaseUser_universal.getUid();
+                renterTime=fd.getRentedTime().get(specific_renterID);
+            }//if not current renting, renting specific renter Id=null, renterTime size=0
+        }
+
+
+        //if current renter
         if((specific_renterID!=null)&&(specific_renterID.equals(mFirebaseUser_universal.getUid()))){
-            System.out.println(specific_renterID+"222222");
             DatabaseReference database = mDatabase.child("users").child(fd.getHost()).child("userName");
             database.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -347,32 +452,21 @@ public class DetailedViewActivity extends AppCompatActivity{
                         viewButton.setText("Host:"+name);
                     }
                 });
-            }
-        else if(fd.getHost().equals(mFirebaseUser_universal.getUid())){
-            if(specific_renterID!=null) {
-                System.out.println(specific_renterID+"4444444");
-                DatabaseReference database = mDatabase.child("users").child(specific_renterID).child("userName");
-                database.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        name = (String) dataSnapshot.getValue();
-                        System.out.println(name+"5555555");
-                    }
+        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        System.out.println("The read failed: " + databaseError.getCode());
-                    }
-                });
+        // if host
+        else if(fd.getHost().equals(mFirebaseUser_universal.getUid())){
                 viewButton.post(new Runnable() {
                     @Override
                     public void run() {
-                        viewButton.setText("Renter:" + name);
+                        if(all_renter_name.size()!=0){
+                        viewButton.setText("Renter:" + all_renter_name.get(0));}
                     }
                 });
-            }
-            }
-        else if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){
+        }
+
+        //old renter. not current renting
+        else if(specific_renterID==null && !fd.getHost().equals(mFirebaseUser_universal.getUid())){
             DatabaseReference database = mDatabase.child("users").child(fd.getHost()).child("userName");
             database.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -394,37 +488,28 @@ public class DetailedViewActivity extends AppCompatActivity{
             });
         }
 
-        if (renterTime.size() != 0) {
-            if(specific_renterID.equals(mFirebaseUser_universal.getUid())) {
+        //cancel button
+        //if host always can cancel
+        if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){ //if not host
+            if(specific_renterID!=null){//current renting
                 String startTime = renterTime.get(0);
                 java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
                 String today = getToday(df);
-                Date end;
+                Date start;
                 Date d = null;
                 try {
                     d = df.parse(today);
-                    end = df.parse(startTime.substring(0, startTime.length() - 2) + ":00");
-                    if (d.getTime() > end.getTime()) {
-                        if (specific_renterID != null && (specific_renterID.equals(mFirebaseUser_universal.getUid()))) {
+                    start = df.parse(startTime.substring(0, startTime.length() - 2) + ":00");
+                    if (d.getTime() > start.getTime()) {
                             cancelButton.setEnabled(false);
-                        }
                     }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-            }else{
-                if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){
-                cancelButton.setEnabled(false);
-                cancelButton.setText("This is an old listing");}
-            }
-
-
-        }else{
-            if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){
+            }else{//not current renting, specificID=null
                 cancelButton.setEnabled(false);
                 cancelButton.setText("This is an old listing");
             }
-
         }
 
 
@@ -449,16 +534,36 @@ public class DetailedViewActivity extends AppCompatActivity{
             System.out.println("sammmmmmmmmeeeeeee");
             editButton.setVisibility(Button.GONE);
         }
-        time.post(new Runnable(){
-            @Override
-            public void run(){
-                if(renterTime.size()!=0){
-                time.setText(renterTime.get(0)+" to "+renterTime.get(1));}
-                else{
-                    time.setText(fd.getStartDates()+" "+fd.getStartTime()+" to "+fd.getEndDates()+" "+fd.getEndTime());
-                }
+
+
+
+        if(!fd.getHost().equals(mFirebaseUser_universal.getUid())){ //if not host
+            if(specific_renterID!=null){//current renting
+                TextView time_text = new TextView(this);
+                time_text.setText(renterTime.get(0)+" to "+renterTime.get(1));
+                time_text.setTextSize(20);
+                time_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
+                ((LinearLayout) time).addView(time_text);
+            }else{//not current renting, old renter, specificID=null
+                TextView time_text = new TextView(this);
+                time_text.setText(fd.getStartDates()+" "+fd.getStartTime()+" to "+fd.getEndDates()+" "+fd.getEndTime());
+                time_text.setTextSize(20);
+                time_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
+                ((LinearLayout) time).addView(time_text);
             }
-        });
+        }else{//if host
+            for(int i=0;i<all_rented_time.size();i++){
+                TextView time_text = new TextView(this);
+                time_text.setText(all_rented_time.get(i).get(0)+" to "+all_rented_time.get(i).get(1));
+                time_text.setTextSize(20);
+                time_text.setLayoutParams(new AppBarLayout.LayoutParams(AppBarLayout.LayoutParams.MATCH_PARENT, AppBarLayout.LayoutParams.WRAP_CONTENT));
+                ((LinearLayout) time).addView(time_text);
+                rent_time.add(time_text);
+            }
+            rent_time.get(0).setTypeface(null, Typeface.BOLD);
+
+        }
+
 
         ratingBar.setRating(fd.calculateRate());
         for (int i = 0; i < fd.getReview().size(); i++) {
