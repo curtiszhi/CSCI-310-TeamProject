@@ -278,8 +278,8 @@ public class ActionActivity extends AppCompatActivity {
             {
                 for (DataSnapshot child : dataSnapshot.getChildren())
                 {
+                    System.out.println("Spot: " + child.getKey());
                     if (child.child("activity").getValue().toString().equals("true") &&
-//                        child.child("rentedTime").getValue() == null &&
                             isValidDT(startdate, enddate, child.child("startDates").getValue().toString(), child.child("endDates").getValue().toString(),
                                     starttime, endtime, child.child("startTime").getValue().toString(), child.child("endTime").getValue().toString()) &&
                             isValidFilters(requestCompact, requestCover, handicapped, child.child("filter")))
@@ -343,6 +343,8 @@ public class ActionActivity extends AppCompatActivity {
 
     public static double distance(double lat1, double lon1, double lat2, double lon2)
     {
+        if (lat1 == lat2 && lon1 == lon2)
+            return 0;
         double theta = lon1 - lon2;
         double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
