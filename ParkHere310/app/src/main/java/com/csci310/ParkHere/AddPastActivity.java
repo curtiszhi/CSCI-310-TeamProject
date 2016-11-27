@@ -30,11 +30,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
+import static java.lang.System.currentTimeMillis;
 
 /**
  * Created by Sean Yuan on 11/23/2016.
@@ -46,7 +47,9 @@ public class AddPastActivity extends AppCompatActivity {
     private static FirebaseUser mFirebaseUser;
     static List<FeedItem> hostingActualList;
     public static ArrayList<FeedItem> hostList;
-    static MyRecyclerAdapter adapter;
+    static MySecondRecyclerAdapter adapter;
+    List<String> selected = new ArrayList<String>();
+    long startTime;
 
 
     @Override
@@ -64,25 +67,14 @@ public class AddPastActivity extends AppCompatActivity {
 
 
     public void getItemsHosting(){
-        Calendar c = Calendar.getInstance();
-        int seconds = c.get(Calendar.MILLISECOND);
-        System.out.println("Enter query past hostings: " + seconds);
-        DatabaseReference database = mDatabase.child("parking-spots-hosting");
+        startTime = currentTimeMillis();
+        DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/hosting");
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    HashMap<String, Object> user_map = (HashMap<String,Object>) dataSnapshot.getValue();
-                    HashMap<String, String> spot_names = new HashMap<String,String>();
-                    if (user_map != null) {
-                        for (HashMap.Entry<String, Object> innerEntry : user_map.entrySet()) {
-                            String key = innerEntry.getKey();
-                            spot_names.put(key, key);
-                            System.out.println(key);
-                        }
-                    }
-                    getSpot_host(spot_names);
-                }
+                    HashMap<String,String> user_map= (HashMap<String,String>)dataSnapshot.getValue();
+                    getSpot_host(user_map);}
             }
 
             @Override
@@ -95,7 +87,7 @@ public class AddPastActivity extends AppCompatActivity {
     private void getSpot_host(HashMap<String,String> spot_map){
         Vector<String> names=new Vector<String>();
         for (HashMap.Entry<String, String> entry : spot_map.entrySet()) {
-            if(entry.getKey().startsWith(mFirebaseUser.getUid())){
+            if (!names.contains(entry.getKey())) {
                 names.add(entry.getKey());
             }
         }
@@ -108,83 +100,81 @@ public class AddPastActivity extends AppCompatActivity {
 
                     if (user_map != null) {
                         FeedItem user_all = new FeedItem();
-                        for (HashMap.Entry<String, Object> innerEntry : user_map.entrySet()) {
-                            String key = innerEntry.getKey();
-                            Object value = innerEntry.getValue();
+                        String spotaddy = (String) user_map.get("address");
+                        if (!selected.contains(spotaddy)) {
+                            for (HashMap.Entry<String, Object> innerEntry : user_map.entrySet()) {
+                                String key = innerEntry.getKey();
+                                Object value = innerEntry.getValue();
+                                if (key.equals("latitude")) {
+                                    user_all.setLatitude((double) value);
+                                }
+                                if (key.equals("address")) {
+                                    user_all.setAddress((String) value);
+                                    selected.add((String) value);
+                                }
 
-                            if (key.equals("latitude")) {
-                                user_all.setLatitude((double) value);
-                                System.out.println(value);
+                                if (key.equals("longitude")) {
+                                    user_all.setLongitude((double) value);
+                                }
+                                if (key.equals("spotID")) {
+                                    user_all.setSpotID((String) value);
+                                }
+                                if (key.equals("startDates")) {
+                                    user_all.setStartDates((String) value);
+                                }
+                                if (key.equals("endDates")) {
+                                    user_all.setEndDates((String) value);
+                                }
+                                if (key.equals("startTime")) {
+                                    user_all.setStartTime((String) value);
+                                }
+                                if (key.equals("endTime")) {
+                                    user_all.setEndTime((String) value);
+                                }
+                                if (key.equals("price")) {
+                                    user_all.setPrice(Double.parseDouble((value + "")));
+                                }
+                                if (key.equals("bookings")) {
+                                    user_all.setBookings(Integer.parseInt((String) (value + "")));
+                                }
+                                if (key.equals("cancel")) {
+                                    user_all.setCancel((String) value);
+                                }
+                                if (key.equals("description")) {
+                                    user_all.setDescription((String) value);
+                                }
+                                if (key.equals("rating")) {
+                                    ArrayList<String> temp = (ArrayList<String>) value;
+                                    user_all.setRating(temp);
+                                }
+                                if (key.equals("activity")) {
+                                    user_all.setActivity((Boolean) value);
+                                }
+                                if (key.equals("filter")) {
+                                    Vector v = new Vector((ArrayList<String>) value);
+                                    user_all.setFilter(v);
+                                }
+                                if (key.equals("host")) {
+                                    user_all.setHost((String) value);
+                                }
+                                if (key.equals("photos")) {
+                                    user_all.setPhotos((ArrayList<String>) value);
+                                }
+                                if (key.equals("rentedTime")) {
+                                    user_all.setRentedTime((Map<String, ArrayList<String>>) value);
+                                }
+                                if (key.equals("identifier")) {
+                                    user_all.setIdentifier((String) value);
+                                }
+                                if (key.equals("review")) {
+                                    user_all.setReview((ArrayList<String>) value);
+                                }
+                                if (key.equals("currentRenter")) {
+                                    user_all.setCurrentRenter((String) value);
+                                }
                             }
-                            if (key.equals("address")) {
-                                user_all.setAddress((String) value);
-                            }
-
-                            if (key.equals("longitude")) {
-                                user_all.setLongitude((double) value);
-                            }
-                            if (key.equals("spotID")) {
-                                user_all.setSpotID((String) value);
-                            }
-                            if (key.equals("startDates")) {
-                                user_all.setStartDates((String) value);
-                            }
-                            if (key.equals("endDates")) {
-                                user_all.setEndDates((String) value);
-                            }
-                            if (key.equals("startTime")) {
-                                user_all.setStartTime((String) value);
-                            }
-                            if (key.equals("endTime")) {
-                                user_all.setEndTime((String) value);
-                            }
-                            if (key.equals("price")) {
-                                user_all.setPrice(Double.parseDouble( (value + "")));
-                            }
-                            if (key.equals("bookings")) {
-                                user_all.setBookings(Integer.parseInt((String) (value + "")));
-                            }
-                            if (key.equals("cancel")) {
-                                user_all.setCancel((String) value);
-                            }
-                            if (key.equals("description")) {
-                                user_all.setDescription((String) value);
-                            }
-                            if (key.equals("rating")) {
-
-                                ArrayList<String> temp=(ArrayList<String>) value;
-
-                                user_all.setRating(temp);
-
-                            }
-                            if (key.equals("activity")) {
-                                user_all.setActivity((Boolean) value);
-                            }
-                            if (key.equals("filter")) {
-                                Vector v = new Vector((ArrayList<String>) value);
-                                user_all.setFilter(v);
-                            }
-                            if (key.equals("host")) {
-                                user_all.setHost((String) value);
-                            }
-                            if (key.equals("photos")) {
-                                user_all.setPhotos((ArrayList<String>) value);
-                            }
-                            if (key.equals("rentedTime")) {
-                                user_all.setRentedTime((Map<String, ArrayList<String>>) value);
-                            }
-                            if (key.equals("identifier")) {
-                                user_all.setIdentifier((String) value);
-                            }
-                            if (key.equals("review")) {
-                                user_all.setReview((ArrayList<String>) value);
-                            }
-                            if (key.equals("currentRenter")) {
-                                user_all.setCurrentRenter((String) value);
-                            }
+                            hostList.add(user_all);
                         }
-
-                        hostList.add(user_all);
                     }
 
 
@@ -197,9 +187,8 @@ public class AddPastActivity extends AppCompatActivity {
                 }
             });
         }
-        Calendar c = Calendar.getInstance();
-        int seconds = c.get(Calendar.MILLISECOND);
-        System.out.println("Finish query past hostings: " + seconds);
+        long finalTime = currentTimeMillis() - startTime;
+        System.out.println("Total runtime: " + finalTime);
     }
 
 
@@ -286,26 +275,26 @@ public class AddPastActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(layoutManager);
-            adapter = new MyRecyclerAdapter(getActivity(), "past");
+            adapter = new MySecondRecyclerAdapter(getActivity(), "past");
             recyclerView.setAdapter(adapter);
             return root;
         }
     }
 
     public static class RecyclerViewFragmentNewHosting extends Fragment {
-            @SuppressLint("InflateParams")
-            @Override
-            public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-                View root = inflater.inflate(R.layout.chat, container, false);
-                Button newbutton = (Button) root.findViewById(R.id.newpostButton);
-                newbutton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getActivity(), AddActivity.class);
-                        startActivity(intent);
-                    }
-                });
-                return root;
-            }
+        @SuppressLint("InflateParams")
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View root = inflater.inflate(R.layout.chat, container, false);
+            Button newbutton = (Button) root.findViewById(R.id.newpostButton);
+            newbutton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), AddActivity.class);
+                    startActivity(intent);
+                }
+            });
+            return root;
+        }
     }
 }

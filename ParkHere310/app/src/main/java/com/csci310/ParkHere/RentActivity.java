@@ -313,7 +313,6 @@ public class RentActivity extends AppCompatActivity {
 
                             }else{
                                 ref1.setValue(rentList);
-
                             }
 
 
