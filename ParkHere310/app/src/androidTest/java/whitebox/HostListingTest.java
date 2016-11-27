@@ -151,8 +151,6 @@ public class HostListingTest {
                     .check(matches(withText(spot1.getCancel())));
 
 
-            onView(withId(R.id.confirmButton))
-                    .check(matches(not(isEnabled())));
             onView(withId(R.id.cancelButton))
                     .check(matches(isClickable()));
             onView(withId(R.id.editButton))

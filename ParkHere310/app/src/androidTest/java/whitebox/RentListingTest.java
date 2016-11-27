@@ -137,8 +137,6 @@ public class RentListingTest {
             onView(withId(R.id.cancel))
                     .check(matches(withText(spot.getCancel())));
 
-            onView(withId(R.id.confirmButton))
-                    .check(matches(not(isDisplayed())));
             onView(withId(R.id.cancelButton))
                     .check(matches(isEnabled()));
             onView(withId(R.id.editButton))

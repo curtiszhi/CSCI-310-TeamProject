@@ -368,7 +368,7 @@ public class RentActivity extends AppCompatActivity {
 
 
                     System.out.print("go to user activity");
-                    Intent intent = new Intent(RentActivity.this, UserActivity.class);//change to ActionActivity.class
+                    Intent intent = new Intent(RentActivity.this, ActionActivity.class);//change to ActionActivity.class
                     startActivity(intent);
 
                 } catch (JSONException e) {

@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,13 +64,25 @@ public class AddPastActivity extends AppCompatActivity {
 
 
     public void getItemsHosting(){
-        DatabaseReference database = mDatabase.child("users/"+mFirebaseUser.getUid()+"/hosting");
+        Calendar c = Calendar.getInstance();
+        int seconds = c.get(Calendar.MILLISECOND);
+        System.out.println("Enter query past hostings: " + seconds);
+        DatabaseReference database = mDatabase.child("parking-spots-hosting");
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    HashMap<String,String> user_map= (HashMap<String,String>)dataSnapshot.getValue();
-                    getSpot_host(user_map);}
+                    HashMap<String, Object> user_map = (HashMap<String,Object>) dataSnapshot.getValue();
+                    HashMap<String, String> spot_names = new HashMap<String,String>();
+                    if (user_map != null) {
+                        for (HashMap.Entry<String, Object> innerEntry : user_map.entrySet()) {
+                            String key = innerEntry.getKey();
+                            spot_names.put(key, key);
+                            System.out.println(key);
+                        }
+                    }
+                    getSpot_host(spot_names);
+                }
             }
 
             @Override
@@ -82,7 +95,9 @@ public class AddPastActivity extends AppCompatActivity {
     private void getSpot_host(HashMap<String,String> spot_map){
         Vector<String> names=new Vector<String>();
         for (HashMap.Entry<String, String> entry : spot_map.entrySet()) {
-            names.add(entry.getKey());
+            if(entry.getKey().startsWith(mFirebaseUser.getUid())){
+                names.add(entry.getKey());
+            }
         }
         for(int i=0;i<names.size();i++){
             DatabaseReference database_p = mDatabase.child("parking-spots-hosting").child(names.get(i));
@@ -96,7 +111,6 @@ public class AddPastActivity extends AppCompatActivity {
                         for (HashMap.Entry<String, Object> innerEntry : user_map.entrySet()) {
                             String key = innerEntry.getKey();
                             Object value = innerEntry.getValue();
-                            System.out.println("innerkey: " + key + "// innervalue: " + value);
 
                             if (key.equals("latitude")) {
                                 user_all.setLatitude((double) value);
@@ -169,6 +183,7 @@ public class AddPastActivity extends AppCompatActivity {
                                 user_all.setCurrentRenter((String) value);
                             }
                         }
+
                         hostList.add(user_all);
                     }
 
@@ -182,6 +197,9 @@ public class AddPastActivity extends AppCompatActivity {
                 }
             });
         }
+        Calendar c = Calendar.getInstance();
+        int seconds = c.get(Calendar.MILLISECOND);
+        System.out.println("Finish query past hostings: " + seconds);
     }
 
 
