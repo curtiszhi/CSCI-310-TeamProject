@@ -222,6 +222,8 @@ public class RentActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mDatabase.child("users").child(mFirebaseUser.getUid()).child("wishlist").child(fd.getIdentifier()).setValue(fd.getIdentifier());
+                Intent intent = new Intent(RentActivity.this, UserActivity.class);
+                startActivity(intent);
             }
         });
         hostPublic.setOnClickListener(new View.OnClickListener() {
