@@ -73,6 +73,13 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+        forgotButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, PasswordReset.class);
+                startActivity(intent);
+            }
+        });
     }
     private boolean check_empty(){
         if(emailEditText.getText().toString().trim().length()==0 || passEditText.getText().toString().trim().length()==0){
