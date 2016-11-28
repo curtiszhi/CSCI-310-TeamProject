@@ -294,7 +294,7 @@ public class RentActivity extends AppCompatActivity {
                     host_rentedlist = rentList;
                     //update spot renttime
                     ref1 = mDatabase.child("parking-spots-hosting").child(fd.getIdentifier()).child("rentedTime");
-                    ref1.addValueEventListener(new ValueEventListener() {
+                    ref1.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {

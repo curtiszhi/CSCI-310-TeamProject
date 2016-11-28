@@ -108,6 +108,7 @@ public class AddressOperation extends AsyncTask<String, Void, String>
         lat = ((JSONArray) jsonObject.get("results")).getJSONObject(0)
                 .getJSONObject("geometry").getJSONObject("location")
                 .getDouble("lat");
+        System.out.println( lng+"   la   "+lat+"   lo");
         return new double[]{lat, lng};
     }
 

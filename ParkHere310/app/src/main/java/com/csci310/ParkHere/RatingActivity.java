@@ -48,29 +48,37 @@ public class RatingActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private static FirebaseUser mFirebaseUser;
 
-    private ArrayList<String> originalSpot;
+   // private ArrayList<String> originalSpot;
     private ArrayList<String> originalHost;
-    private ArrayList<String> originalSpotComment;
+   // private ArrayList<String> originalSpotComment;
     private ArrayList<String> originalHostComment;
 
 
     private String rate_list;
     private String spot_Identifier;
 
-    private DatabaseReference ref;
+    //private DatabaseReference ref;
     private DatabaseReference ref1;
-    private DatabaseReference ref2;
+    //private DatabaseReference ref2;
     private DatabaseReference ref3;
 
-    private boolean count1=true;
+    //private boolean count1=true;
     private boolean count2=true;
-    private boolean count3=true;
+    //private boolean count3=true;
     private boolean count4=true;
 
     private double single_price=0;
     private Map<String, ArrayList<String>> rented_Time;
     private ArrayList<String> time_frame=new ArrayList<String>();
     private double total_price;
+
+
+    private int count_spots=0;
+    private int count_host_spots=0;
+    private ArrayList<String> host_all_spot;
+    private FeedItem this_spot;
+    private ArrayList<FeedItem> all_spot;
+    private ArrayList<String> all_similar_spot;
 
 
 
@@ -87,10 +95,15 @@ public class RatingActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
-        originalSpot=new ArrayList<String>();
+
+
+
         originalHost=new ArrayList<String>();
-        originalSpotComment=new ArrayList<String>();
         originalHostComment=new ArrayList<String>();
+
+        host_all_spot=new ArrayList<String>();
+        all_spot=new ArrayList<FeedItem>();
+        all_similar_spot=new ArrayList<String>();
 
         getInfo(spot_Identifier);
 
@@ -109,7 +122,7 @@ public class RatingActivity extends AppCompatActivity {
                     commentHost = commentHostText.getText().toString().trim();
                     commentSpot = commentSpotText.getText().toString().trim();
                     update();
-                    //check();
+
                 }else{
                     AlertDialog alertDialog = new AlertDialog.Builder(RatingActivity.this).create();
                     alertDialog.setTitle("Wait!");
@@ -168,6 +181,32 @@ public class RatingActivity extends AppCompatActivity {
                             System.out.println("The read failed: " + databaseError.getCode());
                         }
                     });
+
+                    DatabaseReference ref5=mDatabase.child("users").child(host_ID).child("hosting");
+                    ref5.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()) {
+                                int allspot_count=(int)dataSnapshot.getChildrenCount();
+                                System.out.println(allspot_count+"   count spots");
+                                for (DataSnapshot child : dataSnapshot.getChildren())
+                                {
+                                    count_spots++;
+                                    host_all_spot.add(child.getValue(String.class));
+                                    System.out.println(child.getValue(String.class)+"   hosting spots");
+                                    if(count_spots==allspot_count){
+                                        get_all_spot();
+                                    }
+
+                                }
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            System.out.println("The read failed: " + databaseError.getCode());
+                        }
+                    });
+
                 }
             }
             @Override
@@ -262,10 +301,22 @@ public class RatingActivity extends AppCompatActivity {
             }
         });
 
+        DatabaseReference ref6=mDatabase.child("parking-spots-hosting").child(parkID);
+        ref6.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+                this_spot=dataSnapshot.getValue(FeedItem.class);
+                System.out.println(this_spot.getAddress() +"   address");
+                System.out.println(this_spot.getCancel() +"   cancel");
+                System.out.println(this_spot.getPrice() +"   price");
+            }
 
-
-
-
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println(databaseError.getMessage());
+            }
+        });
 
 
     }
@@ -283,31 +334,118 @@ public class RatingActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void get_all_spot(){
+        for(int i=0;i<host_all_spot.size();i++){
+            DatabaseReference ref=mDatabase.child("parking-spots-hosting").child(host_all_spot.get(i));
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot)
+                {
+                    all_spot.add(dataSnapshot.getValue(FeedItem.class));
+                    System.out.println(dataSnapshot.getValue(FeedItem.class).getAddress() +"   duplicate");
+                    count_host_spots++;
+
+                    if(count_host_spots==host_all_spot.size()){
+                        compare();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println(databaseError.getMessage());
+                }
+            });
+        }
+    }
+
+    private void compare(){
+        for(int i=0;i<all_spot.size();i++){
+            //address
+            if(!all_spot.get(i).getAddress().equals(this_spot.getAddress())){
+              return;
+            }
+           /* //cancellation policy
+            if(!all_spot.get(i).getCancel().equals(this_spot.getCancel())){
+                return;
+            }
+            //description
+            if(!all_spot.get(i).getDescription().equals(this_spot.getDescription())){
+                return;
+            }
+            //photo
+            if(all_spot.get(i).getPhotos().size()!=this_spot.getPhotos().size()){
+                return;
+            }*/
+            System.out.println(all_spot.get(i).getIdentifier()+ "     id");
+            System.out.println(all_spot.get(i).getAddress()+ "     adresssssssss");
+            all_similar_spot.add(all_spot.get(i).getIdentifier());
+        }
+       // all_similar_spot.add(this_spot.getIdentifier());
+    }
+
+
+
+
+
     private void update(){
-        ref=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rating");
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                originalSpot= (ArrayList)dataSnapshot.getValue();
-                originalSpot.add(rateSpot);
+        for(int i=0;i<all_similar_spot.size();i++) {
+
+            System.out.println(all_similar_spot.get(i)+ "     id finally");
+            final DatabaseReference ref=mDatabase.child("parking-spots-hosting").child(all_similar_spot.get(i)).child("rating");
+            ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    ArrayList<String> originalSpot=new ArrayList<String>();
+                    if(dataSnapshot.exists()){
+                        originalSpot= (ArrayList)dataSnapshot.getValue();
+                        originalSpot.add(rateSpot);
+                        ref.setValue(originalSpot);
+                    }
+                    else{
+                        System.out.println("rate the spot");
+                        originalSpot.add(rateSpot);
+                        ref.setValue(originalSpot);
+                    }
                 }
-                else{
-                    originalSpot.add(rateSpot);
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
                 }
-                if(count1==true){
-                ref.setValue(originalSpot);
-                    count1=false;}
+            });
+
+            System.out.println(rateSpot);
+            if(commentSpot.length()!=0) {
+                final DatabaseReference ref2=mDatabase.child("parking-spots-hosting").child(all_similar_spot.get(i)).child("review");
+                ref2.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ArrayList<String> originalSpotComment=new ArrayList<String>();
+                        if(dataSnapshot.exists()){
+                            originalSpotComment= (ArrayList)dataSnapshot.getValue();
+                            originalSpotComment.add(commentSpot);
+                            ref2.setValue(originalSpotComment);}
+                        else{
+                            originalSpotComment.add(commentSpot);
+                            System.out.println("comment the spot");
+                            ref2.setValue(originalSpotComment);
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        System.out.println("The read failed: " + databaseError.getCode());
+                    }
+                });
+
+                System.out.println(commentSpot);
 
             }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
+        }
 
-        System.out.println(rateSpot);
+
 
 
         ref1=mDatabase.child("users").child(host_ID).child("rating");
@@ -333,31 +471,7 @@ public class RatingActivity extends AppCompatActivity {
 
         System.out.println(rateHost);
 
-        if(commentSpot.length()!=0) {
-            ref2=mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("review");
-            ref2.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    if(dataSnapshot.exists()){
-                    originalSpotComment= (ArrayList)dataSnapshot.getValue();
-                    originalSpotComment.add(commentSpot);}
-                    else{
-                        originalSpotComment.add(commentSpot);
-                    }
-                    if(count3==true){
-                    ref2.setValue(originalSpotComment);
-                    count3=false;}
-                }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                }
-            });
-
-            System.out.println(commentSpot);
-
-        }
 
         if(commentHost.length()!=0) {
             ref3=mDatabase.child("users").child(host_ID).child("review");
@@ -383,6 +497,10 @@ public class RatingActivity extends AppCompatActivity {
             System.out.println(commentHost);
 
         }
+
+
+
+
         mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(spot_Identifier).setValue("rated");
         mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("activity").setValue(true);
         mDatabase.child("parking-spots-hosting").child(spot_Identifier).child("rentedTime").child(mFirebaseUser.getUid()).setValue(null);
@@ -393,16 +511,7 @@ public class RatingActivity extends AppCompatActivity {
         mDatabase.child("payment").child(host_ID).child("Get Payment").child(today).setValue(total_price);
 
 
-        /*Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"yingchew@usc.edu"});
-        i.putExtra(Intent.EXTRA_SUBJECT, "Refund to the renter");
-        i.putExtra(Intent.EXTRA_TEXT   , "Hi! this whole trasaction is finished!");
-        try {
-            startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(RatingActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }*/
+
         Intent intent = new Intent(RatingActivity.this, ActionActivity.class);
         startActivity(intent);
 
