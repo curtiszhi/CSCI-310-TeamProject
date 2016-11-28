@@ -364,7 +364,7 @@ public class RatingActivity extends AppCompatActivity {
             if(!all_spot.get(i).getAddress().equals(this_spot.getAddress())){
               return;
             }
-           /* //cancellation policy
+            //cancellation policy
             if(!all_spot.get(i).getCancel().equals(this_spot.getCancel())){
                 return;
             }
@@ -375,7 +375,26 @@ public class RatingActivity extends AppCompatActivity {
             //photo
             if(all_spot.get(i).getPhotos().size()!=this_spot.getPhotos().size()){
                 return;
-            }*/
+            }else{
+                for(int j=0;j<this_spot.getPhotos().size();j++){
+                    if(!all_spot.get(i).getPhotos().contains(this_spot.getPhotos().get(j))){
+                        return;
+                    }
+
+                }
+            }
+            //filter
+            if(all_spot.get(i).getFilter().size()!=this_spot.getFilter().size()){
+                return;
+            }else{
+                for(int j=0;j<this_spot.getFilter().size();j++){
+                    if(!all_spot.get(i).getFilter().contains(this_spot.getFilter().get(j))){
+                        return;
+                    }
+
+                }
+            }
+
             System.out.println(all_spot.get(i).getIdentifier()+ "     id");
             System.out.println(all_spot.get(i).getAddress()+ "     adresssssssss");
             all_similar_spot.add(all_spot.get(i).getIdentifier());
