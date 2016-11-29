@@ -138,7 +138,7 @@ public class RentTest {
                 catch(Exception e1){
 
                 }
-                onView(withHint("1234 5678 1234 5678")).perform(typeText("4264 5101 8909 8545 0217 666"));
+                onView(withHint("1234 5678 1234 5678")).perform(typeText("Insert Number Here"));
 
                 ViewInteraction button = onView(
                         allOf(withText("Done"), isDisplayed()));
