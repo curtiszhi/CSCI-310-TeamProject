@@ -162,6 +162,8 @@ public class RentActivity extends AppCompatActivity {
 
         if(wish_check==1){
           popup();
+          start =null;
+          end =null;
         }
 
         Intent intent = new Intent(this, PayPalService.class);
@@ -284,6 +286,7 @@ public class RentActivity extends AppCompatActivity {
                     ArrayList<String> startend = new ArrayList<String>();
                     startend.add(start);
                     startend.add(end);
+                    System.out.println(start+"     starttttttt");
                     rentList.put(mFirebaseUser.getUid(), startend);
 
                     renter_rentedlist = new HashMap<String, ArrayList<String>>();
@@ -355,7 +358,6 @@ public class RentActivity extends AppCompatActivity {
 
                     //update user renting list
                     fd.setRentedTime(renter_rentedlist);
-                    fd.setActivity(false);
                     mDatabase.child("users").child(mFirebaseUser.getUid()).child("renting").child(fd.getIdentifier()).setValue(fd.getIdentifier());
 
                     java.text.SimpleDateFormat df = new java.text.SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
@@ -577,6 +579,8 @@ public class RentActivity extends AppCompatActivity {
 
                                         price.setText("$" + Double.toString(fd.getPrice() * (diffHours+1)));
                                         String time_frame = start_w + " to " + end_w;
+                                        start = start_w;
+                                        end = end_w;
                                         time.setText(time_frame);
                                     }
 
@@ -593,6 +597,8 @@ public class RentActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 dialog.cancel();
+                                price.setText("$" + Double.toString(fd.getPrice()));
+                                String time_frame = fd.getStartDates()+" "+fd.getStartTime() + " to " + fd.getEndDates()+" "+fd.getEndTime();
                                 rent.setEnabled(false);
                             }
                         });

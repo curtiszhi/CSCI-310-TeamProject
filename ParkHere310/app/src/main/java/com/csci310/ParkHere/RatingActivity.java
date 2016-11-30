@@ -384,14 +384,22 @@ public class RatingActivity extends AppCompatActivity {
                 }
             }
             //filter
-            if(all_spot.get(i).getFilter().size()!=this_spot.getFilter().size()){
+            if(all_spot.get(i).getFilter()!=null && this_spot.getFilter()==null) {
                 return;
-            }else{
-                for(int j=0;j<this_spot.getFilter().size();j++){
-                    if(!all_spot.get(i).getFilter().contains(this_spot.getFilter().get(j))){
-                        return;
-                    }
+            }
+            if(all_spot.get(i).getFilter()==null && this_spot.getFilter()!=null) {
+                return;
+            }
+            if(all_spot.get(i).getFilter()!=null && this_spot.getFilter()!=null) {
+                if (all_spot.get(i).getFilter().size() != this_spot.getFilter().size()) {
+                    return;
+                } else {
+                    for (int j = 0; j < this_spot.getFilter().size(); j++) {
+                        if (!all_spot.get(i).getFilter().contains(this_spot.getFilter().get(j))) {
+                            return;
+                        }
 
+                    }
                 }
             }
 
